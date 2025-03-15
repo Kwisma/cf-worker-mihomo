@@ -1,9 +1,9 @@
 {
   "type": "module",
   "dependencies": {
-    "js-yaml": "^4.1.0",
+    "js-yaml": "^4.1.0"
   },
   "devDependencies": {
-    "esbuild": "^0.25.1",
+    "esbuild": "^0.25.1"
   }
 }
