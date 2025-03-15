@@ -18,7 +18,9 @@ jobs:
       - name: install
         run: npm install --save-dev
       - name: build
-        run: npx esbuild config.js --bundle --outfile=worker.js --platform=neutral --format=esm
+        run: |
+          npx esbuild config.js --bundle --outfile=worker.js --platform=neutral --format=esm
+          npx esbuild config.js --bundle --outfile=_worker.js --platform=neutral --format=esm
       - run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
