@@ -92,7 +92,7 @@ bind-address: "*" # 绑定地址，默认为所有 IP 地址
 # always 开启，强制匹配所有进程
 # strict 默认，由 Clash 判断是否开启
 # off 不匹配进程，推荐在路由器上使用此模式
-find-process-mode: strict
+find-process-mode: always
 mode: rule # 工作模式为规则模式
 geodata-mode: false # 更改 geoip 使用文件，mmdb 或者 dat，可选 true/false,true为 dat
 # standard：标准加载器
@@ -510,8 +510,6 @@ proxy-groups:
         ‎|🇮🇱|\bIL\b|以色列|Israel|
         ‎|🇦🇪|\bAE\b|阿拉伯联合酋长国|United Arab Emirates|
         ‎|🇨🇭|\bCH\b|瑞士|Switzerland).*$' }
-
-  - { name: 🐟漏网之鱼, <<: *proxy }
 
 rules:
   # 广告拦截
@@ -1282,16 +1280,6 @@ rule-providers:
     url: "https://cdn.jsdmirror.com/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/Tencent/Tencent_OCD_IP.mrs"
     path: ./ruleset/Tencent_OCD_IP.mrs
 
-  EHGallery:
-    <<: *domain_mrs
-    url: "https://cdn.jsdmirror.com/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/EHGallery/EHGallery_OCD_Domain.mrs"
-    path: ./ruleset/EHGallery_OCD_Domain.mrs
-
-  EHGallerycidr:
-    <<: *ipcidr_mrs
-    url: "https://cdn.jsdmirror.com/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/EHGallery/EHGallery_OCD_IP.mrs"
-    path: ./ruleset/EHGallery_OCD_IP.mrs
-
   Pixiv:
     <<: *domain_mrs
     url: "https://cdn.jsdmirror.com/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/Pixiv/Pixiv_OCD_Domain.mrs"
@@ -1527,6 +1515,16 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://cdn.jsdmirror.com/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/STUN/STUN_IP.mrs"
     path: ./ruleset/STUN_IP.mrs
+
+  EHGallery:
+    <<: *domain_mrs
+    url: "https://cdn.jsdmirror.com/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/EHGallery/EHGallery_Domain.mrs"
+    path: ./ruleset/EHGallery_Domain.mrs
+
+  EHGallerycidr:
+    <<: *ipcidr_mrs
+    url: "https://cdn.jsdmirror.com/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/EHGallery/EHGallery_IP.mrs"
+    path: ./ruleset/EHGallery_IP.mrs
 
   Spotifycidr:
     <<: *ipcidr_mrs
