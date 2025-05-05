@@ -92,7 +92,7 @@ bind-address: "*" # 绑定地址，默认为所有 IP 地址
 # always 开启，强制匹配所有进程
 # strict 默认，由 Clash 判断是否开启
 # off 不匹配进程，推荐在路由器上使用此模式
-find-process-mode: always
+find-process-mode: off
 mode: rule # 工作模式为规则模式
 geodata-mode: false # 更改 geoip 使用文件，mmdb 或者 dat，可选 true/false,true为 dat
 # standard：标准加载器
