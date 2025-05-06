@@ -22,15 +22,16 @@ const urlList = [
 	'https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/best.txt',
 	'https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/http.txt',
 	'https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/nohttp.txt',
-	'https://at.raxianch.moe/ATline_best.txt',
-	'https://at.raxianch.moe/ATline_all.txt',
-	'https://at.raxianch.moe/ATline_all_udp.txt',
-	'https://at.raxianch.moe/ATline_all_http.txt',
-	'https://at.raxianch.moe/ATline_all_https.txt',
-	'https://at.raxianch.moe/ATline_all_ws.txt',
-	'https://at.raxianch.moe/ATline_best_ip.txt',
-	'https://at.raxianch.moe/ATline_all_ip.txt',
-	'https://at.raxianch.moe/ATline_bad.txt',
+	'https://raw.githubusercontent.com/XIU2/TrackersListCollection/master/other.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_best.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/AT_all_udp.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/ATline_all_http.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/ATline_all_https.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/ATline_all_ws.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/ATline_best_ip.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/ATline_all_ip.txt',
+	'https://raw.githubusercontent.com/DeSireFire/animeTrackerList/master/ATline_bad.txt',
 	'https://raw.githubusercontent.com/hezhijie0327/Trackerslist/refs/heads/main/trackerslist_combine.txt',
 	'https://raw.githubusercontent.com/hezhijie0327/Trackerslist/refs/heads/main/trackerslist_exclude.txt',
 	'https://raw.githubusercontent.com/hezhijie0327/Trackerslist/refs/heads/main/trackerslist_tracker.txt',
@@ -40,6 +41,7 @@ const urlList = [
 	'https://newtrackon.com/api/http',
 	'https://newtrackon.com/api/all',
 	'https://trackers.run/s/wp_ws_up_hp_hs_v4_v6.txt',
+	'https://raw.githubusercontent.com/1265578519/OpenTracker/refs/heads/master/tracker.txt',
 ];
 
 const domainSet = new Set();
@@ -74,7 +76,7 @@ const handleLine = (line) => {
 
 		const host = parsed.hostname.replace(/^\[|\]$/g, ''); // remove [ ]
 		if (ipv4Regex.test(host) || ipv6Regex.test(host)) {
-			ipSet.add(`${parsed.hostname}/32`);
+			ipSet.add(`${host}/32`);
 		} else {
 			domainSet.add(shortenDomain(host));
 		}
@@ -92,7 +94,12 @@ async function fetchAndProcess(url) {
 			return;
 		}
 		const text = await res.text();
-		text.split(/\r?\n/).forEach(handleLine);
+		// 统一将文本内容按换行或逗号拆分为单条规则
+		text
+			.split(/[\r\n,]+/) // 支持换行符和逗号作为分隔符
+			.map(line => line.trim())
+			.filter(Boolean)
+			.forEach(handleLine);
 	} catch (err) {
 		console.error(`Error fetching ${url}:`, err);
 	}
