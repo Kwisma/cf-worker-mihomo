@@ -75,8 +75,10 @@ const handleLine = (line) => {
 		urlSet.add(`${parsed}\n\n`);
 
 		const host = parsed.hostname.replace(/^\[|\]$/g, ''); // remove [ ]
-		if (ipv4Regex.test(host) || ipv6Regex.test(host)) {
+		if (ipv4Regex.test(host)) {
 			ipSet.add(`${host}/32`);
+		} else if (ipv6Regex.test(host)) {
+			ipSet.add(`${host}/128`);
 		} else {
 			domainSet.add(shortenDomain(host));
 		}
@@ -97,7 +99,7 @@ async function fetchAndProcess(url) {
 		// 统一将文本内容按换行或逗号拆分为单条规则
 		text
 			.split(/[\r\n,]+/) // 支持换行符和逗号作为分隔符
-			.map(line => line.trim())
+			.map((line) => line.trim())
 			.filter(Boolean)
 			.forEach(handleLine);
 	} catch (err) {
@@ -134,7 +136,13 @@ async function main() {
 	try {
 		await ensureDirectoryExists(TrackerPath);
 
-		await Promise.all(urlList.map(fetchAndProcess));
+		for (const url of urlList) {
+			try {
+				await fetchAndProcess(url);
+			} catch (err) {
+				console.error(`Error processing ${url}:`, err);
+			}
+		}
 
 		await saveYaml('Tracker_Domain.yaml', domainSet);
 		await saveYaml('Tracker_IP.yaml', ipSet);
