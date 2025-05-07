@@ -24,8 +24,6 @@ http://107.152.127.9:6969/announce
 
 http://107.189.10.20.sslip.io:7777/announce
 
-http://107.189.2.131:1337/announce
-
 http://107.189.31.134:6969/announce
 
 http://107.189.7.143:6969/announce
@@ -34,7 +32,7 @@ http://11.rarbg.com/announce
 
 http://116.252.176.125:6969/announce
 
-http://116.8.91.54:6969/announce
+http://116.8.90.79:6969/announce
 
 http://116.9.207.121:6969/announce
 
@@ -45,6 +43,8 @@ http://116.9.207.198:6969/announce
 http://116.9.207.226:6969/announce
 
 http://119.28.71.45:8080/announce
+
+http://123.245.62.53:6969/announce
 
 http://129.146.193.240:6699/announce
 
@@ -188,6 +188,10 @@ http://211.20.122.47:6969/announce
 
 http://211.22.29.93/announce
 
+http://211.75.205.188/announce
+
+http://211.75.210.220:6969/announce
+
 http://211.75.29.254:6969/announce
 
 http://212.6.3.67/announce
@@ -206,11 +210,9 @@ http://34.89.30.59:2710/announce
 
 http://34.89.91.10/announce
 
-http://34.89.91.10:11450/announce
-
-http://34.89.91.10:1337/announce
-
 http://34.89.91.10:2710/announce
+
+http://34.89.91.10:443/announce
 
 http://34.89.91.10:6969/announce
 
@@ -224,11 +226,7 @@ http://34.94.76.146/announce
 
 http://34.94.76.146/announce.php
 
-http://34.94.76.146:2701/announce
-
 http://34.94.76.146:2710/announce
-
-http://34.94.76.146:443/announce
 
 http://34.94.76.146:6960/announce
 
@@ -240,9 +238,11 @@ http://35.227.12.84:2710/announce
 
 http://35.227.59.57/announce
 
-http://35.227.59.57/announce.php
+http://35.227.59.57:11450/announce
 
-http://35.227.59.57:2710/announce
+http://35.227.59.57:1337/announce
+
+http://35.227.59.57:2701/announce
 
 http://35.227.59.57:6969/announce
 
@@ -455,8 +455,6 @@ http://bigfoot1942.sektori.org:6969/announce
 http://bithq.org/announce
 
 http://bithq.org/announce.php
-
-http://bittorrent-tracker.e-n-c-r-y-p-t.net:1337/announce
 
 http://bjlt.zhuqiy.eu.org:6666/announce
 
@@ -1786,8 +1784,6 @@ udp://107.175.221.194:6969/announce
 
 udp://107.182.30.76.16clouds.com:6969/announce
 
-udp://107.189.2.131:1337/announce
-
 udp://108.53.194.223:6969/announce
 
 udp://109.201.134.183:80/announce
@@ -1805,8 +1801,6 @@ udp://135.125.202.143:6969/announce
 udp://138.124.183.78:6969/announce
 
 udp://138.199.241.244:6969/announce
-
-udp://144.126.245.19:6969/announce
 
 udp://144.91.88.22:6969/announce
 
@@ -1834,6 +1828,8 @@ udp://176.31.250.174:6969/announce
 
 udp://176.56.7.89:6969/announce
 
+udp://176.79.98.66:6969/announce
+
 udp://176.99.7.59:6969/announce
 
 udp://177.139.47.40:6969/announce
@@ -1860,8 +1856,6 @@ udp://193.177.162.187:6969/announce
 
 udp://193.37.214.12:6969/announce
 
-udp://193.42.111.57:9337/announce
-
 udp://194.110.247.18:6969/announce
 
 udp://194.38.21.77:6969/announce
@@ -1875,6 +1869,8 @@ udp://207.241.226.111:6969/announce
 udp://207.241.231.226:6969/announce
 
 udp://209.126.11.233:6969/announce
+
+udp://209.141.59.16:6969/announce
 
 udp://209.141.59.25:6969/announce
 
@@ -1892,17 +1888,15 @@ udp://220.200.35.72:6969/announce
 
 udp://23.137.251.45:6969/announce
 
-udp://23.140.248.9:1337/announce
-
 udp://23.153.248.83:6969/announce
 
 udp://23.157.120.14:6969/announce
 
 udp://23.163.56.66:6969/announce
 
-udp://34.89.91.10:1337/announce
+udp://23.168.232.9:1337/announce
 
-udp://37.1.205.12:6969/announce
+udp://35.227.59.57:1337/announce
 
 udp://37.187.111.136:6969/announce
 
@@ -1918,8 +1912,6 @@ udp://45.9.60.30:6969/announce
 
 udp://46.138.242.240:6969/announce
 
-udp://46.59.69.118:6969/announce
-
 udp://47.ip-51-68-199.eu:6969/announce
 
 udp://5.196.67.51:6969/announce
@@ -1927,8 +1919,6 @@ udp://5.196.67.51:6969/announce
 udp://5.196.89.204:6969/announce
 
 udp://5.255.124.190:6969/announce
-
-udp://5.45.69.185:6969/announce
 
 udp://51.15.26.25:6969/announce
 
@@ -1938,13 +1928,13 @@ udp://51.158.144.42:6969/announce
 
 udp://51.159.54.68:6666/announce
 
-udp://51.222.82.36:6969/announce
-
 udp://51.68.174.87:6969/announce
 
 udp://51.81.222.188:6969/announce
 
 udp://52.58.128.163:6969/announce
+
+udp://54.39.48.3:6969/announce
 
 udp://6.pocketnet.app:6969/announce
 
@@ -1971,8 +1961,6 @@ udp://89.234.156.205:451/announce
 udp://89.36.216.8:6969/announce
 
 udp://91.211.5.21:6969/announce
-
-udp://91.216.110.53:451/announce
 
 udp://93.104.214.40:6969/announce
 
@@ -2057,6 +2045,8 @@ udp://bt.rer.lol:2710/announce
 udp://bt.rer.lol:6969/announce
 
 udp://bt1.archive.org:6969/announce
+
+udp://bt1.xxxxbt.cc:6969/announce
 
 udp://bt2.archive.org:6969/announce
 
@@ -2150,13 +2140,9 @@ udp://hbsy.zhuqiy.eu.org:6666/announce
 
 udp://home.kray.pw:6969/announce
 
-udp://home.yxgz.club:6969/announce
-
 udp://http//www.peckservers.com:9000/announce
 
 udp://htz3.noho.st:6969/announce
-
-udp://hzzwly.gq:6969/announce
 
 udp://incine.ru:6969/announce
 
@@ -2173,6 +2159,8 @@ udp://ipv4.tracker.harry.lu:80/announce
 udp://ipv4announce.sktorrent.eu:6969/announce
 
 udp://ipv6.fuuuuuck.com:6969/announce
+
+udp://ipv6.rer.lol:6969/announce
 
 udp://ipv6.tracker.harry.lu/announce
 
@@ -2340,6 +2328,8 @@ udp://serpb.vpsburti.com:6969/announce
 
 udp://shizzle.hammetjus.nl:6969/announce
 
+udp://shogiroom.com:6969/announce
+
 udp://slicie.icon256.com:8000/announce
 
 udp://smtp-relay.odysseylabel.com.au:6969/announce
@@ -2389,6 +2379,8 @@ udp://tk2.trackerservers.com:8080/announce
 udp://tk4.leechshield.link:6969/announce
 
 udp://torrent.fedoraproject.org:6969/announce
+
+udp://torrent.hificode.in:6969/announce
 
 udp://torrent.i.ng:6969/announce
 
@@ -2590,6 +2582,8 @@ udp://tracker.tryhackx.org:6969/announce
 
 udp://tracker.valete.tf:9999/announce
 
+udp://tracker.vanitycore.co:6969/announce
+
 udp://tracker.vds.nz:6969/announce
 
 udp://tracker.vraphim.com:6969/announce
@@ -2597,6 +2591,8 @@ udp://tracker.vraphim.com:6969/announce
 udp://tracker.vrpnet.org:6969/announce
 
 udp://tracker.waaa.moe:6969/announce
+
+udp://tracker.xiaoduola.xyz:6969/announce
 
 udp://tracker.xor.st:6969/announce
 
@@ -2654,8 +2650,6 @@ udp://udp.tracker.projectk.org:23333/announce
 
 udp://ulfbrueggemann.no-ip.org:6969/announce
 
-udp://unknownsite.de:6969/announce
-
 udp://uploads.gamecoast.net:6969/announce
 
 udp://utracker.ghostchu-services.top:6969/announce
@@ -2697,6 +2691,8 @@ udp://z.mercax.com:53/announce
 udp://zecircle.xyz:6969/announce
 
 ws://hub.bugout.link/announce
+
+ws://tracker.files.fm:7072/announce
 
 ws://tracker.ghostchu-services.top/announce
 
