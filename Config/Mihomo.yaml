@@ -31,9 +31,9 @@ p: &p
     lazy: true # 懒惰状态
 override: &override
   tfo: true # 启用 TCP Fast Open, 仅生效于 TCP 协议
-  mptcp: true # 启用 TCP Multi Path, 仅生效于 TCP 协议
+  mptcp: false # 启用 TCP Multi Path, 仅生效于 TCP 协议
   udp: true # 是否允许 UDP 通过代理，默认为 false
-  udp-over-tcp: true # 启用 UDP over TCP，默认 false
+  udp-over-tcp: false # 启用 UDP over TCP，默认 false
   skip-cert-verify: true # 跳过证书验证，仅适用于使用 tls 的协议
   ip-version: ipv4-prefer # 可选：dual/ipv4/ipv6/ipv4-prefer/ipv6-prefer ,默认使用 dual, ipv4: 仅使用 IPv4, ipv6: 仅使用 IPv6, ipv4-prefer: 优先使用 IPv4，对于 TCP 会进行双栈解析，并发链接但是优先使用 IPv4 链接，UDP 则为双栈解析，获取结果中的第一个 IPv4, ipv6-prefer:优先使用 IPv6，对于 TCP 会进行双栈解析，并发链接但是优先使用 IPv6 链接，UDP 则为双栈解析，获取结果中的第一个 IPv6
 # URL 测试配置
@@ -180,7 +180,7 @@ profile:
 
 # 网络时间协议 (NTP) 设置
 ntp:
-  enable: true # 启用 NTP 功能
+  enable: false # 启用 NTP 功能
   write-to-system: false # 将同步的时间写入系统时钟，需root权限
   server: ntp.ntsc.ac.cn # NTP 服务器地址
   port: 123 # NTP 服务器端口，默认使用 123 端口
@@ -218,7 +218,6 @@ tun:
   auto-detect-interface: true # 自动选择流量出口接口，多出口网卡同时连接的设备建议手动指定出口网卡
   dns-hijack:
     - any:53 # 劫持所有 53 端口的 DNS 请求
-    - tcp://any:53 # 劫持所有 TCP 53 端口的 DNS 请求
   device: utun0 # 指定 TUN 设备名称，默认为 utun
   mtu: 1500 # 设置最大传输单元 (MTU)，提高网络吞吐量
   strict-route: true # 启用 auto-route 时执行严格的路由规则
@@ -238,8 +237,8 @@ dns:
   cache-algorithm: arc # 缓存算法，参数:lru 最近最少使用，arc 自适应替换缓存
   prefer-h3: false # DOH 优先使用 http/3
   use-hosts: true # 使用配置中的 hosts 文件条目
-  use-system-hosts: false # 使用系统的 hosts 文件条目
-  respect-rules: true # dns 连接遵守路由规则，需配置 proxy-server-nameserver, 强烈不建议和 prefer-h3 一起使用
+  use-system-hosts: true # 使用系统的 hosts 文件条目
+  respect-rules: false # dns 连接遵守路由规则，需配置 proxy-server-nameserver, 强烈不建议和 prefer-h3 一起使用
   listen: 0.0.0.0:1053 # 本地 DNS 监听端口，默认是 1053 端口
   ipv6: true # 启用 IPv6 DNS 解析，避免 IPv6 地址的解析请求
   default-nameserver:
@@ -251,7 +250,7 @@ dns:
   fake-ip-range: 198.18.0.0/15 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - RULE-SET:Fakeip-Filter,Private,CN
+    - RULE-SET:Fakeip-Filter,Private,CN,Tracker
   nameserver-policy:
     RULE-SET:CN,Private:
       - "quic://dns.alidns.com" # 阿里 DNS over DOQ
@@ -266,7 +265,7 @@ dns:
     - "quic://dns.alidns.com" # 阿里 DNS over DOQ
   direct-nameserver: #  用于直连出口域名解析的 DNS 服务器
     - "quic://dns.alidns.com" # 阿里 DNS over DOQ
-  direct-nameserver-follow-policy: true # 是否遵循 nameserver-policy，默认为不遵守，仅当 direct-nameserver 不为空时生效
+  direct-nameserver-follow-policy: false # 是否遵循 nameserver-policy，默认为不遵守，仅当 direct-nameserver 不为空时生效
 
 proxies:
   - name: "🎯直连"
