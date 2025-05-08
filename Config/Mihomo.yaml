@@ -1413,10 +1413,10 @@ rule-providers:
 #    url: "https://jsd.onmicrosoft.cn/gh/DustinWin/ruleset_geodata@mihomo-ruleset/proxy.mrs"
 #    path: ./ruleset/Proxy_Domain.mrs
 
-#  CN:
-#    <<: *domain_mrs
-#    url: "https://jsd.onmicrosoft.cn/gh/DustinWin/ruleset_geodata@mihomo-ruleset/cn.mrs"
-#    path: ./ruleset/CN_Domain.mrs
+  CN:
+    <<: *domain_mrs
+    url: "https://jsd.onmicrosoft.cn/gh/DustinWin/ruleset_geodata@mihomo-ruleset/cn.mrs"
+    path: ./ruleset/CN_Domain.mrs
 
   CNcidr:
     <<: *ipcidr_mrs
