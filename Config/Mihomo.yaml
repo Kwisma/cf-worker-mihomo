@@ -250,7 +250,7 @@ dns:
   fake-ip-range: 198.18.0.0/15 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - RULE-SET:Fakeip-Filter,Private,CN,Tracker
+    - RULE-SET:Fakeip-Filter,Private
   nameserver-policy:
     RULE-SET:CN,Private:
       - "quic://dns.alidns.com" # 阿里 DNS over DOQ
