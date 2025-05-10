@@ -339,7 +339,7 @@ proxy-groups:
   - { name: Google云盘, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/GoogleDrive.webp }
   - { name: Google地图, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/GoogleEarth.webp }
   - { name: GoogleVoice, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/GoogleVoice.webp }
-  - { name: HoYoverse, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/HoYoverse.webp }
+  - { name: Hoyoverse, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/HoYoverse.webp }
   - { name: Hulu, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/Hulu.webp }
   - { name: 虎扑, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/Hupu.webp }
   - { name: HBO, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/HBO.webp }
@@ -354,6 +354,7 @@ proxy-groups:
   - { name: LINE, <<: *proxy, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/Line.webp }
   - { name: 美团, <<: *direct, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/MeiTuan.webp }
   - { name: 微软, <<: *direct, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/Microsoft.webp }
+  - { name: Mihoyo, <<: *direct, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/mihoyo.webp }
   - { name: NGA, <<: *direct, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/NGA.webp }
   - { name: 网易, <<: *direct, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/NetEase.webp }
   - { name: 网易云音乐, <<: *direct, icon: https://jsd.onmicrosoft.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/512/NetEase_Music.webp }
@@ -598,7 +599,7 @@ rules:
   - OR,((RULE-SET,Supercell),(RULE-SET,Supercellcidr,no-resolve)),Supercell # Supercell (如部落冲突)
   - RULE-SET,EA,EA # EA 游戏 (如 FIFA)
   - RULE-SET,Sony,索尼 # Sony 相关服务
-  - RULE-SET,HoYoverse,HoYoverse # 米哈游 (如原神)
+  - RULE-SET,Hoyoverse,Hoyoverse # 米哈游 (如原神)
   - RULE-SET,18comic,禁漫天堂 # 禁漫天堂动漫网站
   - RULE-SET,GoogleDrive,Google云盘 # Google Drive 云存储
   - RULE-SET,GoogleEarth,Google地图 # Google Earth 地图服务
@@ -646,6 +647,7 @@ rules:
   - RULE-SET,115,115 # 115 网盘，云存储服务
   - RULE-SET,4399,4399 # 4399，网页游戏和小游戏平台
   - RULE-SET,WeChat,微信 # 微信聊天平台
+  - RULE-SET,Mihoyo,Mihoyo # 米哈游国内
   - OR,((RULE-SET,ChinaMedia),(RULE-SET,ChinaMediacidr,no-resolve)),中国媒体 # 中国主流媒体
   - OR,((RULE-SET,ByteDance),(RULE-SET,ByteDancecidr,no-resolve)),字节跳动 # 字节跳动，包含抖音、今日头条等
   - OR,((RULE-SET,Tencent),(RULE-SET,Tencentcidr,no-resolve)),腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
@@ -1069,11 +1071,6 @@ rule-providers:
     url: "https://jsd.onmicrosoft.cn/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/GoogleVoice/GoogleVoice_OCD_Domain.mrs"
     path: ./ruleset/GoogleVoice_OCD_Domain.mrs
 
-  HoYoverse:
-    <<: *domain_mrs
-    url: "https://jsd.onmicrosoft.cn/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/HoYoverse/HoYoverse_OCD_Domain.mrs"
-    path: ./ruleset/HoYoverse_OCD_Domain.mrs
-
   HuluJP:
     <<: *domain_mrs
     url: "https://jsd.onmicrosoft.cn/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/HuluJP/HuluJP_OCD_Domain.mrs"
@@ -1385,6 +1382,16 @@ rule-providers:
 #    <<: *domain_mrs
 #    url: "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/gfw.mrs"
 #    path: ./ruleset/Gfw_Domain.mrs
+
+  Hoyoverse:
+    <<: *domain_mrs
+    url: "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/hoyoverse.mrs"
+    path: ./ruleset/Hoyoverse_Domain.mrs
+
+  Mihoyo:
+    <<: *domain_mrs
+    url: "https://jsd.onmicrosoft.cn/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/mihoyo.mrs"
+    path: ./ruleset/Mihoyo_Domain.mrs
 
   # ------------------------------------------------------------
   # DustinWin 规则
