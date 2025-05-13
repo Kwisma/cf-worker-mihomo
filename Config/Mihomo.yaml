@@ -13,8 +13,8 @@
 # 锚点区
 proxy: &proxy { type: select, include-all-providers: true, proxies: [🚀全球代理, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港, 🇹🇼台湾, 🇯🇵日本, 🇺🇸美国, 🇸🇬新加坡, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇰🇷韩国, 🇷🇺俄罗斯, 🇳🇱荷兰, 🇮🇳印度, 🇲🇾马来西亚, 🇵🇱波兰, 🇪🇪爱沙尼亚, 🇦🇪阿联酋, 🇳🇬尼日利亚, 🇧🇬保加利亚, 🇸🇨塞舌尔, 🇪🇸西班牙, 🇻🇳越南, 🇸🇽荷属圣马丁, 🇲🇴澳门, 🇵🇭菲律宾, 🇹🇭泰国, 🇲🇳蒙古, 🇫🇮芬兰, 🇸🇪瑞典, 🇦🇹奥地利, 🇧🇷巴西, 🇰🇿哈萨克斯坦, 🇮🇱以色列, 🇦🇪阿拉伯联合酋长国,  🇨🇭瑞士, 🌐其它地区] }
 direct: &direct { type: select, include-all-providers: true, proxies: [🎯全球直连, 🚀全球代理, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港, 🇹🇼台湾, 🇯🇵日本, 🇺🇸美国, 🇸🇬新加坡, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇰🇷韩国, 🇷🇺俄罗斯, 🇳🇱荷兰, 🇮🇳印度, 🇲🇾马来西亚, 🇵🇱波兰, 🇪🇪爱沙尼亚, 🇦🇪阿联酋, 🇳🇬尼日利亚, 🇧🇬保加利亚, 🇸🇨塞舌尔, 🇪🇸西班牙, 🇻🇳越南, 🇸🇽荷属圣马丁, 🇲🇴澳门, 🇵🇭菲律宾, 🇹🇭泰国, 🇲🇳蒙古, 🇫🇮芬兰, 🇸🇪瑞典, 🇦🇹奥地利, 🇧🇷巴西, 🇰🇿哈萨克斯坦, 🇮🇱以色列, 🇦🇪阿拉伯联合酋长国,  🇨🇭瑞士, 🌐其它地区] }
-ipcidr_mrs: &ipcidr_mrs { type: http, interval: 86400, behavior: ipcidr, format: mrs, proxy: 🚀全球代理 }
-domain_mrs: &domain_mrs { type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理 }
+ipcidr_mrs: &ipcidr_mrs { type: http, interval: 86400, behavior: ipcidr, format: mrs, proxy: 🎯全球直连 }
+domain_mrs: &domain_mrs { type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连 }
 # 延迟检测 URL
 p: &p
   type: http
@@ -30,7 +30,7 @@ p: &p
     timeout: 5000 # 健康检查超时时间
     lazy: true # 懒惰状态
 override: &override
-  tfo: true # 启用 TCP Fast Open, 仅生效于 TCP 协议
+  tfo: false # 启用 TCP Fast Open, 仅生效于 TCP 协议
   mptcp: false # 启用 TCP Multi Path, 仅生效于 TCP 协议
   udp: true # 是否允许 UDP 通过代理，默认为 false
   udp-over-tcp: false # 启用 UDP over TCP，默认 false
@@ -103,7 +103,7 @@ geox-url: # Geo 数据库配置，用于地理位置和 ASN 匹配
   geosite: "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat" # GeoSite 数据库
   mmdb: "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.metadb" # GeoIP mmdb 数据库
   asn: "https://ghfast.top/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/GeoLite2-ASN.mmdb" # ASN 数据库
-geo-auto-update: true # 开启自动更新 Geo 数据库
+geo-auto-update: false # 开启自动更新 Geo 数据库
 geo-update-interval: 24 # Geo 数据库更新间隔 (单位: 小时)
 # GeoSite 使用的匹配器实现，可用的实现：
 # - succinct（默认，与规则集相同）
@@ -158,8 +158,8 @@ keep-alive-interval: 15 # Keep-Alive 间隔时间 (单位: 秒)
 
 # 实验性功能配置
 experimental:
-  quic-go-disable-gso: false # 禁用 QUIC 协议中的 GSO (Generic Segmentation Offload) 功能
-  quic-go-disable-ecn: false #禁用ECN
+  quic-go-disable-gso: true # 禁用 QUIC 协议中的 GSO (Generic Segmentation Offload) 功能
+  quic-go-disable-ecn: true #禁用ECN
   dialer-ip4p-convert: false # 启用IP4P地址转换
 
 # 本地 DNS 解析配置
@@ -167,11 +167,6 @@ hosts:
   ntp.ntsc.ac.cn: 
     - 114.118.7.161
     - 114.118.7.163
-  dns.alidns.com: 
-    - 223.5.5.5
-    - 223.6.6.6
-    - "2400:3200:baba::1"
-    - "2400:3200::1"
 
 # 缓存
 profile:
@@ -252,20 +247,25 @@ dns:
   fake-ip-filter:
     - RULE-SET:Fakeip-Filter,Private
   nameserver-policy:
+    ghfast.top:
+      - "quic://223.5.5.5"
+      - "quic://223.6.6.6"
     RULE-SET:CN,Private:
-      - "quic://dns.alidns.com" # 阿里 DNS over DOQ
+      - "quic://223.5.5.5" # 阿里 DNS over DOQ
+      - "quic://223.6.6.6"
   nameserver:
     - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS over H3
     - "https://dns.google/dns-query#h3=true" # Google DNS over H3
     - "https://doh.dns.sb/dns-query#h3=true" # SB DNS over H3
     - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ DNS over H3
-    - "quic://dns.nextdns.io/dns-query" # Next DNS  over DOQ
-    - "quic://unfiltered.adguard-dns.com" # AdGuard DNS over DOQ
-  proxy-server-nameserver: # 用于节点域名解析 DNS 服务器
-    - "quic://dns.alidns.com" # 阿里 DNS over DOQ
+    - "quic://dns.nextdns.io" # Next DNS  over DOQ
+    - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
+  proxy-server-nameserver: # 用于代理出口域名解析 DNS 服务器
+    - "quic://dns.nextdns.io" # Google DNS over H3
   direct-nameserver: #  用于直连出口域名解析的 DNS 服务器
-    - "quic://dns.alidns.com" # 阿里 DNS over DOQ
-  direct-nameserver-follow-policy: false # 是否遵循 nameserver-policy，默认为不遵守，仅当 direct-nameserver 不为空时生效
+    - "quic://223.5.5.5" # 阿里 DNS over DOQ
+    - "quic://223.6.6.6"  
+  direct-nameserver-follow-policy: true # 是否遵循 nameserver-policy，默认为不遵守，仅当 direct-nameserver 不为空时生效
 
 proxies:
   - name: "🎯直连"
@@ -513,10 +513,9 @@ proxy-groups:
 
 rules:
   # 广告拦截
-  - OR,((RULE-SET,Advertising),(RULE-SET,Category-ads-all)),🚫广告拦截
-  - OR,((RULE-SET,BlockHttpDNS),(RULE-SET,BlockHttpDNScidr,no-resolve),(RULE-SET,Category-httpdns-cn)(RULE-SET,STUN),(RULE-SET,STUNcidr)),🚫泄漏拦截
+  - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-REJECT
   # 局域网
-  - OR,((RULE-SET,Private),(RULE-SET,Privatecidr,no-resolve),(RULE-SET,Fakeip-Filter)),🎯全球直连
+  - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-LAN
   - SUB-RULE,(NETWORK,UDP),SUB-DIRECT
 
   # Apple 相关服务
@@ -652,17 +651,27 @@ rules:
   - OR,((RULE-SET,ByteDance),(RULE-SET,ByteDancecidr,no-resolve)),字节跳动 # 字节跳动，包含抖音、今日头条等
   - OR,((RULE-SET,Tencent),(RULE-SET,Tencentcidr,no-resolve)),腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
   - OR,((RULE-SET,Alibaba),(RULE-SET,Alibabacidr,no-resolve)),阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
-  - RULE-SET,CNcidr,🎯全球直连,no-resolve # 中国域名
+  - SUB-RULE,(NETWORK,TCP),SUB-DIRECT
 
   # 节点代理
   - MATCH,🚀全球代理
 
 sub-rules:
+  SUB-LAN:
+    - RULE-SET,Private,🎯全球直连
+    - RULE-SET,Privatecidr,🎯全球直连,no-resolve
+    - RULE-SET,Fakeip-Filter,🎯全球直连
   SUB-DIRECT:
-    - RULE-SET,Tracker,BT追踪器
-    - RULE-SET,Trackercidr,BT追踪器,no-resolve
+    - DOMAIN,ghfast.top,🎯全球直连
     - RULE-SET,CNcidr,🎯全球直连,no-resolve
-      
+  SUB-REJECT:
+    - RULE-SET,Advertising,🚫广告拦截
+    - RULE-SET,Category-ads-all,🚫广告拦截
+    - RULE-SET,BlockHttpDNS,🚫泄漏拦截
+    - RULE-SET,BlockHttpDNScidr,🚫泄漏拦截,no-resolve
+    - RULE-SET,Category-httpdns-cn,🚫泄漏拦截
+    - RULE-SET,STUN,🚫泄漏拦截
+    - RULE-SET,STUNcidr,🚫泄漏拦截,no-resolve
 rule-providers:
   # ------------------------------------------------------------
   # ios_rule_script 规则
