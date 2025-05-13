@@ -513,9 +513,9 @@ proxy-groups:
 
 rules:
   # 广告拦截
-  - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-REJECT
+  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-REJECT
   # 局域网
-  - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-LAN
+  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-LAN
 
   # Apple 相关服务
   - RULE-SET,AppStore,AppStore # App Store 应用商店
@@ -534,7 +534,7 @@ rules:
   - RULE-SET,AppleDev,Apple # Apple 开发者服务
   - RULE-SET,AppleFirmware,Apple # Apple 设备固件下载
   - RULE-SET,AppleHardware,Apple # Apple 硬件相关服务
-  - OR,((RULE-SET,Apple),(RULE-SET,Applecidr,no-resolve)),Apple # Apple 相关服务的总规则
+  - OR,((RULE-SET,Apple),(RULE-SET,Applecidr)),Apple # Apple 相关服务的总规则
   - RULE-SET,AppleProxy,Apple # Apple 代理相关流量
 
   #媒体类别
@@ -560,18 +560,18 @@ rules:
   - RULE-SET,Spotify,Spotify # Spotify 音乐流媒体
   - RULE-SET,LastFM,LastFM # Last.fm 音乐推荐
   - RULE-SET,4GTV,4GTV # 4GTV 媒体
-  - OR,((RULE-SET,Spotify),(RULE-SET,Spotifycidr,no-resolve)),Spotify # Spotify 音乐流媒体
-  - OR,((RULE-SET,iQIYI),(RULE-SET,iQIYIcidr,no-resolve)),爱奇艺 # 爱奇艺，在线视频平台
-  - OR,((RULE-SET,KugouKuwo),(RULE-SET,KugouKuwocidr,no-resolve)),酷狗 # 酷狗&酷我音乐，在线音乐平台
-  - OR,((RULE-SET,NetEaseMusic),(RULE-SET,NetEaseMusiccidr,no-resolve)),网易云音乐 # 网易云音乐，在线音乐流媒体
-  - OR,((RULE-SET,Twitch),(RULE-SET,Twitchcidr,no-resolve)),Twitch # Twitch 直播平台
+  - OR,((RULE-SET,Spotify),(RULE-SET,Spotifycidr)),Spotify # Spotify 音乐流媒体
+  - OR,((RULE-SET,iQIYI),(RULE-SET,iQIYIcidr)),爱奇艺 # 爱奇艺，在线视频平台
+  - OR,((RULE-SET,KugouKuwo),(RULE-SET,KugouKuwocidr)),酷狗 # 酷狗&酷我音乐，在线音乐平台
+  - OR,((RULE-SET,NetEaseMusic),(RULE-SET,NetEaseMusiccidr)),网易云音乐 # 网易云音乐，在线音乐流媒体
+  - OR,((RULE-SET,Twitch),(RULE-SET,Twitchcidr)),Twitch # Twitch 直播平台
   # 国外分流
   - RULE-SET,PikPak,PikPak # PikPak 云存储
   - RULE-SET,Discord,Discord # Discord 语音聊天社区
-  - OR,((RULE-SET,Telegram),(RULE-SET,Telegramcidr,no-resolve)),Telegram # Telegram 即时通讯
+  - OR,((RULE-SET,Telegram),(RULE-SET,Telegramcidr)),Telegram # Telegram 即时通讯
   - RULE-SET,Claude,OpenAI # Claude AI 聊天机器人
   - RULE-SET,GitHub,GitHub # GitHub 代码托管平台
-  - OR,((RULE-SET,Amazon),(RULE-SET,Amazoncidr,no-resolve)),亚马逊电商 # 亚马逊电商
+  - OR,((RULE-SET,Amazon),(RULE-SET,Amazoncidr)),亚马逊电商 # 亚马逊电商
   - RULE-SET,Adobe,Adobe # Adobe 相关服务 (如 Creative Cloud)
   - RULE-SET,Docker,Docker # Docker 容器服务
   - RULE-SET,Instagram,Instagram # Instagram 社交平台
@@ -580,51 +580,51 @@ rules:
   - RULE-SET,Teams,微软 # Microsoft Teams 协作工具
   - RULE-SET,MicrosoftEdge,微软 # Microsoft Edge 浏览器
   - RULE-SET,OneDrive,微软云盘 # Microsoft OneDrive 云储存
-  - OR,((RULE-SET,Copilot),(RULE-SET,Copilotcidr,no-resolve)),OpenAI # Microsoft Copilot AI 助手
+  - OR,((RULE-SET,Copilot),(RULE-SET,Copilotcidr)),OpenAI # Microsoft Copilot AI 助手
   - RULE-SET,Microsoft,微软 # Microsoft 相关服务
-  - OR,((RULE-SET,OpenAI),(RULE-SET,OpenAIcidr,no-resolve)),OpenAI # OpenAI 相关服务
+  - OR,((RULE-SET,OpenAI),(RULE-SET,OpenAIcidr)),OpenAI # OpenAI 相关服务
   - RULE-SET,Intel,因特尔 # Intel 相关服务
   - RULE-SET,Speedtest,Speedtest # Speedtest 速度测试
   - RULE-SET,Reddit,Reddit # Reddit 论坛
-  - OR,((RULE-SET,EHGallery),(RULE-SET,EHGallerycidr,no-resolve)),E站 #E站（E-Hentai / ExHentai）
+  - OR,((RULE-SET,EHGallery),(RULE-SET,EHGallerycidr)),E站 #E站（E-Hentai / ExHentai）
   - RULE-SET,Pixiv,Pixiv # P站（Pixiv插画社区）
   - RULE-SET,Wikipedia,维基百科 # 维基百科，自由的百科全书
-  - OR,((RULE-SET,Blizzard),(RULE-SET,Blizzardcidr,no-resolve)),暴雪 # 暴雪游戏 (如魔兽世界)
+  - OR,((RULE-SET,Blizzard),(RULE-SET,Blizzardcidr)),暴雪 # 暴雪游戏 (如魔兽世界)
   - RULE-SET,Steam,Steam # Steam 游戏商店及社区
   - RULE-SET,Rockstar,Rockstar # Rockstar 游戏 (如 GTA)
   - RULE-SET,PlayStation,PlayStation # PlayStation 网络
   - RULE-SET,Epic,Epic # Epic Games 商店
-  - OR,((RULE-SET,Supercell),(RULE-SET,Supercellcidr,no-resolve)),Supercell # Supercell (如部落冲突)
+  - OR,((RULE-SET,Supercell),(RULE-SET,Supercellcidr)),Supercell # Supercell (如部落冲突)
   - RULE-SET,EA,EA # EA 游戏 (如 FIFA)
   - RULE-SET,Sony,索尼 # Sony 相关服务
   - RULE-SET,Hoyoverse,Hoyoverse # 米哈游 (如原神)
   - RULE-SET,18comic,禁漫天堂 # 禁漫天堂动漫网站
   - RULE-SET,GoogleDrive,Google云盘 # Google Drive 云存储
   - RULE-SET,GoogleEarth,Google地图 # Google Earth 地图服务
-  - OR,((RULE-SET,GoogleFCM),(RULE-SET,GoogleFCMcidr,no-resolve)),FCM # Google Firebase Cloud Messaging (推送)
+  - OR,((RULE-SET,GoogleFCM),(RULE-SET,GoogleFCMcidr)),FCM # Google Firebase Cloud Messaging (推送)
   - RULE-SET,GoogleVoice,GoogleVoice # Google Voice 语音服务
   - RULE-SET,Scholar,Google学术 # Google Scholar 学术搜索
   - RULE-SET,Gemini,OpenAI # Google Gemini AI
   - RULE-SET,HBO,HBO # Home Box Office
-  - OR,((RULE-SET,Line),(RULE-SET,Linecidr,no-resolve)),LINE # LINE （连我）
+  - OR,((RULE-SET,Line),(RULE-SET,Linecidr)),LINE # LINE （连我）
   - RULE-SET,Wise,Wise # Wise 金融科技
   - RULE-SET,Signal,Signal # Signal 加密即時通訊
   - RULE-SET,Picacg,哔咔哔咔 # 哔咔哔咔漫画
   - RULE-SET,Pandora,潘朵拉珠宝 # Pandora 珠宝相关
-  - OR,((RULE-SET,Talkatone),(RULE-SET,Talkatonecidr,no-resolve)),Talkatone # Talkatone 电话
-  - OR,((RULE-SET,Facebook),(RULE-SET,Facebookcidr,no-resolve)),Facebook # Facebook 社交网络
-  - OR,((RULE-SET,Twitter),(RULE-SET,Twittercidr,no-resolve)),Twitter # Twitter 社交平台
-  - OR,((RULE-SET,Google),(RULE-SET,Googlecidr,no-resolve)),Google # Google 相关服务
-  - OR,((RULE-SET,Cloudflare),(RULE-SET,Cloudflarecidr,no-resolve)),Cloudflare # Cloudflare CDN 及安全服务
-  - OR,((RULE-SET,Media),(RULE-SET,Mediacidr,no-resolve)),国际媒体 # 媒体相关规则集，适用于流媒体解锁
-  - OR,((RULE-SET,Netflix),(RULE-SET,Netflixcidr,no-resolve)),Netflix # Netflix 影视流媒体
-  - OR,((RULE-SET,Tor),(RULE-SET,Torcidr,no-resolve)),Tor # 洋葱浏览器
-  - OR,((RULE-SET,Fastly),(RULE-SET,Fastlycidr,no-resolve)),Fastly # Fastly 服务商
+  - OR,((RULE-SET,Talkatone),(RULE-SET,Talkatonecidr)),Talkatone # Talkatone 电话
+  - OR,((RULE-SET,Facebook),(RULE-SET,Facebookcidr)),Facebook # Facebook 社交网络
+  - OR,((RULE-SET,Twitter),(RULE-SET,Twittercidr)),Twitter # Twitter 社交平台
+  - OR,((RULE-SET,Google),(RULE-SET,Googlecidr)),Google # Google 相关服务
+  - OR,((RULE-SET,Cloudflare),(RULE-SET,Cloudflarecidr)),Cloudflare # Cloudflare CDN 及安全服务
+  - OR,((RULE-SET,Media),(RULE-SET,Mediacidr)),国际媒体 # 媒体相关规则集，适用于流媒体解锁
+  - OR,((RULE-SET,Netflix),(RULE-SET,Netflixcidr)),Netflix # Netflix 影视流媒体
+  - OR,((RULE-SET,Tor),(RULE-SET,Torcidr)),Tor # 洋葱浏览器
+  - OR,((RULE-SET,Fastly),(RULE-SET,Fastlycidr)),Fastly # Fastly 服务商
 #  - OR,((RULE-SET,Category-anticensorship),(RULE-SET,Geolocation-!cn),(RULE-SET,Proxy),(RULE-SET,Gfw),(RULE-SET,US)),Proxy # 国际网络
 
   # 国内分流
   - RULE-SET,NGA,NGA # NGA 论坛 (游戏社区)
-  - OR,((RULE-SET,Tracker),(RULE-SET,Trackercidr,no-resolve)),BT追踪器 # 私有跟踪器，通常用于 BT 下载和种子分享
+  - OR,((RULE-SET,Tracker),(RULE-SET,Trackercidr)),BT追踪器 # 私有跟踪器，通常用于 BT 下载和种子分享
   - RULE-SET,BaiDuTieBa,百度贴吧 # 百度贴吧，社区论坛
   - RULE-SET,GaoDe,高德 # 高德地图，地图导航服务
   - RULE-SET,MeiTuan,美团 # 美团，外卖、团购、酒店预订等服务
@@ -637,7 +637,7 @@ rules:
   - RULE-SET,Baidu,百度 # 百度，搜索引擎和相关服务
   - RULE-SET,DingTalk,钉钉 # 钉钉，阿里巴巴企业通讯工具
   - RULE-SET,SteamCN,Steam中国 # Steam 中国版，游戏社区和商店
-  - OR,((RULE-SET,NetEase),(RULE-SET,NetEasecidr,no-resolve)),网易 # 网易，涵盖邮箱、游戏等服务
+  - OR,((RULE-SET,NetEase),(RULE-SET,NetEasecidr)),网易 # 网易，涵盖邮箱、游戏等服务
   - RULE-SET,JingDong,京东 # 京东，电商平台
   - RULE-SET,58TongCheng,58同城 # 58同城，分类信息平台
   - RULE-SET,AliPay,支付宝 # 支付宝，在线支付平台
@@ -646,11 +646,11 @@ rules:
   - RULE-SET,4399,4399 # 4399，网页游戏和小游戏平台
   - RULE-SET,WeChat,微信 # 微信聊天平台
   - RULE-SET,Mihoyo,Mihoyo # 米哈游国内
-  - OR,((RULE-SET,ChinaMedia),(RULE-SET,ChinaMediacidr,no-resolve)),中国媒体 # 中国主流媒体
-  - OR,((RULE-SET,ByteDance),(RULE-SET,ByteDancecidr,no-resolve)),字节跳动 # 字节跳动，包含抖音、今日头条等
-  - OR,((RULE-SET,Tencent),(RULE-SET,Tencentcidr,no-resolve)),腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
-  - OR,((RULE-SET,Alibaba),(RULE-SET,Alibabacidr,no-resolve)),阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
-  - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-DIRECT
+  - OR,((RULE-SET,ChinaMedia),(RULE-SET,ChinaMediacidr)),中国媒体 # 中国主流媒体
+  - OR,((RULE-SET,ByteDance),(RULE-SET,ByteDancecidr)),字节跳动 # 字节跳动，包含抖音、今日头条等
+  - OR,((RULE-SET,Tencent),(RULE-SET,Tencentcidr)),腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
+  - OR,((RULE-SET,Alibaba),(RULE-SET,Alibabacidr)),阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
+  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-DIRECT
 
   # 节点代理
   - MATCH,🚀全球代理
@@ -658,19 +658,22 @@ rules:
 sub-rules:
   SUB-LAN:
     - RULE-SET,Private,🎯全球直连
-    - RULE-SET,Privatecidr,🎯全球直连,no-resolve
+    - RULE-SET,Privatecidr,🎯全球直连
     - RULE-SET,Fakeip-Filter,🎯全球直连
   SUB-DIRECT:
     - DOMAIN,ghfast.top,🎯全球直连
-    - RULE-SET,CNcidr,🎯全球直连,no-resolve
+    - RULE-SET,CNcidr,🎯全球直连
   SUB-REJECT:
     - RULE-SET,Advertising,🚫广告拦截
     - RULE-SET,Category-ads-all,🚫广告拦截
     - RULE-SET,BlockHttpDNS,🚫泄漏拦截
-    - RULE-SET,BlockHttpDNScidr,🚫泄漏拦截,no-resolve
+    - RULE-SET,BlockHttpDNScidr,🚫泄漏拦截
     - RULE-SET,Category-httpdns-cn,🚫泄漏拦截
     - RULE-SET,STUN,🚫泄漏拦截
-    - RULE-SET,STUNcidr,🚫泄漏拦截,no-resolve
+    - RULE-SET,STUNcidr,🚫泄漏拦截
+    - DST-PORT,3478,🚫泄漏拦截
+    - DST-PORT,5349,🚫泄漏拦截
+    - DOMAIN-KEYWORD,stun,🚫泄漏拦截
 rule-providers:
   # ------------------------------------------------------------
   # ios_rule_script 规则
