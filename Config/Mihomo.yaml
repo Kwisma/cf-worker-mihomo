@@ -261,8 +261,7 @@ dns:
     - "quic://dns.nextdns.io" # Next DNS  over DOQ
     - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
   proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
-    - "quic://223.5.5.5" # 阿里 DNS over DOQ
-    - "quic://223.6.6.6"
+    - "quic://dns.nextdns.io" # Next DNS  over DOQ
   direct-nameserver: #  用于直连出口域名解析的 DNS 服务器
     - "quic://223.5.5.5" # 阿里 DNS over DOQ
     - "quic://223.6.6.6"
