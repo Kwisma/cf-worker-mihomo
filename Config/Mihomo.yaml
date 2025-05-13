@@ -616,12 +616,12 @@ rules:
   - OR,((RULE-SET,Talkatone),(RULE-SET,Talkatonecidr)),Talkatone # Talkatone 电话
   - OR,((RULE-SET,Facebook),(RULE-SET,Facebookcidr)),Facebook # Facebook 社交网络
   - OR,((RULE-SET,Twitter),(RULE-SET,Twittercidr)),Twitter # Twitter 社交平台
-  - OR,((RULE-SET,Google),(RULE-SET,Googlecidr)),Google # Google 相关服务
-  - OR,((RULE-SET,Cloudflare),(RULE-SET,Cloudflarecidr)),Cloudflare # Cloudflare CDN 及安全服务
-  - OR,((RULE-SET,Media),(RULE-SET,Mediacidr)),国际媒体 # 媒体相关规则集，适用于流媒体解锁
   - OR,((RULE-SET,Netflix),(RULE-SET,Netflixcidr)),Netflix # Netflix 影视流媒体
   - OR,((RULE-SET,Tor),(RULE-SET,Torcidr)),Tor # 洋葱浏览器
   - OR,((RULE-SET,Fastly),(RULE-SET,Fastlycidr)),Fastly # Fastly 服务商
+  - OR,((RULE-SET,Google),(RULE-SET,Googlecidr)),Google # Google 相关服务
+  - OR,((RULE-SET,Media),(RULE-SET,Mediacidr)),国际媒体 # 媒体相关规则集，适用于流媒体解锁
+  - OR,((RULE-SET,Cloudflare),(RULE-SET,Cloudflarecidr)),Cloudflare # Cloudflare CDN 及安全服务
 #  - OR,((RULE-SET,Category-anticensorship),(RULE-SET,Geolocation-!cn),(RULE-SET,Proxy),(RULE-SET,Gfw),(RULE-SET,US)),Proxy # 国际网络
 
   # 国内分流
