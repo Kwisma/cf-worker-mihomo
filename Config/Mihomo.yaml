@@ -329,6 +329,7 @@ proxy-groups:
   - { name: E站, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/E-Hentai.webp }
   - { name: EA, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/EA.webp }
   - { name: Epic, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Epic.webp }
+  - { name: Emby, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Emby.webp }
   - { name: FCM, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/FCM.webp }
   - { name: Facebook, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Facebook.webp }
   - { name: Fastly, <<: *proxy, icon: https://ghfast.top/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Fastly.webp }
@@ -611,6 +612,7 @@ rules:
   - RULE-SET,Signal,Signal # Signal 加密即時通訊
   - RULE-SET,Picacg,哔咔哔咔 # 哔咔哔咔漫画
   - RULE-SET,Pandora,潘朵拉珠宝 # Pandora 珠宝相关
+  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-EMBY # Emby 影视
   - OR,((RULE-SET,Talkatone),(RULE-SET,Talkatonecidr)),Talkatone # Talkatone 电话
   - OR,((RULE-SET,Facebook),(RULE-SET,Facebookcidr)),Facebook # Facebook 社交网络
   - OR,((RULE-SET,Twitter),(RULE-SET,Twittercidr)),Twitter # Twitter 社交平台
@@ -674,6 +676,9 @@ sub-rules:
     - DST-PORT,3478,🚫泄漏拦截
     - DST-PORT,5349,🚫泄漏拦截
     - DOMAIN-KEYWORD,stun,🚫泄漏拦截
+  SUB-EMBY:
+    - RULE-SET,Emby,Emby
+    - DOMAIN-KEYWORD,emby,Emby
 rule-providers:
   # ------------------------------------------------------------
   # ios_rule_script 规则
@@ -1321,6 +1326,11 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://ghfast.top/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Line/Line_OCD_IP.mrs"
     path: ./ruleset/Line_OCD_IP.mrs
+
+  Emby:
+    <<: *domain_mrs
+    url: "https://ghfast.top/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Emby/Emby_OCD_Domain.mrs"
+    path: ./ruleset/Emby_OCD_Domain.mrs
 
   # ------------------------------------------------------------
   # MetaCubeX 规则
