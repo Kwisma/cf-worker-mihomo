@@ -516,7 +516,6 @@ rules:
   - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-REJECT
   # 局域网
   - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-LAN
-  - SUB-RULE,(NETWORK,UDP),SUB-DIRECT
 
   # Apple 相关服务
   - RULE-SET,AppStore,AppStore # App Store 应用商店
@@ -651,7 +650,7 @@ rules:
   - OR,((RULE-SET,ByteDance),(RULE-SET,ByteDancecidr,no-resolve)),字节跳动 # 字节跳动，包含抖音、今日头条等
   - OR,((RULE-SET,Tencent),(RULE-SET,Tencentcidr,no-resolve)),腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
   - OR,((RULE-SET,Alibaba),(RULE-SET,Alibabacidr,no-resolve)),阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
-  - SUB-RULE,(NETWORK,TCP),SUB-DIRECT
+  - SUB-RULE,(OR,(NETWORK,UDP),(NETWORK,TCP)),SUB-DIRECT
 
   # 节点代理
   - MATCH,🚀全球代理
