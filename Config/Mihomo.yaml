@@ -245,7 +245,7 @@ dns:
   fake-ip-range: 198.18.0.0/15 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - RULE-SET:Fakeip-Filter,Private
+    - RULE-SET:Fakeip-Filter,Private,CN
   nameserver-policy:
     ghfast.top:
       - "quic://223.5.5.5"
