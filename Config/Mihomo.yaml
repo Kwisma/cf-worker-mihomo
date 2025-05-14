@@ -230,7 +230,7 @@ tun:
 dns:
   enable: true # 启用 DNS 模块
   cache-algorithm: arc # 缓存算法，参数:lru 最近最少使用，arc 自适应替换缓存
-  prefer-h3: false # DOH 优先使用 http/3
+  prefer-h3: true # DOH 优先使用 http/3
   use-hosts: true # 使用配置中的 hosts 文件条目
   use-system-hosts: true # 使用系统的 hosts 文件条目
   respect-rules: false # dns 连接遵守路由规则，需配置 proxy-server-nameserver, 强烈不建议和 prefer-h3 一起使用
@@ -258,10 +258,8 @@ dns:
     - "https://dns.google/dns-query#h3=true" # Google DNS over H3
     - "https://doh.dns.sb/dns-query#h3=true" # SB DNS over H3
     - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ DNS over H3
-    - "quic://dns.nextdns.io" # Next DNS  over DOQ
-    - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
-  proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
-    - "quic://dns.nextdns.io" # Next DNS  over DOQ
+#  proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
+#    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS  over DOQ
   direct-nameserver: #  用于直连出口域名解析的 DNS 服务器
     - "quic://223.5.5.5" # 阿里 DNS over DOQ
     - "quic://223.6.6.6"
