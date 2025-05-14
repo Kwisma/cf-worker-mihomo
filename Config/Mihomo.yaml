@@ -181,9 +181,9 @@ ntp:
   port: 123 # NTP 服务器端口，默认使用 123 端口
   interval: 30 # 同步时间的间隔 (单位: 分钟)
 
-# sniffer 配置：用于检测和处理不同协议的流量
+# sniffer 配置：用于检测和处理不同协议的流量，与 ,no-resolve 参数冲突
 sniffer:
-  enable: true # 是否启用 sniffer 侦测功能，默认关闭
+  enable: false # 是否启用 sniffer 侦测功能，默认关闭
   force-dns-mapping: true # 对 redir-host 类型识别的流量进行强制嗅探
   parse-pure-ip: true # 对所有未获取到域名的流量进行强制嗅探
   override-destination: false # 是否使用嗅探结果作为实际访问，默认为 true
