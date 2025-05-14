@@ -673,7 +673,7 @@ sub-rules:
     - RULE-SET,Category-httpdns-cn,🚫泄漏拦截
     - RULE-SET,STUN,🚫泄漏拦截
     - RULE-SET,STUNcidr,🚫泄漏拦截
-    - ST-PORT,3478,🚫泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
+    - DST-PORT,3478,🚫泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
     - DST-PORT,5349,🚫泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
     - DST-PORT,5350,🚫泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
     - DST-PORT,5351,🚫泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
