@@ -522,7 +522,7 @@ rules:
 
 sub-rules:
   SUB-REJECT:
-    - RULE-SET,Advertising,🚫广告拦截
+    - RULE-SET,Advertising-ads,🚫广告拦截
     - RULE-SET,Category-ads-all,🚫广告拦截
     - RULE-SET,BlockHttpDNS,🚫泄漏拦截
     - RULE-SET,BlockHttpDNScidr,🚫泄漏拦截
@@ -1506,10 +1506,10 @@ rule-providers:
 
   # ------------------------------------------------------------
   # 自定义 规则
-  Advertising:
+  Advertising-ads:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
-    path: ./ruleset/Advertising_Domain.mrs
+    path: ./ruleset/Advertising_ads_Domain.mrs
 
   4GTV:
     <<: *domain_mrs
