@@ -351,6 +351,7 @@ proxy-groups:
   - { name: iCloud, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/iCloud.webp }
   - { name: 京东, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/JingDong.webp }
   - { name: 酷狗, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Kugou.webp }
+  - { name: 酷我, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Kuwo.webp }
   - { name: LastFM, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/LastFM.webp }
   - { name: LINE, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Line.webp }
   - { name: 美团, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/MeiTuan.webp }
@@ -582,7 +583,8 @@ sub-rules:
     - RULE-SET,4GTV,4GTV # 4GTV 媒体
     - RULE-SET,Spotify,Spotify # Spotify 音乐流媒体
     - RULE-SET,iQIYI,爱奇艺 # 爱奇艺，在线视频平台
-    - RULE-SET,KugouKuwo,酷狗 # 酷狗&酷我音乐，在线音乐平台
+    - RULE-SET,Kugou,酷狗 # 酷狗音乐，在线音乐平台
+    - RULE-SET,Kuwo,酷我 # 酷我音乐，在线音乐平台
     - RULE-SET,NetEaseMusic,网易云音乐 # 网易云音乐，在线音乐流媒体
     - RULE-SET,Twitch,Twitch # Twitch 直播平台
     - RULE-SET,PikPak,PikPak # PikPak 云存储
@@ -639,8 +641,9 @@ sub-rules:
     - RULE-SET,Tor,Tor # 洋葱浏览器
     - RULE-SET,Fastly,Fastly # Fastly 服务商
     - RULE-SET,Google,Google # Google 相关服务
-    - RULE-SET,Media,国际媒体 # 媒体相关规则集，适用于流媒体解锁
+    - RULE-SET,GlobalMedia,国际媒体 # 媒体相关规则集，适用于流媒体解锁
     - RULE-SET,Cloudflare,Cloudflare # Cloudflare CDN 及安全服务
+    ############ 分割线 ############
     - RULE-SET,NGA,NGA # NGA 论坛 (游戏社区)
     - RULE-SET,Tracker,BT追踪器 # 私有跟踪器，通常用于 BT 下载和种子分享
     - RULE-SET,BaiDuTieBa,百度贴吧 # 百度贴吧，社区论坛
@@ -672,11 +675,11 @@ sub-rules:
     # 国内服务
     - RULE-SET,NetEasecidr,网易,no-resolve
     - RULE-SET,iQIYIcidr,爱奇艺,no-resolve
-    - RULE-SET,KugouKuwocidr,酷狗,no-resolve
     - RULE-SET,NetEaseMusiccidr,网易云音乐,no-resolve
     - RULE-SET,ByteDancecidr,字节跳动,no-resolve
     - RULE-SET,Tencentcidr,腾讯,no-resolve
     - RULE-SET,Alibabacidr,阿里巴巴,no-resolve
+    - RULE-SET,BiliBilicidr,哔哩哔哩,no-resolve
     - RULE-SET,ChinaMediacidr,中国媒体,no-resolve # 国内兜底媒体
     - RULE-SET,CNcidr,🎯全球直连,no-resolve # 国内兜底 IP
 
@@ -702,7 +705,8 @@ sub-rules:
     - RULE-SET,Googlecidr,Google,no-resolve
     - RULE-SET,Trackercidr,BT追踪器,no-resolve
     - RULE-SET,Qobuzcidr,Qobuz,no-resolve
-    - RULE-SET,Mediacidr,国际媒体,no-resolve # 国外兜底媒体
+    - RULE-SET,YouTubecidr,YouTube,no-resolve
+    - RULE-SET,GlobalMediacidr,国际媒体,no-resolve # 国外兜底媒体
     - RULE-SET,Cloudflarecidr,Cloudflare,no-resolve # 国外兜底 IP
 
 rule-providers:
@@ -711,652 +715,697 @@ rule-providers:
   Apple:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Apple/Apple_OCD_Domain.mrs"
-    path: ./ruleset/Apple_OCD_Domain.mrs
+    path: ./ruleset/Apple_Domain.mrs
 
   Applecidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Apple/Apple_OCD_IP.mrs"
-    path: ./ruleset/Apple_OCD_IP.mrs
+    path: ./ruleset/Apple_IP.mrs
 
   BlockHttpDNS:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BlockHttpDNS/BlockHttpDNS_OCD_Domain.mrs"
-    path: ./ruleset/BlockHttpDNS_OCD_Domain.mrs
+    path: ./ruleset/BlockHttpDNS_Domain.mrs
 
   BlockHttpDNScidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BlockHttpDNS/BlockHttpDNS_OCD_IP.mrs"
-    path: ./ruleset/BlockHttpDNS_OCD_IP.mrs
+    path: ./ruleset/BlockHttpDNS_IP.mrs
 
   ChinaMedia:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ChinaMedia/ChinaMedia_OCD_Domain.mrs"
-    path: ./ruleset/ChinaMedia_OCD_Domain.mrs
+    path: ./ruleset/ChinaMedia_Domain.mrs
 
   ChinaMediacidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ChinaMedia/ChinaMedia_OCD_IP.mrs"
-    path: ./ruleset/ChinaMedia_OCD_IP.mrs
+    path: ./ruleset/ChinaMedia_IP.mrs
 
   NetEase:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/NetEase/NetEase_OCD_Domain.mrs"
-    path: ./ruleset/NetEase_OCD_Domain.mrs
+    path: ./ruleset/NetEase_Domain.mrs
 
   NetEasecidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/NetEase/NetEase_OCD_IP.mrs"
-    path: ./ruleset/NetEase_OCD_IP.mrs
+    path: ./ruleset/NetEase_IP.mrs
 
   JingDong:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/JingDong/JingDong_OCD_Domain.mrs"
-    path: ./ruleset/JingDong_OCD_Domain.mrs
+    path: ./ruleset/JingDong_Domain.mrs
 
   58TongCheng:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/58TongCheng/58TongCheng_OCD_Domain.mrs"
-    path: ./ruleset/58TongCheng_OCD_Domain.mrs
+    path: ./ruleset/58TongCheng_Domain.mrs
 
   AliPay:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AliPay/AliPay_OCD_Domain.mrs"
-    path: ./ruleset/AliPay_OCD_Domain.mrs
+    path: ./ruleset/AliPay_Domain.mrs
 
   Pinduoduo:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Pinduoduo/Pinduoduo_OCD_Domain.mrs"
-    path: ./ruleset/Pinduoduo_OCD_Domain.mrs
+    path: ./ruleset/Pinduoduo_Domain.mrs
 
   Alibaba:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Alibaba/Alibaba_OCD_Domain.mrs"
-    path: ./ruleset/Alibaba_OCD_Domain.mrs
+    path: ./ruleset/Alibaba_Domain.mrs
 
   Alibabacidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Alibaba/Alibaba_OCD_IP.mrs"
-    path: ./ruleset/Alibaba_OCD_IP.mrs
+    path: ./ruleset/Alibaba_IP.mrs
 
   115:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/115/115_OCD_Domain.mrs"
-    path: ./ruleset/115_OCD_Domain.mrs
+    path: ./ruleset/115_Domain.mrs
 
   4399:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/4399/4399_OCD_Domain.mrs"
-    path: ./ruleset/4399_OCD_Domain.mrs
+    path: ./ruleset/4399_Domain.mrs
 
   PikPak:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/PikPak/PikPak_OCD_Domain.mrs"
-    path: ./ruleset/PikPak_OCD_Domain.mrs
+    path: ./ruleset/PikPak_Domain.mrs
 
   Google:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_Domain.mrs"
-    path: ./ruleset/Google_OCD_Domain.mrs
+    path: ./ruleset/Google_Domain.mrs
 
   Googlecidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_IP.mrs"
-    path: ./ruleset/Google_OCD_IP.mrs
+    path: ./ruleset/Google_IP.mrs
 
   YouTubeMusic:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/YouTubeMusic/YouTubeMusic_OCD_Domain.mrs"
-    path: ./ruleset/YouTubeMusic_OCD_Domain.mrs
+    path: ./ruleset/YouTubeMusic_Domain.mrs
 
   Twitter:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Twitter/Twitter_OCD_Domain.mrs"
-    path: ./ruleset/Twitter_OCD_Domain.mrs
+    path: ./ruleset/Twitter_Domain.mrs
 
   Twittercidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Twitter/Twitter_OCD_IP.mrs"
-    path: ./ruleset/Twitter_OCD_IP.mrs
+    path: ./ruleset/Twitter_IP.mrs
 
   Discord:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Discord/Discord_OCD_Domain.mrs"
-    path: ./ruleset/Discord_OCD_Domain.mrs
+    path: ./ruleset/Discord_Domain.mrs
 
   Telegram:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_Domain.mrs"
-    path: ./ruleset/Telegram_OCD_Domain.mrs
+    path: ./ruleset/Telegram_Domain.mrs
 
   Telegramcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_IP.mrs"
-    path: ./ruleset/Telegram_OCD_IP.mrs
+    path: ./ruleset/Telegram_IP.mrs
 
   OpenAI:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/OpenAI/OpenAI_OCD_Domain.mrs"
-    path: ./ruleset/OpenAI_OCD_Domain.mrs
+    path: ./ruleset/OpenAI_Domain.mrs
 
   OpenAIcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/OpenAI/OpenAI_OCD_IP.mrs"
-    path: ./ruleset/OpenAI_OCD_IP.mrs
+    path: ./ruleset/OpenAI_IP.mrs
 
   GitHub:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GitHub/GitHub_OCD_Domain.mrs"
-    path: ./ruleset/GitHub_OCD_Domain.mrs
+    path: ./ruleset/GitHub_Domain.mrs
 
   Facebook:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Facebook/Facebook_OCD_Domain.mrs"
-    path: ./ruleset/Facebook_OCD_Domain.mrs
+    path: ./ruleset/Facebook_Domain.mrs
 
   Facebookcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Facebook/Facebook_OCD_IP.mrs"
-    path: ./ruleset/Facebook_OCD_IP.mrs
+    path: ./ruleset/Facebook_IP.mrs
 
   Cloudflare:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Cloudflare/Cloudflare_OCD_Domain.mrs"
-    path: ./ruleset/Cloudflare_OCD_Domain.mrs
+    path: ./ruleset/Cloudflare_Domain.mrs
 
   Cloudflarecidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Cloudflare/Cloudflare_OCD_IP.mrs"
-    path: ./ruleset/Cloudflare_OCD_IP.mrs
+    path: ./ruleset/Cloudflare_IP.mrs
 
   Bahamut:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Bahamut/Bahamut_OCD_Domain.mrs"
-    path: ./ruleset/Bahamut_OCD_Domain.mrs
+    path: ./ruleset/Bahamut_Domain.mrs
 
   Hulu:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Hulu/Hulu_OCD_Domain.mrs"
-    path: ./ruleset/Hulu_OCD_Domain.mrs
+    path: ./ruleset/Hulu_Domain.mrs
 
   TVB:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/TVB/TVB_OCD_Domain.mrs"
-    path: ./ruleset/TVB_OCD_Domain.mrs
+    path: ./ruleset/TVB_Domain.mrs
 
   Niconico:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Niconico/Niconico_OCD_Domain.mrs"
-    path: ./ruleset/Niconico_OCD_Domain.mrs
+    path: ./ruleset/Niconico_Domain.mrs
 
   AbemaTV:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AbemaTV/AbemaTV_OCD_Domain.mrs"
-    path: ./ruleset/AbemaTV_OCD_Domain.mrs
+    path: ./ruleset/AbemaTV_Domain.mrs
 
   12306:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/12306/12306_OCD_Domain.mrs"
-    path: ./ruleset/12306_OCD_Domain.mrs
+    path: ./ruleset/12306_Domain.mrs
 
   ABC:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ABC/ABC_OCD_Domain.mrs"
-    path: ./ruleset/ABC_OCD_Domain.mrs
+    path: ./ruleset/ABC_Domain.mrs
 
   Adobe:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Adobe/Adobe_OCD_Domain.mrs"
-    path: ./ruleset/Adobe_OCD_Domain.mrs
+    path: ./ruleset/Adobe_Domain.mrs
 
   Amazon:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Amazon/Amazon_OCD_Domain.mrs"
-    path: ./ruleset/Amazon_OCD_Domain.mrs
+    path: ./ruleset/Amazon_Domain.mrs
 
   Amazoncidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Amazon/Amazon_OCD_IP.mrs"
-    path: ./ruleset/Amazon_OCD_IP.mrs
+    path: ./ruleset/Amazon_IP.mrs
 
   AmazonPrimeVideo:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AmazonPrimeVideo/AmazonPrimeVideo_OCD_Domain.mrs"
-    path: ./ruleset/AmazonPrimeVideo_OCD_Domain.mrs
+    path: ./ruleset/AmazonPrimeVideo_Domain.mrs
 
   AppleDaily:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleDaily/AppleDaily_OCD_Domain.mrs"
-    path: ./ruleset/AppleDaily_OCD_Domain.mrs
+    path: ./ruleset/AppleDaily_Domain.mrs
 
   AppleDev:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleDev/AppleDev_OCD_Domain.mrs"
-    path: ./ruleset/AppleDev_OCD_Domain.mrs
+    path: ./ruleset/AppleDev_Domain.mrs
 
   AppleFirmware:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleFirmware/AppleFirmware_OCD_Domain.mrs"
-    path: ./ruleset/AppleFirmware_OCD_Domain.mrs
+    path: ./ruleset/AppleFirmware_Domain.mrs
 
   AppleHardware:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleHardware/AppleHardware_OCD_Domain.mrs"
-    path: ./ruleset/AppleHardware_OCD_Domain.mrs
+    path: ./ruleset/AppleHardware_Domain.mrs
 
   AppleID:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleID/AppleID_OCD_Domain.mrs"
-    path: ./ruleset/AppleID_OCD_Domain.mrs
+    path: ./ruleset/AppleID_Domain.mrs
 
   AppleMail:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleMail/AppleMail_OCD_Domain.mrs"
-    path: ./ruleset/AppleMail_OCD_Domain.mrs
+    path: ./ruleset/AppleMail_Domain.mrs
 
   AppleMedia:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleMedia/AppleMedia_OCD_Domain.mrs"
-    path: ./ruleset/AppleMedia_OCD_Domain.mrs
+    path: ./ruleset/AppleMedia_Domain.mrs
 
   AppleMusic:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleMusic/AppleMusic_OCD_Domain.mrs"
-    path: ./ruleset/AppleMusic_OCD_Domain.mrs
+    path: ./ruleset/AppleMusic_Domain.mrs
 
   AppleNews:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleNews/AppleNews_OCD_Domain.mrs"
-    path: ./ruleset/AppleNews_OCD_Domain.mrs
+    path: ./ruleset/AppleNews_Domain.mrs
 
   AppleProxy:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleProxy/AppleProxy_OCD_Domain.mrs"
-    path: ./ruleset/AppleProxy_OCD_Domain.mrs
+    path: ./ruleset/AppleProxy_Domain.mrs
 
   AppleTV:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppleTV/AppleTV_OCD_Domain.mrs"
-    path: ./ruleset/AppleTV_OCD_Domain.mrs
+    path: ./ruleset/AppleTV_Domain.mrs
 
   AppStore:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/AppStore/AppStore_OCD_Domain.mrs"
-    path: ./ruleset/AppStore_OCD_Domain.mrs
+    path: ./ruleset/AppStore_Domain.mrs
 
   Baidu:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Baidu/Baidu_OCD_Domain.mrs"
-    path: ./ruleset/Baidu_OCD_Domain.mrs
+    path: ./ruleset/Baidu_Domain.mrs
 
   BaiDuTieBa:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BaiDuTieBa/BaiDuTieBa_OCD_Domain.mrs"
-    path: ./ruleset/BaiDuTieBa_OCD_Domain.mrs
+    path: ./ruleset/BaiDuTieBa_Domain.mrs
 
   Beats:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Beats/Beats_OCD_Domain.mrs"
-    path: ./ruleset/Beats_OCD_Domain.mrs
+    path: ./ruleset/Beats_Domain.mrs
 
   Bing:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Bing/Bing_OCD_Domain.mrs"
-    path: ./ruleset/Bing_OCD_Domain.mrs
+    path: ./ruleset/Bing_Domain.mrs
 
   Blizzard:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Blizzard/Blizzard_OCD_Domain.mrs"
-    path: ./ruleset/Blizzard_OCD_Domain.mrs
+    path: ./ruleset/Blizzard_Domain.mrs
 
   Blizzardcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Blizzard/Blizzard_OCD_IP.mrs"
-    path: ./ruleset/Blizzard_OCD_IP.mrs
+    path: ./ruleset/Blizzard_IP.mrs
 
   ByteDance:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ByteDance/ByteDance_OCD_Domain.mrs"
-    path: ./ruleset/ByteDance_OCD_Domain.mrs
+    path: ./ruleset/ByteDance_Domain.mrs
 
   ByteDancecidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ByteDance/ByteDance_OCD_IP.mrs"
-    path: ./ruleset/ByteDance_OCD_IP.mrs
+    path: ./ruleset/ByteDance_IP.mrs
 
   CCTV:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/CCTV/CCTV_OCD_Domain.mrs"
-    path: ./ruleset/CCTV_OCD_Domain.mrs
+    path: ./ruleset/CCTV_Domain.mrs
 
   Claude:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Claude/Claude_OCD_Domain.mrs"
-    path: ./ruleset/Claude_OCD_Domain.mrs
+    path: ./ruleset/Claude_Domain.mrs
 
   Copilot:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Copilot/Copilot_OCD_Domain.mrs"
-    path: ./ruleset/Copilot_OCD_Domain.mrs
+    path: ./ruleset/Copilot_Domain.mrs
 
   Copilotcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Copilot/Copilot_OCD_IP.mrs"
-    path: ./ruleset/Copilot_OCD_IP.mrs
+    path: ./ruleset/Copilot_IP.mrs
 
   DingTalk:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/DingTalk/DingTalk_OCD_Domain.mrs"
-    path: ./ruleset/DingTalk_OCD_Domain.mrs
+    path: ./ruleset/DingTalk_Domain.mrs
 
   Docker:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Docker/Docker_OCD_Domain.mrs"
-    path: ./ruleset/Docker_OCD_Domain.mrs
+    path: ./ruleset/Docker_Domain.mrs
 
   DouBan:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/DouBan/DouBan_OCD_Domain.mrs"
-    path: ./ruleset/DouBan_OCD_Domain.mrs
+    path: ./ruleset/DouBan_Domain.mrs
 
   DouYin:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/DouYin/DouYin_OCD_Domain.mrs"
-    path: ./ruleset/DouYin_OCD_Domain.mrs
+    path: ./ruleset/DouYin_Domain.mrs
 
   EA:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/EA/EA_OCD_Domain.mrs"
-    path: ./ruleset/EA_OCD_Domain.mrs
+    path: ./ruleset/EA_Domain.mrs
 
   Epic:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Epic/Epic_OCD_Domain.mrs"
-    path: ./ruleset/Epic_OCD_Domain.mrs
+    path: ./ruleset/Epic_Domain.mrs
 
   FitnessPlus:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/FitnessPlus/FitnessPlus_OCD_Domain.mrs"
-    path: ./ruleset/FitnessPlus_OCD_Domain.mrs
+    path: ./ruleset/FitnessPlus_Domain.mrs
 
   GaoDe:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GaoDe/GaoDe_OCD_Domain.mrs"
-    path: ./ruleset/GaoDe_OCD_Domain.mrs
+    path: ./ruleset/GaoDe_Domain.mrs
 
   Gemini:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Gemini/Gemini_OCD_Domain.mrs"
-    path: ./ruleset/Gemini_OCD_Domain.mrs
+    path: ./ruleset/Gemini_Domain.mrs
 
   GoogleDrive:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleDrive/GoogleDrive_OCD_Domain.mrs"
-    path: ./ruleset/GoogleDrive_OCD_Domain.mrs
+    path: ./ruleset/GoogleDrive_Domain.mrs
 
   GoogleEarth:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleEarth/GoogleEarth_OCD_Domain.mrs"
-    path: ./ruleset/GoogleEarth_OCD_Domain.mrs
+    path: ./ruleset/GoogleEarth_Domain.mrs
 
   GoogleFCM:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleFCM/GoogleFCM_OCD_Domain.mrs"
-    path: ./ruleset/GoogleFCM_OCD_Domain.mrs
+    path: ./ruleset/GoogleFCM_Domain.mrs
 
   GoogleFCMcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleFCM/GoogleFCM_OCD_IP.mrs"
-    path: ./ruleset/GoogleFCM_OCD_IP.mrs
+    path: ./ruleset/GoogleFCM_IP.mrs
 
   GoogleVoice:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GoogleVoice/GoogleVoice_OCD_Domain.mrs"
-    path: ./ruleset/GoogleVoice_OCD_Domain.mrs
+    path: ./ruleset/GoogleVoice_Domain.mrs
 
   HuluJP:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/HuluJP/HuluJP_OCD_Domain.mrs"
-    path: ./ruleset/HuluJP_OCD_Domain.mrs
+    path: ./ruleset/HuluJP_Domain.mrs
 
   HuluUSA:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/HuluUSA/HuluUSA_OCD_Domain.mrs"
-    path: ./ruleset/HuluUSA_OCD_Domain.mrs
+    path: ./ruleset/HuluUSA_Domain.mrs
 
   Hupu:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Hupu/Hupu_OCD_Domain.mrs"
-    path: ./ruleset/Hupu_OCD_Domain.mrs
+    path: ./ruleset/Hupu_Domain.mrs
 
   iCloud:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/iCloud/iCloud_OCD_Domain.mrs"
-    path: ./ruleset/iCloud_OCD_Domain.mrs
+    path: ./ruleset/iCloud_Domain.mrs
 
   IMDB:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/IMDB/IMDB_OCD_Domain.mrs"
-    path: ./ruleset/IMDB_OCD_Domain.mrs
+    path: ./ruleset/IMDB_Domain.mrs
 
   Instagram:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Instagram/Instagram_OCD_Domain.mrs"
-    path: ./ruleset/Instagram_OCD_Domain.mrs
+    path: ./ruleset/Instagram_Domain.mrs
 
   Intel:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Intel/Intel_OCD_Domain.mrs"
-    path: ./ruleset/Intel_OCD_Domain.mrs
+    path: ./ruleset/Intel_Domain.mrs
 
   iQIYI:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/iQIYI/iQIYI_OCD_Domain.mrs"
-    path: ./ruleset/iQIYI_OCD_Domain.mrs
+    path: ./ruleset/iQIYI_Domain.mrs
 
   iQIYIcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/iQIYI/iQIYI_OCD_IP.mrs"
-    path: ./ruleset/iQIYI_OCD_IP.mrs
-
-  KugouKuwo:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/KugouKuwo/KugouKuwo_OCD_Domain.mrs"
-    path: ./ruleset/KugouKuwo_OCD_Domain.mrs
-
-  KugouKuwocidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/KugouKuwo/KugouKuwo_OCD_IP.mrs"
-    path: ./ruleset/KugouKuwo_OCD_IP.mrs
+    path: ./ruleset/iQIYI_IP.mrs
 
   LastFM:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/LastFM/LastFM_OCD_Domain.mrs"
-    path: ./ruleset/LastFM_OCD_Domain.mrs
+    path: ./ruleset/LastFM_Domain.mrs
 
   MeiTuan:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/MeiTuan/MeiTuan_OCD_Domain.mrs"
-    path: ./ruleset/MeiTuan_OCD_Domain.mrs
+    path: ./ruleset/MeiTuan_Domain.mrs
 
   Microsoft:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Microsoft/Microsoft_OCD_Domain.mrs"
-    path: ./ruleset/Microsoft_OCD_Domain.mrs
+    path: ./ruleset/Microsoft_Domain.mrs
 
   MicrosoftEdge:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/MicrosoftEdge/MicrosoftEdge_OCD_Domain.mrs"
-    path: ./ruleset/MicrosoftEdge_OCD_Domain.mrs
+    path: ./ruleset/MicrosoftEdge_Domain.mrs
 
   NetEaseMusic:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/NetEaseMusic/NetEaseMusic_OCD_Domain.mrs"
-    path: ./ruleset/NetEaseMusic_OCD_Domain.mrs
+    path: ./ruleset/NetEaseMusic_Domain.mrs
 
   NetEaseMusiccidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/NetEaseMusic/NetEaseMusic_OCD_IP.mrs"
-    path: ./ruleset/NetEaseMusic_OCD_IP.mrs
+    path: ./ruleset/NetEaseMusic_IP.mrs
 
   NGA:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/NGA/NGA_OCD_Domain.mrs"
-    path: ./ruleset/NGA_OCD_Domain.mrs
+    path: ./ruleset/NGA_Domain.mrs
 
   OneDrive:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/OneDrive/OneDrive_OCD_Domain.mrs"
-    path: ./ruleset/OneDrive_OCD_Domain.mrs
+    path: ./ruleset/OneDrive_Domain.mrs
 
   Pandora:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Pandora/Pandora_OCD_Domain.mrs"
-    path: ./ruleset/Pandora_OCD_Domain.mrs
+    path: ./ruleset/Pandora_Domain.mrs
 
   PayPal:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/PayPal/PayPal_OCD_Domain.mrs"
-    path: ./ruleset/PayPal_OCD_Domain.mrs
+    path: ./ruleset/PayPal_Domain.mrs
 
   PlayStation:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/PlayStation/PlayStation_OCD_Domain.mrs"
-    path: ./ruleset/PlayStation_OCD_Domain.mrs
+    path: ./ruleset/PlayStation_Domain.mrs
 
   Qobuz:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Qobuz/Qobuz_OCD_Domain.mrs"
-    path: ./ruleset/Qobuz_OCD_Domain.mrs
+    path: ./ruleset/Qobuz_Domain.mrs
 
   Qobuzcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Qobuz/Qobuz_OCD_IP.mrs"
-    path: ./ruleset/Qobuz_OCD_IP.mrs
+    path: ./ruleset/Qobuz_IP.mrs
 
   Reddit:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Reddit/Reddit_OCD_Domain.mrs"
-    path: ./ruleset/Reddit_OCD_Domain.mrs
+    path: ./ruleset/Reddit_Domain.mrs
 
   Rockstar:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Rockstar/Rockstar_OCD_Domain.mrs"
-    path: ./ruleset/Rockstar_OCD_Domain.mrs
+    path: ./ruleset/Rockstar_Domain.mrs
 
   Scholar:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Scholar/Scholar_OCD_Domain.mrs"
-    path: ./ruleset/Scholar_OCD_Domain.mrs
+    path: ./ruleset/Scholar_Domain.mrs
 
   Sina:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Sina/Sina_OCD_Domain.mrs"
-    path: ./ruleset/Sina_OCD_Domain.mrs
+    path: ./ruleset/Sina_Domain.mrs
 
   Siri:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Siri/Siri_OCD_Domain.mrs"
-    path: ./ruleset/Siri_OCD_Domain.mrs
+    path: ./ruleset/Siri_Domain.mrs
 
   SMZDM:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/SMZDM/SMZDM_OCD_Domain.mrs"
-    path: ./ruleset/SMZDM_OCD_Domain.mrs
+    path: ./ruleset/SMZDM_Domain.mrs
 
   Sony:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Sony/Sony_OCD_Domain.mrs"
-    path: ./ruleset/Sony_OCD_Domain.mrs
+    path: ./ruleset/Sony_Domain.mrs
 
   SoundCloud:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/SoundCloud/SoundCloud_OCD_Domain.mrs"
-    path: ./ruleset/SoundCloud_OCD_Domain.mrs
+    path: ./ruleset/SoundCloud_Domain.mrs
 
   Speedtest:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Speedtest/Speedtest_OCD_Domain.mrs"
-    path: ./ruleset/Speedtest_OCD_Domain.mrs
+    path: ./ruleset/Speedtest_Domain.mrs
 
   Steam:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Steam/Steam_OCD_Domain.mrs"
-    path: ./ruleset/Steam_OCD_Domain.mrs
+    path: ./ruleset/Steam_Domain.mrs
 
   SteamCN:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/SteamCN/SteamCN_OCD_Domain.mrs"
-    path: ./ruleset/SteamCN_OCD_Domain.mrs
+    path: ./ruleset/SteamCN_Domain.mrs
 
   Supercell:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Supercell/Supercell_OCD_Domain.mrs"
-    path: ./ruleset/Supercell_OCD_Domain.mrs
+    path: ./ruleset/Supercell_Domain.mrs
 
   Supercellcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Supercell/Supercell_OCD_IP.mrs"
-    path: ./ruleset/Supercell_OCD_IP.mrs
+    path: ./ruleset/Supercell_IP.mrs
 
   SystemOTA:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/SystemOTA/SystemOTA_OCD_Domain.mrs"
-    path: ./ruleset/SystemOTA_OCD_Domain.mrs
+    path: ./ruleset/SystemOTA_Domain.mrs
 
   Teams:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Teams/Teams_OCD_Domain.mrs"
-    path: ./ruleset/Teams_OCD_Domain.mrs
+    path: ./ruleset/Teams_Domain.mrs
 
   Tencent:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Tencent/Tencent_OCD_Domain.mrs"
-    path: ./ruleset/Tencent_OCD_Domain.mrs
+    path: ./ruleset/Tencent_Domain.mrs
 
   Tencentcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Tencent/Tencent_OCD_IP.mrs"
-    path: ./ruleset/Tencent_OCD_IP.mrs
+    path: ./ruleset/Tencent_IP.mrs
 
   Pixiv:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Pixiv/Pixiv_OCD_Domain.mrs"
-    path: ./ruleset/Pixiv_OCD_Domain.mrs
+    path: ./ruleset/Pixiv_Domain.mrs
 
   Wikipedia:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Wikipedia/Wikipedia_OCD_Domain.mrs"
-    path: ./ruleset/Wikipedia_OCD_Domain.mrs
+    path: ./ruleset/Wikipedia_Domain.mrs
 
   Twitch:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Twitch/Twitch_OCD_Domain.mrs"
-    path: ./ruleset/Twitch_OCD_Domain.mrs
+    path: ./ruleset/Twitch_Domain.mrs
 
   Twitchcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Twitch/Twitch_OCD_IP.mrs"
-    path: ./ruleset/Twitch_OCD_IP.mrs
+    path: ./ruleset/Twitch_IP.mrs
 
   HBO:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/HBO/HBO_OCD_Domain.mrs"
-    path: ./ruleset/HBO_OCD_Domain.mrs
+    path: ./ruleset/HBO_Domain.mrs
 
   Line:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Line/Line_OCD_Domain.mrs"
-    path: ./ruleset/Line_OCD_Domain.mrs
+    path: ./ruleset/Line_Domain.mrs
 
   Linecidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Line/Line_OCD_IP.mrs"
-    path: ./ruleset/Line_OCD_IP.mrs
+    path: ./ruleset/Line_IP.mrs
 
   Emby:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Emby/Emby_OCD_Domain.mrs"
-    path: ./ruleset/Emby_OCD_Domain.mrs
+    path: ./ruleset/Emby_Domain.mrs
+
+  BiliBili:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BiliBili/BiliBili_OCD_Domain.mrs"
+    path: ./ruleset/BiliBili_Domain.mrs
+
+  BiliBilicidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BiliBili/BiliBili_OCD_IP.mrs"
+    path: ./ruleset/BiliBili_IP.mrs
+
+  Netflix:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Netflix/Netflix_OCD_Domain.mrs"
+    path: ./ruleset/Netflix_Domain.mrs
+
+  Netflixcidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Netflix/Netflix_OCD_IP.mrs"
+    path: ./ruleset/Netflix_IP.mrs
+
+  Disney:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Disney/Disney_OCD_Domain.mrs"
+    path: ./ruleset/Disney_Domain.mrs
+
+  Spotify:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Spotify/Spotify_OCD_Domain.mrs"
+    path: ./ruleset/Spotify_Domain.mrs
+
+  Spotifycidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Spotify/Spotify_OCD_IP.mrs"
+    path: ./ruleset/Spotify_IP.mrs
+
+  YouTube:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/YouTube/YouTube_OCD_Domain.mrs"
+    path: ./ruleset/YouTube_Domain.mrs
+
+  YouTubecidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/YouTube/YouTube_OCD_IP.mrs"
+    path: ./ruleset/YouTube_IP.mrs
+
+  GlobalMedia:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GlobalMedia/GlobalMedia_OCD_Domain.mrs"
+    path: ./ruleset/Media_Domain.mrs
+
+  GlobalMediacidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GlobalMedia/GlobalMedia_OCD_IP.mrs"
+    path: ./ruleset/Media_IP.mrs
 
   # ------------------------------------------------------------
   # MetaCubeX 规则
@@ -1425,72 +1474,35 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/mihoyo.mrs"
     path: ./ruleset/Mihoyo_Domain.mrs
 
-  # ------------------------------------------------------------
-  # DustinWin 规则
   Private:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/private.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"
     path: ./ruleset/Private_Domain.mrs
 
   Privatecidr:
     <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/privateip.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"
     path: ./ruleset/Private_IP.mrs
-
-  Fakeip-Filter:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/fakeip-filter.mrs"
-    path: ./ruleset/Fakeip_Filter_Domain.mrs
-
-  BiliBili:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/bilibili.mrs"
-    path: ./ruleset/BiliBili_Domain.mrs
 
   CN:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/cn.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
     path: ./ruleset/CN_Domain.mrs
 
   CNcidr:
     <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/cnip.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
     path: ./ruleset/CN_IP.mrs
 
-  Netflix:
+  Kugou:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/netflix.mrs"
-    path: ./ruleset/Netflix_Domain.mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/kugou.mrs"
+    path: ./ruleset/Kugou_Domain.mrs
 
-  Netflixcidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/netflixip.mrs"
-    path: ./ruleset/Netflix_IP.mrs
-
-  Disney:
+  Kuwo:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/disney.mrs"
-    path: ./ruleset/Disney_Domain.mrs
-
-  Media:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/media.mrs"
-    path: ./ruleset/Media_Domain.mrs
-
-  Mediacidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/mediaip.mrs"
-    path: ./ruleset/Media_IP.mrs
-
-  Spotify:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/spotify.mrs"
-    path: ./ruleset/Spotify_Domain.mrs
-
-  YouTube:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/youtube.mrs"
-    path: ./ruleset/YouTube_Domain.mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/kuwo.mrs"
+    path: ./ruleset/Kuwo_Domain.mrs
 
   # ------------------------------------------------------------
   # 自定义 规则
@@ -1554,7 +1566,7 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/EHGallery/EHGallery_IP.mrs"
     path: ./ruleset/EHGallery_IP.mrs
 
-  Spotifycidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/qljsyph/ruleset-icon/main/mihomo/ipcidr/spotify-ip.mrs"
-    path: ./ruleset/Spotify_IP.mrs
+  Fakeip-Filter:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/fakeip-filter.mrs"
+    path: ./ruleset/Fakeip_Filter_Domain.mrs
