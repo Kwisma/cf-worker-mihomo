@@ -674,11 +674,10 @@ sub-rules:
     - RULE-SET,STUN,🚫泄漏拦截
     - RULE-SET,STUNcidr,🚫泄漏拦截
     - DST-PORT,3478,🚫泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
-    - DST-PORT,5349,🚫泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
-    - DST-PORT,5350,🚫泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
-    - DST-PORT,5351,🚫泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
-    - DST-PORT,19302,🚫泄漏拦截 # Google 公共 STUN 服务端口，常用于 WebRTC 默认配置
-    - DOMAIN-KEYWORD,stun,🚫泄漏拦截
+    - AND,((NETWORK,TCP),(DST-PORT,5349)),🚫泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
+    - AND,((NETWORK,UDP),(DST-PORT,5350)),🚫泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
+    - AND,((NETWORK,UDP),(DST-PORT,5351)),🚫泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
+    - AND,((NETWORK,UDP),(DST-PORT,19302)),🚫泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
   SUB-EMBY:
     - RULE-SET,Emby,Emby
     - DOMAIN-KEYWORD,emby,Emby
