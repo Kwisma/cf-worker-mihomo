@@ -243,11 +243,11 @@ dns:
     - quic://223.6.6.6 # 阿里 DNS 解析 DNS 域名
     - "2400:3200::1" # 阿里 DNS 解析 DNS 域名
     - "2400:3200:baba::1" # 阿里 DNS 解析 DNS 域名
-  enhanced-mode: redir-host # 启用增强模式 redir-host or fake-ip
+  enhanced-mode: fake-ip # 启用增强模式 redir-host or fake-ip
   fake-ip-range: 198.18.0.0/16 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - RULE-SET:Private,China
+    - RULE-SET:Private,Fakeip_Filter,China
   nameserver-policy:
     github.akams.cn:
       - "quic://223.5.5.5"
@@ -1555,3 +1555,8 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/EHGallery/EHGallery_IP.mrs"
     path: ./ruleset/EHGallery_IP.mrs
+
+  Fakeip_Filter:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/fakeip-filter.mrs"
+    path: ./ruleset/Fakeip_Filter_Domain.mrs
