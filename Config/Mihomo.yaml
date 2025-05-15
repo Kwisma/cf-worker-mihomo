@@ -550,7 +550,7 @@ sub-rules:
     - RULE-SET,FitnessPlus,FitnessPlus # Apple Fitness+ 健身订阅
     - RULE-SET,AppleTV,AppleTV # Apple TV+ 影视订阅服务
     - RULE-SET,AppleMedia,AppleTV # Apple 影音服务 (如 Podcasts)
-    - RO,((RULE-SET,AppleProxy),(DOMAIN-KEYWORD,smp-device),(DOMAIN-KEYWORD,testflight)),Apple # Apple 代理相关流量
+    - OR,((RULE-SET,AppleProxy),(DOMAIN-KEYWORD,smp-device),(DOMAIN-KEYWORD,testflight)),Apple # Apple 代理相关流量
     - RULE-SET,Biliintl,哔哩东南亚 # 哔哩哔哩国际版
     - OR,((RULE-SET,TikTok),(DOMAIN-KEYWORD,tiktok)),TikTok # TikTok 短视频平台
     - OR,((RULE-SET,YouTube),(DOMAIN-KEYWORD,youtube)),YouTube # YouTube 视频平台
