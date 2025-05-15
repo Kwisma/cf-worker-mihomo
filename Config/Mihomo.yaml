@@ -550,10 +550,10 @@ sub-rules:
     - RULE-SET,FitnessPlus,FitnessPlus # Apple Fitness+ 健身订阅
     - RULE-SET,AppleTV,AppleTV # Apple TV+ 影视订阅服务
     - RULE-SET,AppleMedia,AppleTV # Apple 影音服务 (如 Podcasts)
-    - RULE-SET,AppleProxy,Apple # Apple 代理相关流量
+    - RO,((RULE-SET,AppleProxy),(DOMAIN-KEYWORD,smp-device),(DOMAIN-KEYWORD,testflight)),Apple # Apple 代理相关流量
     - RULE-SET,Biliintl,哔哩东南亚 # 哔哩哔哩国际版
-    - RULE-SET,TikTok,TikTok # TikTok 短视频平台
-    - RULE-SET,YouTube,YouTube # YouTube 视频平台
+    - OR,((RULE-SET,TikTok),(DOMAIN-KEYWORD,tiktok)),TikTok # TikTok 短视频平台
+    - OR,((RULE-SET,YouTube),(DOMAIN-KEYWORD,youtube)),YouTube # YouTube 视频平台
     - RULE-SET,YouTubeMusic,YouTubeMusic # YouTube Music 音乐流媒体
     - RULE-SET,Disney,Disney # Disney+ 影视订阅服务
     - RULE-SET,Bahamut,巴哈姆特 # 巴哈姆特 ACG 论坛
@@ -563,33 +563,33 @@ sub-rules:
     - RULE-SET,TVB,TVB # TVB 香港电视台
     - RULE-SET,Niconico,ニコニコ # Niconico 日本弹幕视频
     - RULE-SET,AbemaTV,AbemaTV # Abema 日本网络电视
-    - RULE-SET,AmazonPrimeVideo,亚马逊TV # 亚马逊 Prime Video 影视订阅
+    - OR,((RULE-SET,AmazonPrimeVideo),(DOMAIN-KEYWORD,avoddashs)),亚马逊TV # 亚马逊 Prime Video 影视订阅
     - RULE-SET,IMDB,IMDB # IMDB 电影数据库
     - RULE-SET,Qobuz,Qobuz # Qobuz 音乐流媒体
     - RULE-SET,SoundCloud,SoundCloud # SoundCloud 音乐分享平台
     - RULE-SET,Spotify,Spotify # Spotify 音乐流媒体
     - RULE-SET,LastFM,LastFM # Last.fm 音乐推荐
     - RULE-SET,4GTV,4GTV # 4GTV 媒体
-    - RULE-SET,Spotify,Spotify # Spotify 音乐流媒体
-    - RULE-SET,Twitch,Twitch # Twitch 直播平台
-    - RULE-SET,PikPak,PikPak # PikPak 云存储
+    - OR,((RULE-SET,Spotify),(DOMAIN-KEYWORD,spotify)),Spotify # Spotify 音乐流媒体
+    - OR,((RULE-SET,Twitch),(DOMAIN-KEYWORD,ttvnw)),Twitch # Twitch 直播平台
+    - OR,((RULE-SET,PikPak),(DOMAIN-KEYWORD,mypikpak)),PikPak # PikPak 云存储
     - RULE-SET,Discord,Discord # Discord 语音聊天社区
-    - RULE-SET,Telegram,Telegram # Telegram 即时通讯
-    - RULE-SET,GitHub,GitHub # GitHub 代码托管平台
-    - RULE-SET,Amazon,亚马逊电商 # 亚马逊电商
-    - RULE-SET,Adobe,Adobe # Adobe 相关服务 (如 Creative Cloud)
+    - OR,((RULE-SET,Telegram),(DOMAIN-KEYWORD,nicegram)),Telegram # Telegram 即时通讯
+    - OR,((RULE-SET,GitHub),(DOMAIN-KEYWORD,github)),GitHub # GitHub 代码托管平台
+    - OR,((RULE-SET,Amazon),(DOMAIN-KEYWORD,avoddashs)),亚马逊电商 # 亚马逊电商
+    - OR,((RULE-SET,Adobe),(DOMAIN-KEYWORD,adobe)),Adobe # Adobe 相关服务 (如 Creative Cloud)
     - RULE-SET,Docker,Docker # Docker 容器服务
-    - RULE-SET,Instagram,Instagram # Instagram 社交平台
+    - OR,((RULE-SET,Instagram),(DOMAIN-KEYWORD,instagram)),Instagram # Instagram 社交平台
     - RULE-SET,PayPal,PayPal # PayPal 在线支付
-    - OR,((RULE-SET,Claude),(RULE-SET,OpenAI),(RULE-SET,Gemini),(AND,((RULE-SET,Copilot),(NOT,((DOMAIN,www.bing.com)))))),OpenAI # Microsoft Copilot AI 助手
+    - OR,((RULE-SET,Claude),(RULE-SET,OpenAI),(RULE-SET,Gemini),(AND,((RULE-SET,Copilot),(NOT,((DOMAIN,www.bing.com))))),(DOMAIN-KEYWORD,openai),(DOMAIN-KEYWORD,openaicom-api),(DOMAIN-KEYWORD,colab),(DOMAIN-KEYWORD,developerprofiles),(DOMAIN-KEYWORD,generativelanguage)),OpenAI # Open AI
     - RULE-SET,Intel,因特尔 # Intel 相关服务
-    - RULE-SET,Speedtest,Speedtest # Speedtest 速度测试
+    - OR,((RULE-SET,Speedtest),(DOMAIN-KEYWORD,speedtest)),Speedtest # Speedtest 速度测试
     - RULE-SET,Reddit,Reddit # Reddit 论坛
     - RULE-SET,EHGallery,E站 #E站（E-Hentai / ExHentai）
     - RULE-SET,Pixiv,Pixiv # P站（Pixiv插画社区）
     - RULE-SET,Wikipedia,维基百科 # 维基百科，自由的百科全书
     - RULE-SET,Blizzard,暴雪 # 暴雪游戏 (如魔兽世界)
-    - RULE-SET,Steam,Steam # Steam 游戏商店及社区
+    - OR,((RULE-SET,Steam),(DOMAIN-KEYWORD,steambroadcast),(DOMAIN-KEYWORD,steamstore),(DOMAIN-KEYWORD,steamuserimages)),Steam # Steam 游戏商店及社区
     - RULE-SET,Rockstar,Rockstar # Rockstar 游戏 (如 GTA)
     - RULE-SET,PlayStation,PlayStation # PlayStation 网络
     - RULE-SET,Epic,Epic # Epic Games 商店
@@ -611,8 +611,8 @@ sub-rules:
     - RULE-SET,Pandora,潘朵拉珠宝 # Pandora 珠宝相关
     - OR,((RULE-SET,Emby,Emby),(DOMAIN-KEYWORD,emby)),Emby
     - RULE-SET,Talkatone,Talkatone # Talkatone 电话
-    - RULE-SET,Facebook,Facebook # Facebook 社交网络
-    - RULE-SET,Twitter,Twitter # Twitter 社交平台
+    - OR,((RULE-SET,Facebook),(DOMAIN-KEYWORD,facebook),(DOMAIN-KEYWORD,fbcdn)),Facebook # Facebook 社交网络
+    - OR,((RULE-SET,Twitter),(DOMAIN-KEYWORD,twitter)),Twitter # Twitter 社交平台
     - RULE-SET,Netflix,Netflix # Netflix 影视流媒体
     - RULE-SET,Tor,Tor # 洋葱浏览器
     - RULE-SET,Fastly,Fastly # Fastly 服务商
@@ -631,13 +631,13 @@ sub-rules:
     - RULE-SET,Kuwo,酷我 # 酷我音乐，在线音乐平台
     - RULE-SET,NetEaseMusic,网易云音乐 # 网易云音乐，在线音乐流媒体
     - RULE-SET,NGA,NGA # NGA 论坛 (游戏社区)
-    - RULE-SET,Tracker,BT追踪器 # 私有跟踪器，通常用于 BT 下载和种子分享
+    - OR,((RULE-SET,Tracker),(DOMAIN-KEYWORD,announce),(DOMAIN-KEYWORD,chdbits),(DOMAIN-KEYWORD,m-team),(DOMAIN-KEYWORD,torrent)),BT追踪器 # 私有跟踪器，通常用于 BT 下载和种子分享
     - RULE-SET,BaiDuTieBa,百度贴吧 # 百度贴吧，社区论坛
     - RULE-SET,GaoDe,高德 # 高德地图，地图导航服务
     - RULE-SET,MeiTuan,美团 # 美团，外卖、团购、酒店预订等服务
     - RULE-SET,SMZDM,什么值得买 # 什么值得买，购物推荐和折扣信息
     - RULE-SET,12306,12306 # 12306，中国铁路售票官网
-    - RULE-SET,Sina,新浪 # 新浪，包含新浪新闻、微博等
+    - OR,((RULE-SET,Sina),(DOMAIN-KEYWORD,weibo)),新浪 # 新浪，包含新浪新闻、微博等
     - RULE-SET,DouBan,豆瓣 # 豆瓣，书影音社区
     - RULE-SET,Hupu,虎扑 # 虎扑，体育和潮流社区
     - RULE-SET,ABC,农业银行 # 农业银行服务
@@ -653,8 +653,8 @@ sub-rules:
     - RULE-SET,4399,4399 # 4399，网页游戏和小游戏平台
     - RULE-SET,WeChat,微信 # 微信聊天平台
     - RULE-SET,Mihoyo,Mihoyo # 米哈游国内
-    - RULE-SET,OneDrive,微软云盘 # Microsoft OneDrive 云储存
-    - OR,((RULE-SET,Bing),(RULE-SET,Teams),(RULE-SET,MicrosoftEdge),(RULE-SET,Microsoft)),微软
+    - OR,((RULE-SET,OneDrive),(DOMAIN-KEYWORD,1drv),(DOMAIN-KEYWORD,onedrive),(DOMAIN-KEYWORD,skydrive)),微软云盘 # Microsoft OneDrive 云储存
+    - OR,((RULE-SET,Bing),(RULE-SET,Teams),(RULE-SET,MicrosoftEdge),(RULE-SET,Microsoft),(DOMAIN-KEYWORD,microsoft),(DOMAIN-KEYWORD,skydrive)),微软
     - RULE-SET,ChinaMedia,中国媒体 # 中国主流媒体
     - RULE-SET,ByteDance,字节跳动 # 字节跳动，包含抖音、今日头条等
     - RULE-SET,Tencent,腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
