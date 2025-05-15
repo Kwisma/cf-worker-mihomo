@@ -1,7 +1,35 @@
 const fs = require('fs');
 const yaml = require('js-yaml');
 
-// 假设数据保存在 rules.yaml 文件中
+// 从字符串或嵌套结构中递归提取所有 RULE-SET 名称
+function extractRuleSets(input) {
+  const ruleSets = new Set();
+
+  // 匹配类似 RULE-SET,OpenAI 的字符串
+  if (typeof input === 'string') {
+    const matches = input.matchAll(/RULE-SET\s*,\s*([a-zA-Z0-9_\-]+)/g);
+    for (const match of matches) {
+      ruleSets.add(match[1]);
+    }
+  }
+
+  // 如果是数组或对象，则递归处理
+  else if (Array.isArray(input)) {
+    input.forEach(item => {
+      const nested = extractRuleSets(item);
+      nested.forEach(rs => ruleSets.add(rs));
+    });
+  } else if (typeof input === 'object' && input !== null) {
+    Object.values(input).forEach(value => {
+      const nested = extractRuleSets(value);
+      nested.forEach(rs => ruleSets.add(rs));
+    });
+  }
+
+  return ruleSets;
+}
+
+// 主逻辑
 fs.readFile('config.yaml', 'utf8', (err, data) => {
   if (err) {
     console.error('读取文件出错:', err);
@@ -9,45 +37,31 @@ fs.readFile('config.yaml', 'utf8', (err, data) => {
   }
 
   try {
-    // 解析 YAML 数据
     const parsedData = yaml.load(data);
 
-    // 获取 rule-providers 中的所有参数
-    const ruleProviders = parsedData['rule-providers'];
-    const ruleProviderKeys = Object.keys(ruleProviders);  // 提取所有规则提供者的键
+    const ruleProviders = parsedData['rule-providers'] || {};
+    const subRules = parsedData['sub-rules'] || {};
 
-    // 获取 sub-rules 中的所有 RULE-SET 参数
-    const subRules = parsedData['sub-rules'];
-    let subRulesRuleSetKeys = [];
+    const ruleProviderKeys = Object.keys(ruleProviders);
 
-    if (subRules) {
-      Object.keys(subRules).forEach((subKey) => {
-        const subList = subRules[subKey];
-
-        // 从 sub-rules 中提取所有 RULE-SET 参数
-        subList.forEach(item => {
-          if (item.startsWith('RULE-SET')) {
-            const parts = item.split(',');
-            if (parts[1]) {
-              subRulesRuleSetKeys.push(parts[1].trim());  // 提取 RULE-SET 后的参数名称
-            }
-          }
-        });
-      });
+    // 提取所有 sub-rules 中出现的 RULE-SET 名
+    const foundRuleSets = new Set();
+    for (const subRule of Object.values(subRules)) {
+      const ruleSetNames = extractRuleSets(subRule);
+      ruleSetNames.forEach(rs => foundRuleSets.add(rs));
     }
 
-    // 找出那些只在 rule-providers 中但不在 sub-rules 中的参数
-    const missingInSubRules = ruleProviderKeys.filter(provider => !subRulesRuleSetKeys.includes(provider));
+    // 找出在 rule-providers 中定义但没在 sub-rules 中引用的项
+    const missing = ruleProviderKeys.filter(key => !foundRuleSets.has(key));
 
-    // 输出结果
-    if (missingInSubRules.length > 0) {
-      console.log('以下参数在 rule-providers 中，但没有出现在 sub-rules 中：');
-      missingInSubRules.forEach(param => {
-        console.log(param);
-      });
+    // 输出
+    if (missing.length > 0) {
+      console.log('以下 rule-providers 中的规则没有在 sub-rules 中被引用：');
+      missing.forEach(m => console.log(`- ${m}`));
     } else {
-      console.log('所有 rule-providers 中的参数都已出现在 sub-rules 中');
+      console.log('所有 rule-providers 中的规则都已在 sub-rules 中被引用');
     }
+
   } catch (e) {
     console.error('解析 YAML 出错:', e);
   }
