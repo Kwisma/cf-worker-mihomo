@@ -245,12 +245,12 @@ dns:
   fake-ip-range: 198.18.0.0/15 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - RULE-SET:Private,iCloud,Siri,SystemOTA,AppleID,AppleDev,AppleFirmware,AppleHardware,Apple,Beats,DouYin,CCTV,BiliBili,iQIYI,Kugou,Kuwo,NetEaseMusic,NGA,Tracker,BaiDuTieBa,GaoDe,MeiTuan,SMZDM,12306,Sina,DouBan,Hupu,ABC,Baidu,DingTalk,SteamCN,NetEase,JingDong,58TongCheng,AliPay,Pinduoduo,115,4399,WeChat,Mihoyo,OneDrive,Bing,Teams,MicrosoftEdge,Microsoft,ChinaMedia,ByteDance,Tencent,Alibaba
+    - RULE-SET:Private,China
   nameserver-policy:
     github.akams.cn:
       - "quic://223.5.5.5"
       - "quic://223.6.6.6"
-    RULE-SET:Private,iCloud,Siri,SystemOTA,AppleID,AppleDev,AppleFirmware,AppleHardware,Apple,Beats,DouYin,CCTV,BiliBili,iQIYI,Kugou,Kuwo,NetEaseMusic,NGA,Tracker,BaiDuTieBa,GaoDe,MeiTuan,SMZDM,12306,Sina,DouBan,Hupu,ABC,Baidu,DingTalk,SteamCN,NetEase,JingDong,58TongCheng,AliPay,Pinduoduo,115,4399,WeChat,Mihoyo,OneDrive,Bing,Teams,MicrosoftEdge,Microsoft,ChinaMedia,ByteDance,Tencent,Alibaba:
+    RULE-SET:Private,China:
       - "quic://223.5.5.5" # 阿里 DNS over DOQ
       - "quic://223.6.6.6"
   nameserver: # 设置多个 DNS 会泄漏不同服务商，不会泄漏 CN，如果在意建议只设置一个
@@ -1394,13 +1394,18 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GlobalMedia/GlobalMedia_OCD_IP.mrs"
     path: ./ruleset/Media_IP.mrs
 
-  Chinacidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ChinaIPs/ChinaIPs_OCD_IP.mrs"
-    path: ./ruleset/China_IP.mrs
-
   # ------------------------------------------------------------
   # MetaCubeX 规则
+  China:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
+    path: ./ruleset/China_Domain.mrs
+
+  Chinacidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
+    path: ./ruleset/China_IP.mrs
+
   Category-httpdns-cn:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-httpdns-cn.mrs"
