@@ -34,7 +34,7 @@ http://11.rarbg.com/announce
 
 http://116.252.176.125:6969/announce
 
-http://116.8.90.79:6969/announce
+http://116.8.90.91:6969/announce
 
 http://116.9.207.121:6969/announce
 
@@ -184,13 +184,15 @@ http://207.246.79.17:8080/announce
 
 http://209.209.112.121:2710/announce
 
-http://210.61.187.208:6969/announce
-
 http://211.20.122.47:6969/announce
 
 http://211.22.29.93/announce
 
-http://211.75.205.190:6969/announce
+http://211.75.205.187:6969/announce
+
+http://211.75.205.188:6969/announce
+
+http://211.75.205.189/announce
 
 http://211.75.29.254:6969/announce
 
@@ -210,11 +212,9 @@ http://34.89.30.59:2710/announce
 
 http://34.89.91.10/announce
 
+http://34.89.91.10:2701/announce
+
 http://34.89.91.10:2710/announce
-
-http://34.89.91.10:443/announce
-
-http://34.89.91.10:6960/announce
 
 http://34.89.91.10:6969/announce
 
@@ -226,13 +226,11 @@ http://34.94.213.23:2710/announce
 
 http://34.94.76.146/announce
 
-http://34.94.76.146/announce.php
-
 http://34.94.76.146:11450/announce
 
-http://34.94.76.146:1337/announce
-
 http://34.94.76.146:2710/announce
+
+http://34.94.76.146:6960/announce
 
 http://34.94.76.146:6969/announce
 
@@ -244,9 +242,11 @@ http://35.227.59.57/announce
 
 http://35.227.59.57/announce.php
 
-http://35.227.59.57:2701/announce
+http://35.227.59.57:1337/announce
 
 http://35.227.59.57:2710/announce
+
+http://35.227.59.57:443/announce
 
 http://35.227.59.57:6969/announce
 
@@ -1798,6 +1798,8 @@ udp://11.rarbg.com:80/announce
 
 udp://111.90.151.241:6969/announce
 
+udp://116.8.90.91:6969/announce
+
 udp://119.28.71.45:8080/announce
 
 udp://135.125.106.92:6969/announce
@@ -1872,11 +1874,15 @@ udp://207.241.226.111:6969/announce
 
 udp://207.241.231.226:6969/announce
 
+udp://208.83.20.20:6969/announce
+
 udp://209.126.11.233:6969/announce
 
 udp://209.141.59.25:6969/announce
 
-udp://210.61.187.208:6969/announce
+udp://211.75.205.188:6969/announce
+
+udp://211.75.205.189:80/announce
 
 udp://211.75.210.220:6969/announce
 
@@ -1886,9 +1892,7 @@ udp://217.30.10.77:6969/announce
 
 udp://220.200.35.72:2710/announce
 
-udp://220.200.35.72:6969/announce
-
-udp://23.134.89.9:1337/announce
+udp://23.134.88.9:1337/announce
 
 udp://23.137.251.45:6969/announce
 
@@ -1898,7 +1902,15 @@ udp://23.157.120.14:6969/announce
 
 udp://23.163.56.66:6969/announce
 
+udp://34.94.76.146:1337/announce
+
 udp://34.94.76.146:6969/announce
+
+udp://35.227.59.57:1337/announce
+
+udp://35.227.59.57:6969/announce
+
+udp://37.1.205.12:6969/announce
 
 udp://37.187.111.136:6969/announce
 
@@ -1907,6 +1919,8 @@ udp://37.187.95.112:6969/announce
 udp://37.235.176.37:2710/announce
 
 udp://37.59.48.81:6969/announce
+
+udp://45.154.96.35:6969/announce
 
 udp://45.155.53.144:6969/announce
 
@@ -1943,8 +1957,6 @@ udp://52.58.128.163:6969/announce
 udp://6.pocketnet.app:6969/announce
 
 udp://6ahddutb1ucc3cp.ru:6969/announce
-
-udp://79.112.33.41:1234/announce
 
 udp://7p41a8967.wicp.vip:22222/announce
 
@@ -2178,8 +2190,6 @@ udp://ipv6.tracker.harry.lu/announce
 
 udp://ipv6.tracker.harry.lu:6969/announce
 
-udp://isk.richardsw.club:6969/announce
-
 udp://ismaarino.com:1234/announce
 
 udp://jutone.com:6969/announce
@@ -2191,6 +2201,8 @@ udp://kokodayo.site:6969/announce
 udp://laze.cc:6969/announce
 
 udp://leefafa.tk:6969/announce
+
+udp://leet-tracker.moe:1337/announce
 
 udp://llideong.cn:6969/announce
 
@@ -2283,8 +2295,6 @@ udp://p2p.publictracker.xyz:6969/announce
 udp://p4p.arenabg.com:1337/announce
 
 udp://parag.rs:6969/announce
-
-udp://pirate.hz.is:1337/announce
 
 udp://pirate.t-1.org:1337/announce
 
@@ -2389,6 +2399,8 @@ udp://tk2.trackerservers.com:8080/announce
 udp://tk4.leechshield.link:6969/announce
 
 udp://torrent.fedoraproject.org:6969/announce
+
+udp://torrent.hificode.in:6969/announce
 
 udp://torrent.i.ng:6969/announce
 
