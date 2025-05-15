@@ -253,12 +253,12 @@ dns:
     RULE-SET:Private,iCloud,Siri,SystemOTA,AppleID,AppleDev,AppleFirmware,AppleHardware,Apple,Beats,DouYin,CCTV,BiliBili,iQIYI,Kugou,Kuwo,NetEaseMusic,NGA,Tracker,BaiDuTieBa,GaoDe,MeiTuan,SMZDM,12306,Sina,DouBan,Hupu,ABC,Baidu,DingTalk,SteamCN,NetEase,JingDong,58TongCheng,AliPay,Pinduoduo,115,4399,WeChat,Mihoyo,OneDrive,Bing,Teams,MicrosoftEdge,Microsoft,ChinaMedia,ByteDance,Tencent,Alibaba:
       - "quic://223.5.5.5" # 阿里 DNS over DOQ
       - "quic://223.6.6.6"
-  nameserver:
-    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS over H3
-    - "https://dns.google/dns-query#h3=true" # Google DNS over H3
-    - "https://doh.dns.sb/dns-query#h3=true" # SB DNS over H3
-    - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ DNS over H3
-    - "quic://dns.nextdns.io" # Next DNS  over DOQ
+  nameserver: # 设置多个 DNS 会泄漏不同服务商，不会泄漏 CN，如果在意建议只设置一个
+#    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS over H3
+#    - "https://dns.google/dns-query#h3=true" # Google DNS over H3
+#    - "https://doh.dns.sb/dns-query#h3=true" # SB DNS over H3
+#    - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ DNS over H3
+#    - "quic://dns.nextdns.io" # Next DNS  over DOQ
     - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
 #  proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
 #    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS  over DOQ
