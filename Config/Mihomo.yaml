@@ -1,5 +1,5 @@
 # mihomo (Clash Meta) 懒人配置
-# 版本：v1.19.8
+# 版本：v1.19.4
 # 作者：Kwisma
 # 频道：https://t.me/Marisa_kristi
 # 配置：https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/main/Config/Mihomo.yaml
@@ -245,12 +245,12 @@ dns:
   fake-ip-range: 198.18.0.0/15 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
-    - RULE-SET:Fakeip-Filter,Private
+    - RULE-SET:Private,iCloud,Siri,SystemOTA,AppleID,AppleDev,AppleFirmware,AppleHardware,Apple,Beats,DouYin,CCTV,BiliBili,iQIYI,Kugou,Kuwo,NetEaseMusic,NGA,Tracker,BaiDuTieBa,GaoDe,MeiTuan,SMZDM,12306,Sina,DouBan,Hupu,ABC,Baidu,DingTalk,SteamCN,NetEase,JingDong,58TongCheng,AliPay,Pinduoduo,115,4399,WeChat,Mihoyo,OneDrive,Bing,Teams,MicrosoftEdge,Microsoft,ChinaMedia,ByteDance,Tencent,Alibaba
   nameserver-policy:
     github.akams.cn:
       - "quic://223.5.5.5"
       - "quic://223.6.6.6"
-    RULE-SET:CN,Private:
+    RULE-SET:Private,iCloud,Siri,SystemOTA,AppleID,AppleDev,AppleFirmware,AppleHardware,Apple,Beats,DouYin,CCTV,BiliBili,iQIYI,Kugou,Kuwo,NetEaseMusic,NGA,Tracker,BaiDuTieBa,GaoDe,MeiTuan,SMZDM,12306,Sina,DouBan,Hupu,ABC,Baidu,DingTalk,SteamCN,NetEase,JingDong,58TongCheng,AliPay,Pinduoduo,115,4399,WeChat,Mihoyo,OneDrive,Bing,Teams,MicrosoftEdge,Microsoft,ChinaMedia,ByteDance,Tencent,Alibaba:
       - "quic://223.5.5.5" # 阿里 DNS over DOQ
       - "quic://223.6.6.6"
   nameserver:
@@ -539,7 +539,6 @@ sub-rules:
   SUB-LAN:
     - RULE-SET,Private,🎯全球直连
     - RULE-SET,Privatecidr,🎯全球直连
-    - RULE-SET,Fakeip-Filter,🎯全球直连
   SUB-DOMAIN:
     - DOMAIN,github.akams.cn,🎯全球直连
     - RULE-SET,AppStore,AppStore # App Store 应用商店
@@ -1472,11 +1471,6 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"
     path: ./ruleset/Private_IP.mrs
 
-  CN:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
-    path: ./ruleset/CN_Domain.mrs
-
   CNcidr:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
@@ -1553,8 +1547,3 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/EHGallery/EHGallery_IP.mrs"
     path: ./ruleset/EHGallery_IP.mrs
-
-  Fakeip-Filter:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/fakeip-filter.mrs"
-    path: ./ruleset/Fakeip_Filter_Domain.mrs
