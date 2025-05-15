@@ -73,9 +73,6 @@ proxy-providers:
 #redir-port: 7891 # 重定向端口，用于透明代理
 #tproxy-port: 1536 # TProxy 端口，支持 TUN 模式
 
-redir-port: 7891 # 重定向端口，用于透明代理
-tproxy-port: 1536 # TProxy 端口，支持 TUN 模式
-
 port: 7892 # HTTP 代理端口
 socks-port: 7893 # SOCKS5 代理端口
 mixed-port: 7890 # HTTP/SOCKS 混合代理端口
@@ -283,7 +280,7 @@ proxy-groups:
   - { name: 🚫广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🎯直连] }
 
   - { name: 🚫泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🎯直连] }
-  
+
   - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯直连] }
 
   - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
@@ -352,7 +349,7 @@ proxy-groups:
   - { name: 爱奇艺, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/IQIYI.webp }
   - { name: Instagram, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Instagram.webp }
   - { name: 因特尔, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Intel.webp }
-  - { name: iCloud, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/iCloud.webp }
+  - { name: iCloud, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/iCloud.webp }
   - { name: 京东, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/JingDong.webp }
   - { name: 酷狗, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Kugou.webp }
   - { name: 酷我, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Kuwo.webp }
@@ -623,8 +620,8 @@ sub-rules:
     - RULE-SET,GlobalMedia,国际媒体 # 媒体相关规则集，适用于流媒体解锁
     - RULE-SET,Cloudflare,Cloudflare # Cloudflare CDN 及安全服务
     ############ 分割线 ############
-    - OR,((RULE-SET,Siri),(RULE-SET,SystemOTA),(RULE-SET,AppleID),(RULE-SET,AppleDev),(RULE-SET,AppleFirmware),(RULE-SET,AppleHardware),(RULE-SET,Apple)),AppleCN
     - RULE-SET,iCloud,iCloud # iCloud 云存储服务
+    - OR,((RULE-SET,Siri),(RULE-SET,SystemOTA),(RULE-SET,AppleID),(RULE-SET,AppleDev),(RULE-SET,AppleFirmware),(RULE-SET,AppleHardware),(RULE-SET,Apple)),AppleCN
     - RULE-SET,Beats,Beats # Beats 耳机及音频服务
     - RULE-SET,DouYin,抖音 # 抖音，短视频社交平台
     - RULE-SET,CCTV,CCTV # 央视影音，中国中央电视台相关服务
