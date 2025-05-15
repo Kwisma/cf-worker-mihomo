@@ -668,7 +668,7 @@ sub-rules:
     - RULE-SET,Alibabacidr,阿里巴巴,no-resolve
     - RULE-SET,BiliBilicidr,哔哩哔哩,no-resolve
     - RULE-SET,ChinaMediacidr,中国媒体,no-resolve # 国内兜底媒体
-    - RULE-SET,CNcidr,🎯全球直连,no-resolve # 国内兜底 IP
+    - RULE-SET,Chinacidr,🎯全球直连,no-resolve # 国内兜底 IP
 
     # 国际服务
     - RULE-SET,Applecidr,Apple,no-resolve
@@ -1394,6 +1394,11 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GlobalMedia/GlobalMedia_OCD_IP.mrs"
     path: ./ruleset/Media_IP.mrs
 
+  Chinacidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/ChinaIPs/ChinaIPs_OCD_IP.mrs"
+    path: ./ruleset/China_IP.mrs
+
   # ------------------------------------------------------------
   # MetaCubeX 规则
   Category-httpdns-cn:
@@ -1470,11 +1475,6 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"
     path: ./ruleset/Private_IP.mrs
-
-  CNcidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
-    path: ./ruleset/CN_IP.mrs
 
   Kugou:
     <<: *domain_mrs
