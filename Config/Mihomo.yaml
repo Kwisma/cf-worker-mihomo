@@ -573,7 +573,7 @@ sub-rules:
     - RULE-SET,4GTV,4GTV # 4GTV 媒体
     - OR,((RULE-SET,Spotify),(DOMAIN-KEYWORD,spotify)),Spotify # Spotify 音乐流媒体
     - OR,((RULE-SET,Twitch),(DOMAIN-KEYWORD,ttvnw)),Twitch # Twitch 直播平台
-    - OR,((RULE-SET,PikPak),(DOMAIN-KEYWORD,mypikpak)),PikPak # PikPak 云存储
+    - OR,((RULE-SET,PikPak),(DOMAIN-KEYWORD,pikpak)),PikPak # PikPak 云存储
     - RULE-SET,Discord,Discord # Discord 语音聊天社区
     - OR,((RULE-SET,Telegram),(DOMAIN-KEYWORD,nicegram)),Telegram # Telegram 即时通讯
     - OR,((RULE-SET,GitHub),(DOMAIN-KEYWORD,github)),GitHub # GitHub 代码托管平台
