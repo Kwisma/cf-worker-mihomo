@@ -222,6 +222,8 @@ tun:
 #  iproute2-table-index: 2022 # 使用指定的路由表索引 (iproute2)
 #  iproute2-rule-index: 9000 # 设置路由规则的索引 (iproute2)
   endpoint-independent-nat: false # 启用独立于端点的 NAT，性能可能会略有下降，所以不建议在不需要的时候开启
+  route-address: # 启用 auto-route 时路由自定义路由网段
+    - 198.18.0.0/16
 
 # DNS 配置：控制 DNS 查询行为，支持增强模式和假 IP 功能
 # 查询 DNS 是否支持 H3 指令:
@@ -230,10 +232,10 @@ tun:
 dns:
   enable: true # 启用 DNS 模块
   cache-algorithm: arc # 缓存算法，参数:lru 最近最少使用，arc 自适应替换缓存
-  prefer-h3: true # DOH 优先使用 http/3
+  prefer-h3: false # DOH 优先使用 http/3
   use-hosts: true # 使用配置中的 hosts 文件条目
   use-system-hosts: true # 使用系统的 hosts 文件条目
-  respect-rules: false # dns 连接遵守路由规则，需配置 proxy-server-nameserver, 强烈不建议和 prefer-h3 一起使用
+  respect-rules: true # dns 连接遵守路由规则，需配置 proxy-server-nameserver, 强烈不建议和 prefer-h3 一起使用
   listen: 0.0.0.0:1053 # 本地 DNS 监听端口，默认是 1053 端口
   ipv6: true # 启用 IPv6 DNS 解析，避免 IPv6 地址的解析请求
   default-nameserver:
@@ -242,7 +244,7 @@ dns:
     - "2400:3200::1" # 阿里 DNS 解析 DNS 域名
     - "2400:3200:baba::1" # 阿里 DNS 解析 DNS 域名
   enhanced-mode: fake-ip # 启用增强模式 redir-host or fake-ip
-  fake-ip-range: 198.18.0.0/15 # fake-ip 池设置
+  fake-ip-range: 198.18.0.0/16 # fake-ip 池设置
   fake-ip-filter-mode: blacklist
   fake-ip-filter:
     - RULE-SET:Private,China
@@ -260,8 +262,9 @@ dns:
 #    - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ DNS over H3
 #    - "quic://dns.nextdns.io" # Next DNS  over DOQ
     - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
-#  proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
-#    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS  over DOQ
+  proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
+    - "quic://223.5.5.5" # 阿里 DNS over DOQ
+    - "quic://223.6.6.6"
   direct-nameserver: #  用于直连出口域名解析的 DNS 服务器
     - "quic://223.5.5.5" # 阿里 DNS over DOQ
     - "quic://223.6.6.6"
