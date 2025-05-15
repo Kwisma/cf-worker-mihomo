@@ -196,7 +196,7 @@ sniffer:
     QUIC:
       ports: [443, 8443] # 对 QUIC 协议的流量进行嗅探，QUI C 常用于改进 HTTPS 连接的速度
   force-domain:
-    - +.v2ex.com # 对指定域名强制解析，即使 IP 地址已缓存或已知
+    - "+.v2ex.com" # 对指定域名强制解析，即使 IP 地址已缓存或已知
   skip-domain:
     - Mijia.Cloud.com # 跳过指定域名，不对其进行嗅探处理（如智能家居流量）
   skip-src-address:
@@ -662,41 +662,41 @@ sub-rules:
     - RULE-SET,Alibaba,阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
   SUB-IPCIDR:
     # 国内服务
-    - RULE-SET,NetEasecidr,网易,no-resolve
-    - RULE-SET,iQIYIcidr,爱奇艺,no-resolve
-    - RULE-SET,NetEaseMusiccidr,网易云音乐,no-resolve
-    - RULE-SET,ByteDancecidr,字节跳动,no-resolve
-    - RULE-SET,Tencentcidr,腾讯,no-resolve
-    - RULE-SET,Alibabacidr,阿里巴巴,no-resolve
-    - RULE-SET,BiliBilicidr,哔哩哔哩,no-resolve
-    - RULE-SET,ChinaMediacidr,中国媒体,no-resolve # 国内兜底媒体
-    - RULE-SET,Chinacidr,🎯全球直连,no-resolve # 国内兜底 IP
+    - RULE-SET,NetEasecidr,网易
+    - RULE-SET,iQIYIcidr,爱奇艺
+    - RULE-SET,NetEaseMusiccidr,网易云音乐
+    - RULE-SET,ByteDancecidr,字节跳动
+    - RULE-SET,Tencentcidr,腾讯
+    - RULE-SET,Alibabacidr,阿里巴巴
+    - RULE-SET,BiliBilicidr,哔哩哔哩
+    - RULE-SET,ChinaMediacidr,中国媒体 # 国内兜底媒体
+    - RULE-SET,Chinacidr,🎯全球直连 # 国内兜底 IP
 
     # 国际服务
-    - RULE-SET,Applecidr,Apple,no-resolve
-    - RULE-SET,Spotifycidr,Spotify,no-resolve
-    - RULE-SET,Twitchcidr,Twitch,no-resolve
-    - RULE-SET,Telegramcidr,Telegram,no-resolve
-    - RULE-SET,Amazoncidr,亚马逊电商,no-resolve
-    - RULE-SET,Copilotcidr,OpenAI,no-resolve
-    - RULE-SET,OpenAIcidr,OpenAI,no-resolve
-    - RULE-SET,EHGallerycidr,E站,no-resolve
-    - RULE-SET,Blizzardcidr,暴雪,no-resolve
-    - RULE-SET,Supercellcidr,Supercell,no-resolve
-    - RULE-SET,GoogleFCMcidr,FCM,no-resolve
-    - RULE-SET,Linecidr,LINE,no-resolve
-    - RULE-SET,Talkatonecidr,Talkatone,no-resolve
-    - RULE-SET,Facebookcidr,Facebook,no-resolve
-    - RULE-SET,Twittercidr,Twitter,no-resolve
-    - RULE-SET,Netflixcidr,Netflix,no-resolve
-    - RULE-SET,Torcidr,Tor,no-resolve
-    - RULE-SET,Fastlycidr,Fastly,no-resolve
-    - RULE-SET,Googlecidr,Google,no-resolve
-    - RULE-SET,Trackercidr,BT追踪器,no-resolve
-    - RULE-SET,Qobuzcidr,Qobuz,no-resolve
-    - RULE-SET,YouTubecidr,YouTube,no-resolve
-    - RULE-SET,GlobalMediacidr,国际媒体,no-resolve # 国外兜底媒体
-    - RULE-SET,Cloudflarecidr,Cloudflare,no-resolve # 国外兜底 IP
+    - RULE-SET,Applecidr,Apple
+    - RULE-SET,Spotifycidr,Spotify
+    - RULE-SET,Twitchcidr,Twitch
+    - RULE-SET,Telegramcidr,Telegram
+    - RULE-SET,Amazoncidr,亚马逊电商
+    - RULE-SET,Copilotcidr,OpenAI
+    - RULE-SET,OpenAIcidr,OpenAI
+    - RULE-SET,EHGallerycidr,E站
+    - RULE-SET,Blizzardcidr,暴雪
+    - RULE-SET,Supercellcidr,Supercell
+    - RULE-SET,GoogleFCMcidr,FCM
+    - RULE-SET,Linecidr,LINE
+    - RULE-SET,Talkatonecidr,Talkatone
+    - RULE-SET,Facebookcidr,Facebook
+    - RULE-SET,Twittercidr,Twitter
+    - RULE-SET,Netflixcidr,Netflix
+    - RULE-SET,Torcidr,Tor
+    - RULE-SET,Fastlycidr,Fastly
+    - RULE-SET,Googlecidr,Google
+    - RULE-SET,Trackercidr,BT追踪器
+    - RULE-SET,Qobuzcidr,Qobuz
+    - RULE-SET,YouTubecidr,YouTube
+    - RULE-SET,GlobalMediacidr,国际媒体 # 国外兜底媒体
+    - RULE-SET,Cloudflarecidr,Cloudflare # 国外兜底 IP
 
 rule-providers:
   # ------------------------------------------------------------
@@ -786,45 +786,15 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/PikPak/PikPak_OCD_Domain.mrs"
     path: ./ruleset/PikPak_Domain.mrs
 
-  Google:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_Domain.mrs"
-    path: ./ruleset/Google_Domain.mrs
-
-  Googlecidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Google/Google_OCD_IP.mrs"
-    path: ./ruleset/Google_IP.mrs
-
   YouTubeMusic:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/YouTubeMusic/YouTubeMusic_OCD_Domain.mrs"
     path: ./ruleset/YouTubeMusic_Domain.mrs
 
-  Twitter:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Twitter/Twitter_OCD_Domain.mrs"
-    path: ./ruleset/Twitter_Domain.mrs
-
-  Twittercidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Twitter/Twitter_OCD_IP.mrs"
-    path: ./ruleset/Twitter_IP.mrs
-
   Discord:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Discord/Discord_OCD_Domain.mrs"
     path: ./ruleset/Discord_Domain.mrs
-
-  Telegram:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_Domain.mrs"
-    path: ./ruleset/Telegram_Domain.mrs
-
-  Telegramcidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Telegram/Telegram_OCD_IP.mrs"
-    path: ./ruleset/Telegram_IP.mrs
 
   OpenAI:
     <<: *domain_mrs
@@ -840,26 +810,6 @@ rule-providers:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/GitHub/GitHub_OCD_Domain.mrs"
     path: ./ruleset/GitHub_Domain.mrs
-
-  Facebook:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Facebook/Facebook_OCD_Domain.mrs"
-    path: ./ruleset/Facebook_Domain.mrs
-
-  Facebookcidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Facebook/Facebook_OCD_IP.mrs"
-    path: ./ruleset/Facebook_IP.mrs
-
-  Cloudflare:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Cloudflare/Cloudflare_OCD_Domain.mrs"
-    path: ./ruleset/Cloudflare_Domain.mrs
-
-  Cloudflarecidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Cloudflare/Cloudflare_OCD_IP.mrs"
-    path: ./ruleset/Cloudflare_IP.mrs
 
   Bahamut:
     <<: *domain_mrs
@@ -1351,16 +1301,6 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BiliBili/BiliBili_OCD_IP.mrs"
     path: ./ruleset/BiliBili_IP.mrs
 
-  Netflix:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Netflix/Netflix_OCD_Domain.mrs"
-    path: ./ruleset/Netflix_Domain.mrs
-
-  Netflixcidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Netflix/Netflix_OCD_IP.mrs"
-    path: ./ruleset/Netflix_IP.mrs
-
   Disney:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Disney/Disney_OCD_Domain.mrs"
@@ -1492,6 +1432,66 @@ rule-providers:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/kuwo.mrs"
     path: ./ruleset/Kuwo_Domain.mrs
+
+  Cloudflare:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cloudflare.mrs"
+    path: ./ruleset/Cloudflare_Domain.mrs
+
+  Cloudflarecidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cloudflare.mrs"
+    path: ./ruleset/Cloudflare_IP.mrs
+
+  Telegram:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/telegram.mrs"
+    path: ./ruleset/Telegram_Domain.mrs
+
+  Telegramcidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/telegram.mrs"
+    path: ./ruleset/Telegram_IP.mrs
+
+  Facebook:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/facebook.mrs"
+    path: ./ruleset/Facebook_Domain.mrs
+
+  Facebookcidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/facebook.mrs"
+    path: ./ruleset/Facebook_IP.mrs
+
+  Twitter:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/twitter.mrs"
+    path: ./ruleset/Twitter_Domain.mrs
+
+  Twittercidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/twitter.mrs"
+    path: ./ruleset/Twitter_IP.mrs
+
+  Netflix:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/netflix.mrs"
+    path: ./ruleset/Netflix_Domain.mrs
+
+  Netflixcidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/netflix.mrs"
+    path: ./ruleset/Netflix_IP.mrs
+
+  Google:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/google.mrs"
+    path: ./ruleset/Google_Domain.mrs
+
+  Googlecidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/google.mrs"
+    path: ./ruleset/Google_IP.mrs
 
   # ------------------------------------------------------------
   # 自定义 规则
