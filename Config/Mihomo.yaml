@@ -1,5 +1,5 @@
 # mihomo (Clash Meta) 懒人配置
-# 版本：v1.19.4
+# 版本：v1.19.8
 # 作者：Kwisma
 # 频道：https://t.me/Marisa_kristi
 # 配置：https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/main/Config/Mihomo.yaml
@@ -72,6 +72,9 @@ proxy-providers:
 
 #redir-port: 7891 # 重定向端口，用于透明代理
 #tproxy-port: 1536 # TProxy 端口，支持 TUN 模式
+
+redir-port: 7891 # 重定向端口，用于透明代理
+tproxy-port: 1536 # TProxy 端口，支持 TUN 模式
 
 port: 7892 # HTTP 代理端口
 socks-port: 7893 # SOCKS5 代理端口
@@ -280,7 +283,7 @@ proxy-groups:
   - { name: 🚫广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🎯直连] }
 
   - { name: 🚫泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🎯直连] }
-
+  
   - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯直连] }
 
   - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
@@ -303,6 +306,7 @@ proxy-groups:
   - { name: 亚马逊电商, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/AmazonShopping.webp }
   - { name: 亚马逊TV, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/AmazonPrimeVideo.webp }
   - { name: Apple, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Apple.webp }
+  - { name: AppleCN, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/AppleCN.webp }
   - { name: AppStore, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/AppStore.webp }
   - { name: Apple邮箱, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/AppleMail.webp }
   - { name: Apple音乐, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/AppleMusic.webp }
@@ -348,7 +352,7 @@ proxy-groups:
   - { name: 爱奇艺, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/IQIYI.webp }
   - { name: Instagram, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Instagram.webp }
   - { name: 因特尔, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Intel.webp }
-  - { name: iCloud, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/iCloud.webp }
+  - { name: iCloud, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/iCloud.webp }
   - { name: 京东, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/JingDong.webp }
   - { name: 酷狗, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Kugou.webp }
   - { name: 酷我, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Kuwo.webp }
@@ -542,26 +546,14 @@ sub-rules:
   SUB-DOMAIN:
     - DOMAIN,github.akams.cn,🎯全球直连
     - RULE-SET,AppStore,AppStore # App Store 应用商店
-    - RULE-SET,iCloud,iCloud # iCloud 云存储服务
     - RULE-SET,AppleMail,Apple邮箱 # Apple Mail 邮件服务
     - RULE-SET,AppleMusic,Apple音乐 # Apple Music 音乐流媒体
     - RULE-SET,AppleNews,Apple新闻 # Apple News 新闻订阅
     - RULE-SET,AppleDaily,Apple日报 # Apple Daily 新闻
     - RULE-SET,FitnessPlus,FitnessPlus # Apple Fitness+ 健身订阅
-    - RULE-SET,Beats,Beats # Beats 耳机及音频服务
     - RULE-SET,AppleTV,AppleTV # Apple TV+ 影视订阅服务
     - RULE-SET,AppleMedia,AppleTV # Apple 影音服务 (如 Podcasts)
-    - RULE-SET,Siri,Apple # Siri 语音助手
-    - RULE-SET,SystemOTA,Apple # iOS/macOS 系统更新 (OTA)
-    - RULE-SET,AppleID,Apple # Apple ID 登录及验证
-    - RULE-SET,AppleDev,Apple # Apple 开发者服务
-    - RULE-SET,AppleFirmware,Apple # Apple 设备固件下载
-    - RULE-SET,AppleHardware,Apple # Apple 硬件相关服务
-    - RULE-SET,Apple,Apple # Apple 相关服务的总规则
     - RULE-SET,AppleProxy,Apple # Apple 代理相关流量
-    - RULE-SET,DouYin,抖音 # 抖音，短视频社交平台
-    - RULE-SET,CCTV,CCTV # 央视影音，中国中央电视台相关服务
-    - RULE-SET,BiliBili,哔哩哔哩 # 哔哩哔哩，二次元弹幕视频网站
     - RULE-SET,Biliintl,哔哩东南亚 # 哔哩哔哩国际版
     - RULE-SET,TikTok,TikTok # TikTok 短视频平台
     - RULE-SET,YouTube,YouTube # YouTube 视频平台
@@ -582,28 +574,17 @@ sub-rules:
     - RULE-SET,LastFM,LastFM # Last.fm 音乐推荐
     - RULE-SET,4GTV,4GTV # 4GTV 媒体
     - RULE-SET,Spotify,Spotify # Spotify 音乐流媒体
-    - RULE-SET,iQIYI,爱奇艺 # 爱奇艺，在线视频平台
-    - RULE-SET,Kugou,酷狗 # 酷狗音乐，在线音乐平台
-    - RULE-SET,Kuwo,酷我 # 酷我音乐，在线音乐平台
-    - RULE-SET,NetEaseMusic,网易云音乐 # 网易云音乐，在线音乐流媒体
     - RULE-SET,Twitch,Twitch # Twitch 直播平台
     - RULE-SET,PikPak,PikPak # PikPak 云存储
     - RULE-SET,Discord,Discord # Discord 语音聊天社区
     - RULE-SET,Telegram,Telegram # Telegram 即时通讯
-    - RULE-SET,Claude,OpenAI # Claude AI 聊天机器人
     - RULE-SET,GitHub,GitHub # GitHub 代码托管平台
     - RULE-SET,Amazon,亚马逊电商 # 亚马逊电商
     - RULE-SET,Adobe,Adobe # Adobe 相关服务 (如 Creative Cloud)
     - RULE-SET,Docker,Docker # Docker 容器服务
     - RULE-SET,Instagram,Instagram # Instagram 社交平台
     - RULE-SET,PayPal,PayPal # PayPal 在线支付
-    - RULE-SET,Bing,微软 # Bing 搜索引擎
-    - RULE-SET,Teams,微软 # Microsoft Teams 协作工具
-    - RULE-SET,MicrosoftEdge,微软 # Microsoft Edge 浏览器
-    - RULE-SET,OneDrive,微软云盘 # Microsoft OneDrive 云储存
-    - RULE-SET,Copilot,OpenAI # Microsoft Copilot AI 助手
-    - RULE-SET,Microsoft,微软 # Microsoft 相关服务
-    - RULE-SET,OpenAI,OpenAI # OpenAI 相关服务
+    - OR,((RULE-SET,Claude),(RULE-SET,OpenAI),(RULE-SET,Gemini),(AND,((RULE-SET,Copilot),(NOT,((DOMAIN,www.bing.com)))))),OpenAI # Microsoft Copilot AI 助手
     - RULE-SET,Intel,因特尔 # Intel 相关服务
     - RULE-SET,Speedtest,Speedtest # Speedtest 速度测试
     - RULE-SET,Reddit,Reddit # Reddit 论坛
@@ -625,15 +606,13 @@ sub-rules:
     - RULE-SET,GoogleFCM,FCM # Google Firebase Cloud Messaging (推送)
     - RULE-SET,GoogleVoice,GoogleVoice # Google Voice 语音服务
     - RULE-SET,Scholar,Google学术 # Google Scholar 学术搜索
-    - RULE-SET,Gemini,OpenAI # Google Gemini AI
     - RULE-SET,HBO,HBO # Home Box Office
     - RULE-SET,Line,LINE # LINE （连我）
     - RULE-SET,Wise,Wise # Wise 金融科技
     - RULE-SET,Signal,Signal # Signal 加密即時通訊
     - RULE-SET,Picacg,哔咔哔咔 # 哔咔哔咔漫画
     - RULE-SET,Pandora,潘朵拉珠宝 # Pandora 珠宝相关
-    - RULE-SET,Emby,Emby
-    - DOMAIN-KEYWORD,emby,Emby
+    - OR,((RULE-SET,Emby,Emby),(DOMAIN-KEYWORD,emby)),Emby
     - RULE-SET,Talkatone,Talkatone # Talkatone 电话
     - RULE-SET,Facebook,Facebook # Facebook 社交网络
     - RULE-SET,Twitter,Twitter # Twitter 社交平台
@@ -644,6 +623,16 @@ sub-rules:
     - RULE-SET,GlobalMedia,国际媒体 # 媒体相关规则集，适用于流媒体解锁
     - RULE-SET,Cloudflare,Cloudflare # Cloudflare CDN 及安全服务
     ############ 分割线 ############
+    - OR,((RULE-SET,Siri),(RULE-SET,SystemOTA),(RULE-SET,AppleID),(RULE-SET,AppleDev),(RULE-SET,AppleFirmware),(RULE-SET,AppleHardware),(RULE-SET,Apple)),AppleCN
+    - RULE-SET,iCloud,iCloud # iCloud 云存储服务
+    - RULE-SET,Beats,Beats # Beats 耳机及音频服务
+    - RULE-SET,DouYin,抖音 # 抖音，短视频社交平台
+    - RULE-SET,CCTV,CCTV # 央视影音，中国中央电视台相关服务
+    - RULE-SET,BiliBili,哔哩哔哩 # 哔哩哔哩，二次元弹幕视频网站
+    - RULE-SET,iQIYI,爱奇艺 # 爱奇艺，在线视频平台
+    - RULE-SET,Kugou,酷狗 # 酷狗音乐，在线音乐平台
+    - RULE-SET,Kuwo,酷我 # 酷我音乐，在线音乐平台
+    - RULE-SET,NetEaseMusic,网易云音乐 # 网易云音乐，在线音乐流媒体
     - RULE-SET,NGA,NGA # NGA 论坛 (游戏社区)
     - RULE-SET,Tracker,BT追踪器 # 私有跟踪器，通常用于 BT 下载和种子分享
     - RULE-SET,BaiDuTieBa,百度贴吧 # 百度贴吧，社区论坛
@@ -663,10 +652,12 @@ sub-rules:
     - RULE-SET,58TongCheng,58同城 # 58同城，分类信息平台
     - RULE-SET,AliPay,支付宝 # 支付宝，在线支付平台
     - RULE-SET,Pinduoduo,拼多多 # 拼多多，社交电商平台
-    - RULE-SET,115,115 # 115 网盘，云存储服务
+    - OR,((RULE-SET,115),(DOMAIN-SUFFIX,115vod.com)),115 # 115 网盘，云存储服务
     - RULE-SET,4399,4399 # 4399，网页游戏和小游戏平台
     - RULE-SET,WeChat,微信 # 微信聊天平台
     - RULE-SET,Mihoyo,Mihoyo # 米哈游国内
+    - RULE-SET,OneDrive,微软云盘 # Microsoft OneDrive 云储存
+    - OR,((RULE-SET,Bing),(RULE-SET,Teams),(RULE-SET,MicrosoftEdge),(RULE-SET,Microsoft)),微软
     - RULE-SET,ChinaMedia,中国媒体 # 中国主流媒体
     - RULE-SET,ByteDance,字节跳动 # 字节跳动，包含抖音、今日头条等
     - RULE-SET,Tencent,腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
