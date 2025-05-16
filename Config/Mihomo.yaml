@@ -661,7 +661,8 @@ sub-rules:
     - RULE-SET,ByteDance,字节跳动 # 字节跳动，包含抖音、今日头条等
     - RULE-SET,Tencent,腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
     - RULE-SET,Alibaba,阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
-    - NOT,((AND,((RULE-SET,China),(DST-PORT,443)))),🚀全球代理
+    - RULE-SET,China,PASS
+    - RULE-SET,Fakeip_Filter,PASS
   SUB-IPCIDR:
     # 国内服务
     - RULE-SET,NetEasecidr,网易
