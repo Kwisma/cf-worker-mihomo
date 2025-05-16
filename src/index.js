@@ -31,55 +31,55 @@ export default {
                 }, { status: 400 });
             }
         }
-        // if (isBrowser) {
-        //     return new Response(
-        //         `
-        //         <!DOCTYPE html>
-        //         <html>
-        //           <head>
-        //             <title>Welcome</title>
-        //             <style>
-        //               /* 全局背景图（使用在线图片URL） */
-        //               body {
-        //                 background:rgba(179, 172, 172, 0.5);
-        //                 background-size: cover;
-        //                 display: flex;
-        //                 justify-content: center;
-        //                 align-items: center;
-        //                 height: 100vh;
-        //                 margin: 0;
-        //                 font-family: 'Arial', sans-serif;
-        //               }
+        if (isBrowser) {
+            return new Response(
+                `
+                <!DOCTYPE html>
+                <html>
+                  <head>
+                    <title>Welcome</title>
+                    <style>
+                      /* 全局背景图（使用在线图片URL） */
+                      body {
+                        background:rgba(179, 172, 172, 0.5);
+                        background-size: cover;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        height: 100vh;
+                        margin: 0;
+                        font-family: 'Arial', sans-serif;
+                      }
 
-        //               /* 文字框样式 */
-        //               .text-box {
-        //                 background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
-        //                 backdrop-filter: blur(5px); /* 毛玻璃效果 */
-        //                 border-radius: 15px;
-        //                 padding: 40px;
-        //                 max-width: 600px;
-        //                 text-align: center;
-        //                 box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-        //               }
+                      /* 文字框样式 */
+                      .text-box {
+                        background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
+                        backdrop-filter: blur(5px); /* 毛玻璃效果 */
+                        border-radius: 15px;
+                        padding: 40px;
+                        max-width: 600px;
+                        text-align: center;
+                        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+                      }
 
-        //               h1 {
-        //                 color: rgb(255, 0, 0);
-        //                 margin: 0 0 20px 0;
-        //               }
-        //             </style>
-        //           </head>
-        //           <body>
-        //             <div class="text-box">
-        //               <h1>请使用代理工具订阅！</h1>
-        //             </div>
-        //           </body>
-        //         </html>
-        //         `,
-        //         {
-        //             headers: { 'Content-Type': 'text/html; charset=utf-8' },
-        //         }
-        //     );
-        // }
+                      h1 {
+                        color: rgb(255, 0, 0);
+                        margin: 0 0 20px 0;
+                      }
+                    </style>
+                  </head>
+                  <body>
+                    <div class="text-box">
+                      <h1>请使用mihomo内核的代理工具订阅！</h1>
+                    </div>
+                  </body>
+                </html>
+                `,
+                {
+                    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                }
+            );
+        }
         return new Response(await initconfig(urls, config), {
             headers: { "Content-Type": "text/plain; charset=utf-8" }
         });
