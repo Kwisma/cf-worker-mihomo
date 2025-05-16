@@ -12,8 +12,8 @@
 
 # ------------------------------------------------------------
 # 锚点区
-proxy: &proxy { type: select, include-all-providers: true, proxies: [🚀全球代理, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港, 🇹🇼台湾, 🇯🇵日本, 🇺🇸美国, 🇸🇬新加坡, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇰🇷韩国, 🇷🇺俄罗斯, 🇳🇱荷兰, 🇮🇳印度, 🇲🇾马来西亚, 🇵🇱波兰, 🇪🇪爱沙尼亚, 🇦🇪阿联酋, 🇳🇬尼日利亚, 🇧🇬保加利亚, 🇸🇨塞舌尔, 🇪🇸西班牙, 🇻🇳越南, 🇸🇽荷属圣马丁, 🇲🇴澳门, 🇵🇭菲律宾, 🇹🇭泰国, 🇲🇳蒙古, 🇫🇮芬兰, 🇸🇪瑞典, 🇦🇹奥地利, 🇧🇷巴西, 🇰🇿哈萨克斯坦, 🇮🇱以色列, 🇦🇪阿拉伯联合酋长国,  🇨🇭瑞士, 🌐其它地区] }
-direct: &direct { type: select, include-all-providers: true, proxies: [🎯全球直连, 🚀全球代理, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港, 🇹🇼台湾, 🇯🇵日本, 🇺🇸美国, 🇸🇬新加坡, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇰🇷韩国, 🇷🇺俄罗斯, 🇳🇱荷兰, 🇮🇳印度, 🇲🇾马来西亚, 🇵🇱波兰, 🇪🇪爱沙尼亚, 🇦🇪阿联酋, 🇳🇬尼日利亚, 🇧🇬保加利亚, 🇸🇨塞舌尔, 🇪🇸西班牙, 🇻🇳越南, 🇸🇽荷属圣马丁, 🇲🇴澳门, 🇵🇭菲律宾, 🇹🇭泰国, 🇲🇳蒙古, 🇫🇮芬兰, 🇸🇪瑞典, 🇦🇹奥地利, 🇧🇷巴西, 🇰🇿哈萨克斯坦, 🇮🇱以色列, 🇦🇪阿拉伯联合酋长国,  🇨🇭瑞士, 🌐其它地区] }
+proxy: &proxy { type: select, include-all-providers: true, proxies: [🚀全球代理, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇬🇧英国自动, 🇩🇪德国自动, 🇫🇷法国自动, 🇨🇦加拿大自动, 🇦🇺澳大利亚自动, 🇰🇷韩国自动, 🇷🇺俄罗斯自动, 🇳🇱荷兰自动, 🇮🇳印度自动, 🇲🇾马来西亚自动, 🇵🇱波兰自动, 🇪🇪爱沙尼亚自动, 🇦🇪阿联酋自动, 🇳🇬尼日利亚自动, 🇧🇬保加利亚自动, 🇸🇨塞舌尔自动, 🇪🇸西班牙自动, 🇻🇳越南自动, 🇸🇽荷属圣马丁自动, 🇲🇴澳门自动, 🇵🇭菲律宾自动, 🇹🇭泰国自动, 🇲🇳蒙古自动, 🇫🇮芬兰自动, 🇸🇪瑞典自动, 🇦🇹奥地利自动, 🇧🇷巴西自动, 🇰🇿哈萨克斯坦自动, 🇮🇱以色列自动, 🇦🇪阿拉伯联合酋长国自动,  🇨🇭瑞士自动, 🌐其它地区] }
+direct: &direct { type: select, include-all-providers: true, proxies: [🎯全球直连, 🚀全球代理, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇬🇧英国自动, 🇩🇪德国自动, 🇫🇷法国自动, 🇨🇦加拿大自动, 🇦🇺澳大利亚自动, 🇰🇷韩国自动, 🇷🇺俄罗斯自动, 🇳🇱荷兰自动, 🇮🇳印度自动, 🇲🇾马来西亚自动, 🇵🇱波兰自动, 🇪🇪爱沙尼亚自动, 🇦🇪阿联酋自动, 🇳🇬尼日利亚自动, 🇧🇬保加利亚自动, 🇸🇨塞舌尔自动, 🇪🇸西班牙自动, 🇻🇳越南自动, 🇸🇽荷属圣马丁自动, 🇲🇴澳门自动, 🇵🇭菲律宾自动, 🇹🇭泰国自动, 🇲🇳蒙古自动, 🇫🇮芬兰自动, 🇸🇪瑞典自动, 🇦🇹奥地利自动, 🇧🇷巴西自动, 🇰🇿哈萨克斯坦自动, 🇮🇱以色列自动, 🇦🇪阿拉伯联合酋长国自动,  🇨🇭瑞士自动, 🌐其它地区] }
 ipcidr_mrs: &ipcidr_mrs { type: http, interval: 86400, behavior: ipcidr, format: mrs, proxy: 🎯全球直连 }
 domain_mrs: &domain_mrs { type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连 }
 # 延迟检测 URL
@@ -276,7 +276,7 @@ proxies:
   - name: "🚫拒绝"
     type: reject
 proxy-groups:
-  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯直连, 🇭🇰香港, 🇹🇼台湾, 🇯🇵日本, 🇺🇸美国, 🇸🇬新加坡, 🇬🇧英国, 🇩🇪德国, 🇫🇷法国, 🇨🇦加拿大, 🇦🇺澳大利亚, 🇰🇷韩国, 🇷🇺俄罗斯, 🇳🇱荷兰, 🇮🇳印度, 🇲🇾马来西亚, 🇵🇱波兰, 🇪🇪爱沙尼亚, 🇦🇪阿联酋, 🇳🇬尼日利亚, 🇧🇬保加利亚, 🇸🇨塞舌尔, 🇪🇸西班牙, 🇻🇳越南, 🇸🇽荷属圣马丁, 🇲🇴澳门, 🇵🇭菲律宾, 🇹🇭泰国, 🇲🇳蒙古, 🇫🇮芬兰, 🇸🇪瑞典, 🇦🇹奥地利, 🇧🇷巴西, 🇰🇿哈萨克斯坦, 🇮🇱以色列, 🇦🇪阿拉伯联合酋长国,  🇨🇭瑞士, 🌐其它地区] }
+  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇬🇧英国自动, 🇩🇪德国自动, 🇫🇷法国自动, 🇨🇦加拿大自动, 🇦🇺澳大利亚自动, 🇰🇷韩国自动, 🇷🇺俄罗斯自动, 🇳🇱荷兰自动, 🇮🇳印度自动, 🇲🇾马来西亚自动, 🇵🇱波兰自动, 🇪🇪爱沙尼亚自动, 🇦🇪阿联酋自动, 🇳🇬尼日利亚自动, 🇧🇬保加利亚自动, 🇸🇨塞舌尔自动, 🇪🇸西班牙自动, 🇻🇳越南自动, 🇸🇽荷属圣马丁自动, 🇲🇴澳门自动, 🇵🇭菲律宾自动, 🇹🇭泰国自动, 🇲🇳蒙古自动, 🇫🇮芬兰自动, 🇸🇪瑞典自动, 🇦🇹奥地利自动, 🇧🇷巴西自动, 🇰🇿哈萨克斯坦自动, 🇮🇱以色列自动, 🇦🇪阿拉伯联合酋长国自动,  🇨🇭瑞士自动, 🌐其它地区] }
 
   - { name: 🟢手动选择, <<: *u, type: select }
 
@@ -407,77 +407,77 @@ proxy-groups:
   - { name: 哔咔哔咔, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Picacg.webp }
 
   # 地区分组
-  - { name: 🇭🇰香港, <<: *u, hidden: true, filter: '(?i)🇭🇰|\bHK\b|香港|Hong Kong' }
+  - { name: 🇭🇰香港自动, <<: *u, hidden: true, filter: '(?i)🇭🇰|\bHK\b|香港|Hong Kong' }
 
-  - { name: 🇹🇼台湾, <<: *u, hidden: true, filter: '(?i)🇹🇼|\bTW\b|台湾|Taiwan|Tai wan' }
+  - { name: 🇹🇼台湾自动, <<: *u, hidden: true, filter: '(?i)🇹🇼|\bTW\b|台湾|Taiwan|Tai wan' }
 
-  - { name: 🇯🇵日本, <<: *u, hidden: true, filter: '(?i)🇯🇵|\bJP\b|日本|Japan' }
+  - { name: 🇯🇵日本自动, <<: *u, hidden: true, filter: '(?i)🇯🇵|\bJP\b|日本|Japan' }
 
-  - { name: 🇺🇸美国, <<: *u, hidden: true, filter: '(?i)🇺🇸|\bUS\b|美国|United States|CT' }
+  - { name: 🇺🇸美国自动, <<: *u, hidden: true, filter: '(?i)🇺🇸|\bUS\b|美国|United States|CT' }
 
-  - { name: 🇸🇬新加坡, <<: *u, hidden: true, filter: '(?i)🇸🇬|\bSG\b|新加坡|Singapore' }
+  - { name: 🇸🇬新加坡自动, <<: *u, hidden: true, filter: '(?i)🇸🇬|\bSG\b|新加坡|Singapore' }
 
-  - { name: 🇩🇪德国, <<: *u, hidden: true, filter: '(?i)🇩🇪|\bDE\b|德国|Germany' }
+  - { name: 🇩🇪德国自动, <<: *u, hidden: true, filter: '(?i)🇩🇪|\bDE\b|德国|Germany' }
 
-  - { name: 🇫🇷法国, <<: *u, hidden: true, filter: '(?i)🇫🇷|\bFR\b|法国|France' }
+  - { name: 🇫🇷法国自动, <<: *u, hidden: true, filter: '(?i)🇫🇷|\bFR\b|法国|France' }
 
-  - { name: 🇨🇦加拿大, <<: *u, hidden: true, filter: '(?i)🇨🇦|\bCA\b|加拿大|Canada' }
+  - { name: 🇨🇦加拿大自动, <<: *u, hidden: true, filter: '(?i)🇨🇦|\bCA\b|加拿大|Canada' }
 
-  - { name: 🇦🇺澳大利亚, <<: *u, hidden: true, filter: '(?i)🇦🇺|\bAU\b|澳大利亚|Australia' }
+  - { name: 🇦🇺澳大利亚自动, <<: *u, hidden: true, filter: '(?i)🇦🇺|\bAU\b|澳大利亚|Australia' }
 
-  - { name: 🇰🇷韩国, <<: *u, hidden: true, filter: '(?i)🇰🇷|\bKR\b|韩国|South Korea' }
+  - { name: 🇰🇷韩国自动, <<: *u, hidden: true, filter: '(?i)🇰🇷|\bKR\b|韩国|South Korea' }
 
-  - { name: 🇷🇺俄罗斯, <<: *u, hidden: true, filter: '(?i)🇷🇺|\bRU\b|俄罗斯|Russia' }
+  - { name: 🇷🇺俄罗斯自动, <<: *u, hidden: true, filter: '(?i)🇷🇺|\bRU\b|俄罗斯|Russia' }
 
-  - { name: 🇳🇱荷兰, <<: *u, hidden: true, filter: '(?i)🇳🇱|\bNL\b|荷兰|Netherlands' }
+  - { name: 🇳🇱荷兰自动, <<: *u, hidden: true, filter: '(?i)🇳🇱|\bNL\b|荷兰|Netherlands' }
 
-  - { name: 🇮🇳印度, <<: *u, hidden: true, filter: '(?i)🇮🇳|\bIN\b|印度|India' }
+  - { name: 🇮🇳印度自动, <<: *u, hidden: true, filter: '(?i)🇮🇳|\bIN\b|印度|India' }
 
-  - { name: 🇲🇾马来西亚, <<: *u, hidden: true, filter: '(?i)🇲🇾|\bMY\b|马来西亚|Malaysia' }
+  - { name: 🇲🇾马来西亚自动, <<: *u, hidden: true, filter: '(?i)🇲🇾|\bMY\b|马来西亚|Malaysia' }
 
-  - { name: 🇵🇱波兰, <<: *u, hidden: true, filter: '(?i)🇵🇱|\bPL\b|波兰|Poland' }
+  - { name: 🇵🇱波兰自动, <<: *u, hidden: true, filter: '(?i)🇵🇱|\bPL\b|波兰|Poland' }
 
-  - { name: 🇪🇪爱沙尼亚, <<: *u, hidden: true, filter: '(?i)🇪🇪|\bEE\b|爱沙尼亚|Estonia' }
+  - { name: 🇪🇪爱沙尼亚自动, <<: *u, hidden: true, filter: '(?i)🇪🇪|\bEE\b|爱沙尼亚|Estonia' }
 
-  - { name: 🇦🇪阿联酋, <<: *u, hidden: true, filter: '(?i)🇦🇪|\bAE\b|阿联酋|United Arab Emirates' }
+  - { name: 🇦🇪阿联酋自动, <<: *u, hidden: true, filter: '(?i)🇦🇪|\bAE\b|阿联酋|United Arab Emirates' }
 
-  - { name: 🇳🇬尼日利亚, <<: *u, hidden: true, filter: '(?i)🇳🇬|\bNG\b|尼日利亚|Nigeria' }
+  - { name: 🇳🇬尼日利亚自动, <<: *u, hidden: true, filter: '(?i)🇳🇬|\bNG\b|尼日利亚|Nigeria' }
 
-  - { name: 🇧🇬保加利亚, <<: *u, hidden: true, filter: '(?i)🇧🇬|\bBG\b|保加利亚|Bulgaria' }
+  - { name: 🇧🇬保加利亚自动, <<: *u, hidden: true, filter: '(?i)🇧🇬|\bBG\b|保加利亚|Bulgaria' }
 
-  - { name: 🇸🇨塞舌尔, <<: *u, hidden: true, filter: '(?i)🇸🇨|\bSC\b|塞舌尔|Seychelles' }
+  - { name: 🇸🇨塞舌尔自动, <<: *u, hidden: true, filter: '(?i)🇸🇨|\bSC\b|塞舌尔|Seychelles' }
 
-  - { name: 🇬🇧英国, <<: *u, hidden: true, filter: '(?i)🇬🇧|\bGB\b|英国|United Kingdom' }
+  - { name: 🇬🇧英国自动, <<: *u, hidden: true, filter: '(?i)🇬🇧|\bGB\b|英国|United Kingdom' }
 
-  - { name: 🇪🇸西班牙, <<: *u, hidden: true, filter: '(?i)🇪🇸|\bES\b|西班牙|Spain' }
+  - { name: 🇪🇸西班牙自动, <<: *u, hidden: true, filter: '(?i)🇪🇸|\bES\b|西班牙|Spain' }
 
-  - { name: 🇻🇳越南, <<: *u, hidden: true, filter: '(?i)🇻🇳|\bVN\b|越南|Vietnam' }
+  - { name: 🇻🇳越南自动, <<: *u, hidden: true, filter: '(?i)🇻🇳|\bVN\b|越南|Vietnam' }
 
-  - { name: 🇸🇽荷属圣马丁, hidden: true, <<: *u, filter: '(?i)🇸🇽|\bSX\b|荷属圣马丁|Sint Maarten' }
+  - { name: 🇸🇽荷属圣马丁自动, hidden: true, <<: *u, filter: '(?i)🇸🇽|\bSX\b|荷属圣马丁|Sint Maarten' }
 
-  - { name: 🇲🇴澳门, <<: *u, hidden: true, filter: '(?i)🇲🇴|\bMO\b|澳门|Macau|Macao' }
+  - { name: 🇲🇴澳门自动, <<: *u, hidden: true, filter: '(?i)🇲🇴|\bMO\b|澳门|Macau|Macao' }
 
-  - { name: 🇵🇭菲律宾, <<: *u, hidden: true, filter: '(?i)🇵🇭|\bPH\b|菲律宾|Philippines' }
+  - { name: 🇵🇭菲律宾自动, <<: *u, hidden: true, filter: '(?i)🇵🇭|\bPH\b|菲律宾|Philippines' }
 
-  - { name: 🇹🇭泰国, <<: *u, hidden: true, filter: '(?i)🇹🇭|\bTH\b|泰国|Thailand' }
+  - { name: 🇹🇭泰国自动, <<: *u, hidden: true, filter: '(?i)🇹🇭|\bTH\b|泰国|Thailand' }
 
-  - { name: 🇲🇳蒙古, <<: *u, hidden: true, filter: '(?i)🇲🇳|\bMN\b|蒙古|Mongolia' }
+  - { name: 🇲🇳蒙古自动, <<: *u, hidden: true, filter: '(?i)🇲🇳|\bMN\b|蒙古|Mongolia' }
 
-  - { name: 🇫🇮芬兰, <<: *u, hidden: true, filter: '(?i)🇫🇮|\bFI\b|芬兰|Finland' }
+  - { name: 🇫🇮芬兰自动, <<: *u, hidden: true, filter: '(?i)🇫🇮|\bFI\b|芬兰|Finland' }
 
-  - { name: 🇸🇪瑞典, <<: *u, hidden: true, filter: '(?i)🇸🇪|\bSE\b|瑞典|Sweden' }
+  - { name: 🇸🇪瑞典自动, <<: *u, hidden: true, filter: '(?i)🇸🇪|\bSE\b|瑞典|Sweden' }
 
-  - { name: 🇦🇹奥地利, <<: *u, hidden: true, filter: '(?i)🇦🇹|\bAT\b|奥地利|Austria' }
+  - { name: 🇦🇹奥地利自动, <<: *u, hidden: true, filter: '(?i)🇦🇹|\bAT\b|奥地利|Austria' }
 
-  - { name: 🇧🇷巴西, <<: *u, hidden: true, filter: '(?i)🇧🇷|\bBR\b|巴西|Brazil' }
+  - { name: 🇧🇷巴西自动, <<: *u, hidden: true, filter: '(?i)🇧🇷|\bBR\b|巴西|Brazil' }
 
-  - { name: 🇰🇿哈萨克斯坦, <<: *u, hidden: true, filter: '(?i)🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan' }
+  - { name: 🇰🇿哈萨克斯坦自动, <<: *u, hidden: true, filter: '(?i)🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan' }
 
-  - { name: 🇮🇱以色列, <<: *u, hidden: true, filter: '(?i)🇮🇱|\bIL\b|以色列|Israel' }
+  - { name: 🇮🇱以色列自动, <<: *u, hidden: true, filter: '(?i)🇮🇱|\bIL\b|以色列|Israel' }
 
-  - { name: 🇦🇪阿拉伯联合酋长国, <<: *u, hidden: true, filter: '(?i)🇦🇪|\bAE\b|阿拉伯联合酋长国|United Arab Emirates' }
+  - { name: 🇦🇪阿拉伯联合酋长国自动, <<: *u, hidden: true, filter: '(?i)🇦🇪|\bAE\b|阿拉伯联合酋长国|United Arab Emirates' }
 
-  - { name: 🇨🇭瑞士, <<: *u, hidden: true, filter: '(?i)🇨🇭|\bCH\b|瑞士|Switzerland' }
+  - { name: 🇨🇭瑞士自动, <<: *u, hidden: true, filter: '(?i)🇨🇭|\bCH\b|瑞士|Switzerland' }
 
   - { name: 🌐其它地区, <<: *u, type: select, exclude-filter: '(?i)^.*(?:🇨🇳|\bCN\b|中国|China|
         ‎|🇭🇰|\bHK\b|香港|Hong Kong|
