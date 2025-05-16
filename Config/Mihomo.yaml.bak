@@ -206,6 +206,7 @@ sniffer:
     - 192.168.0.3/32 # 跳过目标 IP 地址，不对其进行嗅探
 
 # tun 配置：用于启用 TUN 模式，优化流量路由和 IP 设置
+# tun 配置：用于启用 TUN 模式，优化流量路由和 IP 设置
 tun:
   enable: true # 启用 TUN 模式，用于透明代理
   stack: gvisor # 使用空间网络栈处理流量，可用值： system/gvisor/mixed
