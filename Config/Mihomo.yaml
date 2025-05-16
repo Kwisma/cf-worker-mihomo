@@ -255,7 +255,7 @@ dns:
       - "quic://dns.nextdns.io" # NextDNS（香港） DNS over DOQ
     "+.eu":
       - "quic://dns0.eu" # 公共（欧洲） DNS over DOQ
-    RULE-SET:Private,China:
+    "RULE-SET:Private,China":
       - "quic://223.5.5.5" # 阿里 DNS over DOQ
       - "quic://223.6.6.6"
   nameserver:
