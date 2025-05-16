@@ -2,6 +2,8 @@
 	"name": "cf-worker-mihomo",
 	"version": "1.0.0",
 	"private": true,
+	"type": "module",
+	"license": "MIT",
 	"scripts": {
 		"deploy": "wrangler deploy",
 		"dev": "wrangler dev",
@@ -10,10 +12,11 @@
 	},
 	"devDependencies": {
 		"@cloudflare/vitest-pool-workers": "0.8.18",
-		"js-yaml": "^4.1.0",
 		"wrangler": "^4.12.0"
 	},
 	"dependencies": {
-		"node-fetch": "^3.3.2"
+		"fs": "^0.0.1-security",
+		"node-fetch": "^3.3.2",
+		"yaml": "^2.8.0"
 	}
 }

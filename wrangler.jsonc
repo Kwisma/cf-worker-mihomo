@@ -6,7 +6,7 @@
 	"$schema": "node_modules/wrangler/config-schema.json",
 	"name": "cf-worker-mihomo",
 	"main": "src/index.js",
-	"compatibility_date": "2025-04-22",
+	"compatibility_date": "2025-04-16",
 	"observability": {
 		"enabled": true
 	}
