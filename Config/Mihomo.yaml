@@ -206,6 +206,7 @@ sniffer:
     - 192.168.0.3/32 # 跳过目标 IP 地址，不对其进行嗅探
 
 # tun 配置：用于启用 TUN 模式，优化流量路由和 IP 设置
+# tun 配置：用于启用 TUN 模式，优化流量路由和 IP 设置
 tun:
   enable: true # 启用 TUN 模式，用于透明代理
   stack: gvisor # 使用空间网络栈处理流量，可用值： system/gvisor/mixed
@@ -214,9 +215,10 @@ tun:
   auto-detect-interface: true # 自动选择流量出口接口，多出口网卡同时连接的设备建议手动指定出口网卡
   dns-hijack:
     - any:53 # 劫持所有 53 端口的 DNS 请求
+    - tcp://any:53 # 劫持所有tcp的 53 端口的 DNS 请求
   device: utun0 # 指定 TUN 设备名称，默认为 utun
   mtu: 1500 # 设置最大传输单元 (MTU)，提高网络吞吐量
-  strict-route: false # 启用 auto-route 时执行严格的路由规则
+  strict-route: true # 启用 auto-route 时执行严格的路由规则
   gso: true # 通用分段卸载 (GSO)，提高网络性能
   gso-max-size: 65536 # 设置 GSO 最大分段大小为 65536 字节
   udp-timeout: 300 # 设置 UDP 超时时间为 300 秒，优化 NAT 映射
@@ -258,10 +260,13 @@ dns:
     "RULE-SET:Private,China":
       - "quic://223.5.5.5" # 阿里 DNS over DOQ
       - "quic://223.6.6.6"
-  nameserver:
-    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS over H3
-    - "https://dns.google/dns-query#h3=true" # Google DNS over H3
-    - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
+  nameserver: # 设置多个 DNS 会泄漏不同服务商，不会泄漏 CN，如果在意建议只设置一个
+    - "https://1.1.1.1/dns-query#h3=true" # Cloudflare DNS over H3
+    - "https://1.0.0.1/dns-query#h3=true"
+    - "https://8.8.8.8/dns-query#h3=true" # Google DNS over H3
+    - "https://8.8.4.4/dns-query#h3=true"
+    - "quic://94.140.15.15" # AdGuard DNS over DOQ
+    - "quic://94.140.14.140"
   proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
     - "quic://223.5.5.5" # 阿里 DNS over DOQ
     - "quic://223.6.6.6"
