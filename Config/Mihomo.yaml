@@ -346,7 +346,7 @@ proxy-groups:
   - { name: GoogleVoice, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/GoogleVoice.webp }
   - { name: Hoyoverse, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/HoYoverse.webp }
   - { name: Hulu, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Hulu.webp }
-  - { name: 虎扑, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Hupu.webp }
+  - { name: 虎扑, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/Hupu.webp }
   - { name: HBO, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/HBO.webp }
   - { name: IMDB, <<: *proxy, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/IMDB.webp }
   - { name: 爱奇艺, <<: *direct, icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/512/IQIYI.webp }
