@@ -250,16 +250,18 @@ dns:
     github.akams.cn:
       - "quic://223.5.5.5"
       - "quic://223.6.6.6"
+    "+.jp":
+      - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ （日本） DNS over H3
+    "+.hk":
+      - "quic://dns.nextdns.io" # NextDNS（香港） DNS over DOQ
+    "+.eu":
+      - "quic://dns0.eu" # 公共（欧洲） DNS over DOQ
     RULE-SET:Private,China:
       - "quic://223.5.5.5" # 阿里 DNS over DOQ
       - "quic://223.6.6.6"
-  nameserver: # 设置多个 DNS 会泄漏不同服务商，不会泄漏 CN，如果在意建议只设置一个
-#    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS over H3
-#    - "https://dns.google/dns-query#h3=true" # Google DNS over H3
-#    - "https://doh.dns.sb/dns-query#h3=true" # SB DNS over H3
-#    - "https://public.dns.iij.jp/dns-query#h3=true" # IIJ DNS over H3
-#    - "quic://dns.nextdns.io" # Next DNS  over DOQ
-#    - "quic://dns0.eu" # 欧洲公共 DNS over DOQ
+  nameserver:
+    - "https://cloudflare-dns.com/dns-query#h3=true" # Cloudflare DNS over H3
+    - "https://dns.google/dns-query#h3=true" # Google DNS over H3
     - "quic://dns.adguard-dns.com" # AdGuard DNS over DOQ
   proxy-server-nameserver: # 代理节点域名解析服务器，仅用于解析代理节点的域名
     - "quic://223.5.5.5" # 阿里 DNS over DOQ
@@ -661,6 +663,7 @@ sub-rules:
     - RULE-SET,ByteDance,字节跳动 # 字节跳动，包含抖音、今日头条等
     - RULE-SET,Tencent,腾讯 # 腾讯相关服务，包括 QQ、腾讯云等
     - RULE-SET,Alibaba,阿里巴巴 # 阿里巴巴，涵盖云计算、电商等
+    - NOT,((AND,((RULE-SET,China),(DST-PORT,443)))),🚀全球代理
   SUB-IPCIDR:
     # 国内服务
     - RULE-SET,NetEasecidr,网易
