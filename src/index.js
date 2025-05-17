@@ -1,7 +1,7 @@
 import YAML from 'yaml';
 export default {
     async fetch(request, env) {
-        const config = env.CONFIG || "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml"
+        const config = env.CONFIG
         const url = new URL(request.url);
         // const hostHeader = request.headers.get("host");
         const userAgent = request.headers.get('User-Agent');
