@@ -284,11 +284,13 @@ proxy-groups:
 
   - { name: 🟢手动选择, <<: *u, type: select }
 
-  - { name: 🚫广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🎯直连] }
+  - { name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🚀全球代理, 🎯直连] }
 
-  - { name: 🚫泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🎯直连] }
+  - { name: 🔎HttpDNS, type: select, include-all-providers: true, proxies: [🚫拒绝, 🚀全球代理, 🎯直连] }
 
-  - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯直连] }
+  - { name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🚀全球代理, 🎯直连] }
+
+  - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯直连, 🚀全球代理] }
 
   - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
 
@@ -530,20 +532,18 @@ rules:
 
 sub-rules:
   SUB-REJECT:
-    - RULE-SET,Advertising-ads,🚫广告拦截
-    - RULE-SET,Category-ads-all,🚫广告拦截
-    - RULE-SET,BlockHttpDNS,🚫泄漏拦截
-    - RULE-SET,BlockHttpDNScidr,🚫泄漏拦截
-    - RULE-SET,Category-httpdns-cn,🚫泄漏拦截
-    - RULE-SET,STUN,🚫泄漏拦截
-    - RULE-SET,STUNcidr,🚫泄漏拦截
-    - DST-PORT,3478,🚫泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
-    - AND,((NETWORK,TCP),(DST-PORT,5349)),🚫泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
-    - AND,((NETWORK,UDP),(DST-PORT,5350)),🚫泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
-    - AND,((NETWORK,UDP),(DST-PORT,5351)),🚫泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
-    - AND,((NETWORK,UDP),(DST-PORT,19302)),🚫泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
-    - DOMAIN-KEYWORD,stun,🚫泄漏拦截
-    - DOMAIN-KEYWORD,httpdns,🚫泄漏拦截
+    - RULE-SET,Advertising-ads,🪧广告拦截
+    - RULE-SET,Category-ads-all,🪧广告拦截
+    - RULE-SET,Category-httpdns,🔎HttpDNS
+    - RULE-SET,Category-httpdns-cn,🔎HttpDNS
+    - RULE-SET,STUN,💧泄漏拦截
+    - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
+    - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
+    - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
+    - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
+    - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
+    - DOMAIN-KEYWORD,stun,💧泄漏拦截
+    - DOMAIN-KEYWORD,httpdns,💧泄漏拦截
   SUB-LAN:
     - RULE-SET,Private,🎯全球直连
     - RULE-SET,Privatecidr,🎯全球直连
@@ -718,16 +718,6 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/Apple/Apple_OCD_IP.mrs"
     path: ./ruleset/Apple_IP.mrs
-
-  BlockHttpDNS:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BlockHttpDNS/BlockHttpDNS_OCD_Domain.mrs"
-    path: ./ruleset/BlockHttpDNS_Domain.mrs
-
-  BlockHttpDNScidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/peiyingyao/Rule-for-OCD/master/rule/Clash/BlockHttpDNS/BlockHttpDNS_OCD_IP.mrs"
-    path: ./ruleset/BlockHttpDNS_IP.mrs
 
   ChinaMedia:
     <<: *domain_mrs
@@ -1355,6 +1345,11 @@ rule-providers:
     <<: *ipcidr_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
     path: ./ruleset/China_IP.mrs
+
+  Category-httpdns:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-httpdns.mrs"
+    path: ./ruleset/Category_httpdns_Domain.mrs
 
   Category-httpdns-cn:
     <<: *domain_mrs
