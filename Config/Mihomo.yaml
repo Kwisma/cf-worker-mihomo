@@ -532,9 +532,9 @@ sub-rules:
   SUB-REJECT:
     - RULE-SET,Advertising-ads,🚫广告拦截
     - RULE-SET,Category-ads-all,🚫广告拦截
-    - RULE-SET,BlockHttpDNS,🚫广告拦截
-    - RULE-SET,BlockHttpDNScidr,🚫广告拦截
-    - RULE-SET,Category-httpdns-cn,🚫广告拦截
+    - RULE-SET,BlockHttpDNS,🚫泄漏拦截
+    - RULE-SET,BlockHttpDNScidr,🚫泄漏拦截
+    - RULE-SET,Category-httpdns-cn,🚫泄漏拦截
     - RULE-SET,STUN,🚫泄漏拦截
     - RULE-SET,STUNcidr,🚫泄漏拦截
     - DST-PORT,3478,🚫泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
@@ -543,7 +543,7 @@ sub-rules:
     - AND,((NETWORK,UDP),(DST-PORT,5351)),🚫泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
     - AND,((NETWORK,UDP),(DST-PORT,19302)),🚫泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
     - DOMAIN-KEYWORD,stun,🚫泄漏拦截
-    - DOMAIN-KEYWORD,httpdns,🚫广告拦截
+    - DOMAIN-KEYWORD,httpdns,🚫泄漏拦截
   SUB-LAN:
     - RULE-SET,Private,🎯全球直连
     - RULE-SET,Privatecidr,🎯全球直连
