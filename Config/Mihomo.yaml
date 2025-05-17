@@ -1543,11 +1543,6 @@ rule-providers:
     url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs"
     path: ./ruleset/STUN_Domain.mrs
 
-  STUNcidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_IP.mrs"
-    path: ./ruleset/STUN_IP.mrs
-
   EHGallery:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/EHGallery/EHGallery_Domain.mrs"
