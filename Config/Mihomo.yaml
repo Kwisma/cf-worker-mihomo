@@ -1348,7 +1348,7 @@ rule-providers:
 
   Category-httpdns:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/category-httpdns.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/httpdns.mrs"
     path: ./ruleset/Category_httpdns_Domain.mrs
 
   Category-httpdns-cn:
