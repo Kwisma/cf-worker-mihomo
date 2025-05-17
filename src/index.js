@@ -1,7 +1,7 @@
 import YAML from 'yaml';
 export default {
     async fetch(request, env) {
-        const config = env.CONFIG
+        const config = env.CONFIG || atob('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL21haW4vQ29uZmlnL01paG9tby55YW1s')
         const url = new URL(request.url);
         // const hostHeader = request.headers.get("host");
         const userAgent = request.headers.get('User-Agent');
