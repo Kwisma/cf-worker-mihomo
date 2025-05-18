@@ -320,26 +320,19 @@ proxy-groups:
         ‎|🇰🇷|\bKR\b|韩国|South Korea).*$' }
 
 rules:
-  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-REJECT
-  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-LAN
-  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-IPCIDR
+  - RULE-SET,Private,🎯全球直连
+  - RULE-SET,Privatecidr,🎯全球直连,no-resolve #仅匹配ip，不解析域名
+  - RULE-SET,Advertising-ads,🪧广告拦截
+  - RULE-SET,STUN,💧泄漏拦截
+  - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
+  - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
+  - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
+  - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
+  - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
+  - DOMAIN-KEYWORD,stun,💧泄漏拦截
+  - RULE-SET,Chinacidr,🎯全球直连 # 国内兜底 IP
   - MATCH,🚀全球代理
-
-sub-rules:
-  SUB-REJECT:
-    - RULE-SET,Advertising-ads,🪧广告拦截
-    - RULE-SET,STUN,💧泄漏拦截
-    - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
-    - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
-    - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
-    - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
-    - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
-    - DOMAIN-KEYWORD,stun,💧泄漏拦截
-  SUB-LAN:
-    - RULE-SET,Private,🎯全球直连
-    - RULE-SET,Privatecidr,🎯全球直连
-  SUB-IPCIDR:
-    - RULE-SET,Chinacidr,🎯全球直连 # 国内兜底 IP
+    
 rule-providers:
 
   Advertising-ads:

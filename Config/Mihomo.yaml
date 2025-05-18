@@ -534,7 +534,7 @@ sub-rules:
   SUB-REJECT:
     - RULE-SET,Advertising-ads,🪧广告拦截
     - RULE-SET,BlockHttpDNS,🔎HttpDNS
-    - RULE-SET,BlockHttpDNScidr,🔎HttpDNS
+    - RULE-SET,BlockHttpDNScidr,🔎HttpDNS,no-resolve #仅匹配ip，不解析域名
     - DOMAIN-KEYWORD,httpdns,🔎HttpDNS
     - RULE-SET,STUN,💧泄漏拦截
     - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
@@ -545,7 +545,7 @@ sub-rules:
     - DOMAIN-KEYWORD,stun,💧泄漏拦截
   SUB-LAN:
     - RULE-SET,Private,🎯全球直连
-    - RULE-SET,Privatecidr,🎯全球直连
+    - RULE-SET,Privatecidr,🎯全球直连,no-resolve #仅匹配ip，不解析域名
   SUB-DOMAIN:
     - DOMAIN,github.akams.cn,🎯全球直连
     - RULE-SET,AppStore,AppStore # App Store 应用商店
@@ -687,7 +687,7 @@ sub-rules:
     - RULE-SET,Amazoncidr,亚马逊电商
     - RULE-SET,Copilotcidr,OpenAI
     - RULE-SET,OpenAIcidr,OpenAI
-    - RULE-SET,EHGallerycidr,E站
+    - RULE-SET,EHGallerycidr,E站,no-resolve #仅拦截ip，不解析域名
     - RULE-SET,Blizzardcidr,暴雪
     - RULE-SET,Supercellcidr,Supercell
     - RULE-SET,GoogleFCMcidr,FCM
@@ -699,10 +699,10 @@ sub-rules:
     - RULE-SET,Torcidr,Tor
     - RULE-SET,Fastlycidr,Fastly
     - RULE-SET,Googlecidr,Google
-    - RULE-SET,Trackercidr,BT追踪器
+    - RULE-SET,Trackercidr,BT追踪器,no-resolve #仅匹配ip，不解析域名
     - RULE-SET,Qobuzcidr,Qobuz
     - RULE-SET,YouTubecidr,YouTube
-    - RULE-SET,GlobalMediacidr,国际媒体 # 国外兜底媒体
+    - RULE-SET,GlobalMediacidr,国际媒体,no-resolve #仅匹配ip，不解析域名 国外兜底媒体
     - RULE-SET,Cloudflarecidr,Cloudflare # 国外兜底 IP
 
 rule-providers:
