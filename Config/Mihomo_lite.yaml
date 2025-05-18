@@ -281,9 +281,9 @@ proxies:
   - name: "🚫拒绝"
     type: reject
 proxy-groups:
-  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区] }
+  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区] }
 
-  - { name: 🟢手动选择, <<: *u, type: select }
+  - { name: 🟢手动选择, <<: *u, type: select, proxies: [🎯直连] }
 
   - { name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🚀全球代理, 🎯直连] }
 
