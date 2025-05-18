@@ -319,7 +319,7 @@ proxy-groups:
         ‎|🇸🇬|\bSG\b|新加坡|Singapore|
         ‎|🇰🇷|\bKR\b|韩国|South Korea).*$' }
 
-  - { name: GLOBAL, type: select, include-all-providers: true, proxies: [🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区], icon: "https://pub-8feead0908f649a8b94397f152fb9cba.r2.dev/global.png" } # 包含几乎所有分组，作为全局模式下的选择
+  - { name: 🌍GLOBAL, type: select, include-all-providers: true, proxies: [🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区] }
 
 rules:
   - RULE-SET,Private,🎯全球直连
