@@ -364,12 +364,12 @@ rule-providers:
 
   China:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/direct.mrs"
     path: ./ruleset/China_Domain.mrs
 
   Chinacidr:
     <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/cncidr.mrs"
     path: ./ruleset/China_IP.mrs
 
   STUN:

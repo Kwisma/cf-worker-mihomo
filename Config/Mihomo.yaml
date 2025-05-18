@@ -1336,16 +1336,6 @@ rule-providers:
 
   # ------------------------------------------------------------
   # MetaCubeX 规则
-  China:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/cn.mrs"
-    path: ./ruleset/China_Domain.mrs
-
-  Chinacidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/cn.mrs"
-    path: ./ruleset/China_IP.mrs
-
   Category-httpdns:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/httpdns.mrs"
@@ -1502,6 +1492,16 @@ rule-providers:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
     path: ./ruleset/Advertising_ads_Domain.mrs
+
+  China:
+    <<: *domain_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/direct.mrs"
+    path: ./ruleset/China_Domain.mrs
+
+  Chinacidr:
+    <<: *ipcidr_mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/cncidr.mrs"
+    path: ./ruleset/China_IP.mrs
 
   4GTV:
     <<: *domain_mrs
