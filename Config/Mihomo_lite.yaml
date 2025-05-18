@@ -276,20 +276,20 @@ dns:
   direct-nameserver-follow-policy: true # 是否遵循 nameserver-policy，默认为不遵守，仅当 direct-nameserver 不为空时生效
 
 proxies:
-  - name: "🎯直连"
+  - name: "🎯全局直连"
     type: direct
-  - name: "🚫拒绝"
+  - name: "🚫拒绝连接"
     type: reject
 proxy-groups:
-  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区] }
+  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯全局直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区] }
 
-  - { name: 🟢手动选择, <<: *u, type: select, proxies: [🎯直连] }
+  - { name: 🟢手动选择, <<: *u, type: select }
 
-  - { name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🚀全球代理, 🎯直连] }
+  - { name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝连接, 🚀全球代理, 🎯全局直连] }
 
-  - { name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝, 🚀全球代理, 🎯直连] }
+  - { name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝连接, 🚀全球代理, 🎯全局直连] }
 
-  - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯直连, 🚀全球代理] }
+  - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯全局直连, 🚀全球代理] }
 
   - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
 
