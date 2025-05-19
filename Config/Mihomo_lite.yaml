@@ -324,7 +324,7 @@ proxy-groups:
 rules:
   - RULE-SET,Private,🎯全球直连
   - RULE-SET,Privatecidr,🎯全球直连,no-resolve #仅匹配ip，不解析域名
-  - RULE-SET,Reject-ads,🪧广告拦截
+  - RULE-SET,Advertising-ads,🪧广告拦截
   - RULE-SET,STUN,💧泄漏拦截
   - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
   - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
@@ -337,10 +337,10 @@ rules:
     
 rule-providers:
 
-  Reject-ads:
+  Advertising-ads:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/reject.mrs"
-    path: ./ruleset/Reject_ads_Domain.mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
+    path: ./ruleset/Advertising_ads_Domain.mrs
 
   Private:
     <<: *domain_mrs
