@@ -435,8 +435,7 @@ proxy-groups:
   - { name: GLOBAL, type: select, include-all-providers: true, proxies: [🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区], icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp }
 
 rules:
-  - RULE-SET,Private,🎯全球直连
-  - RULE-SET,Privatecidr,🎯全球直连,no-resolve #仅匹配ip，不解析域名
+  - GEOSITE,private,🎯全球直连
   - RULE-SET,Advertising-ads,🪧广告拦截
   - RULE-SET,STUN,💧泄漏拦截
   - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
@@ -445,7 +444,7 @@ rules:
   - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
   - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
   - DOMAIN-KEYWORD,stun,💧泄漏拦截
-  - RULE-SET,Chinacidr,🎯全球直连 # 国内兜底 IP
+  - GEOIP,CN,🎯全球直连 # 国内兜底 IP
   - MATCH,🚀全球代理
     
 rule-providers:
@@ -454,31 +453,6 @@ rule-providers:
     <<: *domain_mrs
     url: "https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
     path: ./ruleset/Advertising_ads_Domain.mrs
-
-  Private:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geosite/private.mrs"
-    path: ./ruleset/Private_Domain.mrs
-
-  Privatecidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/meta/geo/geoip/private.mrs"
-    path: ./ruleset/Private_IP.mrs
-
-  Fakeip_Filter:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/DustinWin/ruleset_geodata/mihomo-ruleset/fakeip-filter.mrs"
-    path: ./ruleset/Fakeip_Filter_Domain.mrs
-
-  China:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/direct.mrs"
-    path: ./ruleset/China_Domain.mrs
-
-  Chinacidr:
-    <<: *ipcidr_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/cncidr.mrs"
-    path: ./ruleset/China_IP.mrs
 
   STUN:
     <<: *domain_mrs
