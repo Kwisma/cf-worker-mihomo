@@ -214,7 +214,6 @@ tun:
   auto-detect-interface: true # 自动选择流量出口接口，多出口网卡同时连接的设备建议手动指定出口网卡
   dns-hijack:
     - any:53 # 劫持所有 53 端口的 DNS 请求
-    - tcp://any:53 # 劫持所有tcp的 53 端口的 DNS 请求
   device: utun0 # 指定 TUN 设备名称，默认为 utun
   mtu: 1500 # 设置最大传输单元 (MTU)，提高网络吞吐量
   strict-route: true # 启用 auto-route 时执行严格的路由规则
