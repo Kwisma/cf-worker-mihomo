@@ -534,7 +534,7 @@ rules:
 
 sub-rules:
   SUB-REJECT:
-    - RULE-SET,Advertising-ads,🪧广告拦截
+    - RULE-SET,Reject-ads,🪧广告拦截
     - RULE-SET,BlockHttpDNS,🔎HttpDNS
     - RULE-SET,BlockHttpDNScidr,🔎HttpDNS,no-resolve #仅匹配ip，不解析域名
     - DOMAIN-KEYWORD,httpdns,🔎HttpDNS
@@ -1484,10 +1484,10 @@ rule-providers:
 
   # ------------------------------------------------------------
   # 自定义 规则
-  Advertising-ads:
+  Reject-ads:
     <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
-    path: ./ruleset/Advertising_ads_Domain.mrs
+    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/clash-rules/release/reject.mrs"
+    path: ./ruleset/Reject_ads_Domain.mrs
 
   China:
     <<: *domain_mrs
