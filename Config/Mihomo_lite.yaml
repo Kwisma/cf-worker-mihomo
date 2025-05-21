@@ -2,7 +2,7 @@
 # 版本：v1.19.4
 # 作者：Kwisma
 # 频道：https://t.me/Marisa_kristi
-# 配置：https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/main/Config/Mihomo.yaml
+# 配置：https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/main/Config/Mihomo.yaml
 # Github：https://github.com/Kwisma/cf-worker-mihomo
 # 修改自官方示例规则 https://wiki.metacubex.one/example/#meta
 # 不理解的地方建议对照 虚空终端 (Clash Meta) Docs 进行理解
@@ -100,10 +100,10 @@ geodata-mode: false # 更改 geoip 使用文件，mmdb 或者 dat，可选 true/
 # memconservative：专为内存受限 (小内存) 设备优化的加载器 (默认值)
 geodata-loader: memconservative
 geox-url: # Geo 数据库配置，用于地理位置和 ASN 匹配
-  geoip: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat" # GeoIP 数据库
-  geosite: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat" # GeoSite 数据库
-  mmdb: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.metadb" # GeoIP mmdb 数据库
-  asn: "https://github.akams.cn/https://raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/GeoLite2-ASN.mmdb" # ASN 数据库
+  geoip: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat" # GeoIP 数据库
+  geosite: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat" # GeoSite 数据库
+  mmdb: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.metadb" # GeoIP mmdb 数据库
+  asn: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/GeoLite2-ASN.mmdb" # ASN 数据库
 geo-auto-update: false # 开启自动更新 Geo 数据库
 geo-update-interval: 24 # Geo 数据库更新间隔 (单位: 小时)
 # GeoSite 使用的匹配器实现，可用的实现：
@@ -145,7 +145,7 @@ unified-delay: true # 开启统一延迟时
 tcp-concurrent: true # 启用 TCP 并发连接
 external-ui: ui # 外部 UI 目录
 external-ui-name: xd # 外部 UI 名称
-external-ui-url: "https://github.akams.cn/https://github.com/Zephyruso/zashboard/releases/latest/download/dist.zip" # 外部 UI 下载链接
+external-ui-url: "https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist.zip" # 外部 UI 下载链接
 external-doh-server: /dns-query # 外部 DoH 服务器
 #interface-name:  # 使用的网络接口名称
 #routing-mark:  # 路由标记
@@ -393,68 +393,40 @@ dns:
     - "quic://223.6.6.6"
   direct-nameserver-follow-policy: true # 是否遵循 nameserver-policy，默认为不遵守，仅当 direct-nameserver 不为空时生效
 
+proxies:
+  - name: "🎯全局直连"
+    type: direct
+  - name: "🚫拒绝连接"
+    type: reject
 proxy-groups:
-  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, DIRECT, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区] }
-
-  - { name: 🟢手动选择, <<: *u, type: select }
-
-  - { name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [REJECT, 🚀全球代理, DIRECT] }
-
-  - { name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [REJECT, 🚀全球代理, DIRECT] }
-
-  - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [DIRECT, 🚀全球代理] }
-
-  - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
-
-  - { name: ⚡️均衡负载, <<: *u, strategy: round-robin, type: load-balance }
-
-  - { name: 🔯故障转移, <<: *u, type: fallback }
-
-  # 地区分组
-  - { name: 🇭🇰香港自动, <<: *u, hidden: true, filter: '(?i)🇭🇰|\bHK\b|香港|Hong Kong' }
-
-  - { name: 🇹🇼台湾自动, <<: *u, hidden: true, filter: '(?i)🇹🇼|\bTW\b|台湾|Taiwan|Tai wan' }
-
-  - { name: 🇯🇵日本自动, <<: *u, hidden: true, filter: '(?i)🇯🇵|\bJP\b|日本|Japan' }
-
-  - { name: 🇺🇸美国自动, <<: *u, hidden: true, filter: '(?i)🇺🇸|\bUS\b|美国|United States|CT' }
-
-  - { name: 🇸🇬新加坡自动, <<: *u, hidden: true, filter: '(?i)🇸🇬|\bSG\b|新加坡|Singapore' }
-
-  - { name: 🇰🇷韩国自动, <<: *u, hidden: true, filter: '(?i)🇰🇷|\bKR\b|韩国|South Korea' }
-
-
-  - { name: 🌐其它地区, <<: *u, type: select, exclude-filter: '(?i)^.*(?:🇨🇳|\bCN\b|中国|China|
-        ‎|🇭🇰|\bHK\b|香港|Hong Kong|
-        ‎|🇹🇼|\bTW\b|台湾|Taiwan|Tai wan|
-        ‎|🇯🇵|\bJP\b|日本|Japan|
-        ‎|🇺🇸|\bUS\b|美国|United States|CT|
-        ‎|🇸🇬|\bSG\b|新加坡|Singapore|
-        ‎|🇰🇷|\bKR\b|韩国|South Korea).*$' }
-
-  - { name: GLOBAL, type: select, include-all-providers: true, proxies: [🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区], icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp }
-
+  - {name: 🚀全球代理, type: select, proxies: [ ♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯全局直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区 ]}
+  - {name: 🟢手动选择, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
+  - {name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [ 🚫拒绝连接, 🚀全球代理, 🎯全局直连 ]}
+  - {name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [ 🚫拒绝连接, 🚀全球代理, 🎯全局直连 ]}
+  - {name: 🎯全球直连, type: select, include-all-providers: true, proxies: [ 🎯全局直连, 🚀全球代理 ]}
+  - {name: ♻️自动选择, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
+  - {name: ⚡️均衡负载, type: load-balance, tolerance: 1, strategy: round-robin, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
+  - {name: 🔯故障转移, type: fallback, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
+  - {name: 🇭🇰香港自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇭🇰|\\bHK\\b|香港|Hong Kong}
+  - {name: 🇹🇼台湾自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇹🇼|\\bTW\\b|台湾|Taiwan|Tai wan}
+  - {name: 🇯🇵日本自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇯🇵|\\bJP\\b|日本|Japan}
+  - {name: 🇺🇸美国自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇺🇸|\\bUS\\b|美国|United States|CT}
+  - {name: 🇸🇬新加坡自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇸🇬|\\bSG\\b|新加坡|Singapore}
+  - {name: 🇰🇷韩国自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇰🇷|\\bKR\\b|韩国|South Korea}
+  - {name: 🌐其它地区, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, exclude-filter: (?i)^.*(?:🇨🇳|\\bCN\\b|中国|China|🇭🇰|\\bHK\\b|香港|Hong Kong|🇹🇼|\\bTW\\b|台湾|Taiwan|Tai wan|🇯🇵|\\bJP\\b|日本|Japan|🇺🇸|\\bUS\\b|美国|United States|CT|🇸🇬|\\bSG\\b|新加坡|Singapore|🇰🇷|\\bKR\\b|韩国|South Korea).*$}
+  - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp}
 rules:
   - GEOSITE,private,🎯全球直连
   - RULE-SET,Advertising-ads,🪧广告拦截
   - RULE-SET,STUN,💧泄漏拦截
-  - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
-  - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
-  - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
-  - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
-  - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
+  - DST-PORT,3478,💧泄漏拦截
+  - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截
+  - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截
+  - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截
+  - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截
   - DOMAIN-KEYWORD,stun,💧泄漏拦截
-  - GEOIP,CN,🎯全球直连 # 国内兜底 IP
+  - GEOIP,CN,🎯全球直连
   - MATCH,🚀全球代理
-    
 rule-providers:
-
-  Advertising-ads:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
-    path: ./ruleset/Advertising_ads_Domain.mrs
-
-  STUN:
-    <<: *domain_mrs
-    url: "https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs"
-    path: ./ruleset/STUN_Domain.mrs
+  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gh-proxy.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
+  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}

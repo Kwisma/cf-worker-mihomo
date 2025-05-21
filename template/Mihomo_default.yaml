@@ -19,7 +19,7 @@ proxy-groups:
   - {name: 🇸🇬新加坡自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇸🇬|\\bSG\\b|新加坡|Singapore}
   - {name: 🇰🇷韩国自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇰🇷|\\bKR\\b|韩国|South Korea}
   - {name: 🌐其它地区, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, exclude-filter: (?i)^.*(?:🇨🇳|\\bCN\\b|中国|China|🇭🇰|\\bHK\\b|香港|Hong Kong|🇹🇼|\\bTW\\b|台湾|Taiwan|Tai wan|🇯🇵|\\bJP\\b|日本|Japan|🇺🇸|\\bUS\\b|美国|United States|CT|🇸🇬|\\bSG\\b|新加坡|Singapore|🇰🇷|\\bKR\\b|韩国|South Korea).*$}
-  - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp}
+  - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp}
 rules:
   - GEOSITE,private,🎯全球直连
   - RULE-SET,Advertising-ads,🪧广告拦截
@@ -33,5 +33,5 @@ rules:
   - GEOIP,CN,🎯全球直连
   - MATCH,🚀全球代理
 rule-providers:
-  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://gh-proxy.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
-  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
+  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gh-proxy.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
+  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
