@@ -56,9 +56,3 @@ npm run build
 - 如果你设置了自定义域名，也可以直接使用它来访问你的页面。
 
 ---
-
-## 变量
-
-|变量名|示例|必填|
-|---|---|---|
-|`CONFIG`|`https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml`|❌|
