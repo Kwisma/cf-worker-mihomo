@@ -654,6 +654,10 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                             label: "ACL_全分组版 (与Github同步)",
                             value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
                         },
+                        {
+                            label: "ACL_全分组版 (与Github同步) (无图标)",
+                            value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full_WithIcon.yaml"
+                        },
                     ]
                 },
                 {
