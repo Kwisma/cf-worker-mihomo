@@ -1,11 +1,11 @@
 import YAML from 'yaml';
+let configCache = null, templateCache = null;
 export default {
     async fetch(request, env) {
-        const config = env.CONFIG || atob('aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL21haW4vQ29uZmlnL01paG9tby55YW1s')
         const url = new URL(request.url);
-        // const hostHeader = request.headers.get("host");
         const userAgent = request.headers.get('User-Agent');
         const isBrowser = /mozilla|chrome|safari|firefox|edge|opera|webkit|gecko|trident/i.test(userAgent);
+        const template = url.searchParams.get("template");
         // 处理 URL 参数
         let urls = url.searchParams.getAll("url");
 
@@ -80,14 +80,14 @@ export default {
                 }
             );
         }
-        return new Response(await initconfig(urls, config), {
+        return new Response(await initconfig(urls, template), {
             headers: { "Content-Type": "text/plain; charset=utf-8" }
         });
     }
 };
 
 // 获取伪装页面
-async function getFakePage(image = 'https://t.alcy.cc/ycy') {
+async function getFakePage(image = 'https://t.alcy.cc/ycy', remoteConfig = []) {
     return `
 <!DOCTYPE html>
 <html>
@@ -122,7 +122,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            align-items: center;
+            padding: 20px 0;
         }
 
         .container {
@@ -134,6 +134,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             -webkit-backdrop-filter: blur(10px);
             /* Safari兼容 */
             max-width: 600px;
+            margin: 60px 0;
             width: 90%;
             padding: 2rem;
             border-radius: 20px;
@@ -370,6 +371,83 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             align-items: center;
             margin-top: 20px;
         }
+        
+        /* 新增模板选择器样式 - 单展开面板版本 */
+        .template-selector {
+            margin-bottom: 1.5rem;
+        }
+        
+        .template-toggle {
+            padding: 12px 15px;
+            background-color: rgba(67, 97, 238, 0.1);
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .template-toggle:hover {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .template-toggle:after {
+            content: "▼";
+            font-size: 12px;
+            transition: transform 0.3s;
+        }
+        
+        .template-toggle.collapsed:after {
+            transform: rotate(-90deg);
+        }
+        
+        .template-options {
+            background-color: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            margin-top: 5px;
+            max-height: 200px; /* 可根据需要调整高度 */
+            overflow-y: auto;
+        }
+        
+        .template-options.show {
+            display: block;
+        }
+        
+        .template-option {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .template-option:last-child {
+            border-bottom: none;
+        }
+        
+        .template-option:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .template-option.selected {
+            background-color: rgba(67, 97, 238, 0.2);
+            font-weight: bold;
+        }
+        
+        .template-url {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid rgba(0, 0, 0, 0.15);
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: #f8f9fa;
+            color: #666;
+            cursor: not-allowed;
+            margin-top: 10px;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
 </head>
@@ -518,6 +596,151 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                 scale: 1
             });
         }
+
+        // 页面加载完成后初始化模板选择器
+        document.addEventListener('DOMContentLoaded', function() {
+            const container = document.querySelector('.container');
+            const firstInputGroup = document.querySelector('.input-group');
+            
+            // 创建模板选择器
+            const templateDiv = document.createElement('div');
+            templateDiv.className = 'template-selector';
+            
+            // 创建模板URL显示框
+            const templateUrlLabel = document.createElement('label');
+            templateUrlLabel.className = 'template-label';
+            templateUrlLabel.textContent = '模板URL';
+            templateDiv.appendChild(templateUrlLabel);
+            
+            const templateUrlInput = document.createElement('input');
+            templateUrlInput.className = 'template-url';
+            templateUrlInput.type = 'text';
+            templateUrlInput.placeholder = '选择模板后将显示URL';
+            templateUrlInput.id = 'template-url-input';
+            templateUrlInput.readOnly = true;
+            templateDiv.appendChild(templateUrlInput);
+            
+            // 创建模板切换按钮
+            const templateToggle = document.createElement('div');
+            templateToggle.className = 'template-toggle';
+            templateToggle.textContent = '选择配置模板（未选择）';
+            templateDiv.appendChild(templateToggle);
+            
+            // 创建模板选项容器
+            const optionsContainer = document.createElement('div');
+            optionsContainer.className = 'template-options';
+            
+            // 生成所有模板选项
+            ${remoteConfig}.forEach(group => {
+                // 添加分组标签
+                const groupLabel = document.createElement('div');
+                groupLabel.style.padding = '10px 20px';
+                groupLabel.style.fontWeight = 'bold';
+                groupLabel.style.color = '#555';
+                groupLabel.style.backgroundColor = '#f5f5f5';
+                groupLabel.textContent = group.label;
+                optionsContainer.appendChild(groupLabel);
+                
+                // 添加选项
+                group.options.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'template-option';
+                    optionElement.textContent = option.label;
+                    optionElement.dataset.value = option.value;
+                    
+                    optionElement.addEventListener('click', function() {
+                        // 移除之前选中的样式
+                        document.querySelectorAll('.template-option.selected').forEach(item => {
+                            item.classList.remove('selected');
+                        });
+                        templateToggle.textContent = \`选择配置模板（\${this.textContent}）\`;
+
+                        // 添加选中样式
+                        this.classList.add('selected');
+                        
+                        // 更新模板URL显示
+                        document.getElementById('template-url-input').value = this.dataset.value;
+                        
+                        // 点击后自动折叠选项面板
+                        templateToggle.classList.add('collapsed');
+                        optionsContainer.classList.remove('show');
+                    });
+                    
+                    optionsContainer.appendChild(optionElement);
+                });
+            });
+            
+            templateDiv.appendChild(optionsContainer);
+            container.insertBefore(templateDiv, firstInputGroup);
+            
+            // 默认选择第一个选项并显示其URL
+            const firstOption = document.querySelector('.template-option');
+            if (firstOption) {
+                firstOption.classList.add('selected');
+                document.getElementById('template-url-input').value = firstOption.dataset.value;
+                templateToggle.textContent = \`选择配置模板（\${firstOption.textContent}）\`;
+            }
+            
+            // 点击切换按钮展开/折叠选项
+            templateToggle.addEventListener('click', function() {
+                this.classList.toggle('collapsed');
+                optionsContainer.classList.toggle('show');
+            });
+        });
+
+        // 修改generateLink函数以包含模板URL
+        function generateLink() {
+            const subscriptionInputs = document.querySelectorAll('.link-input');
+            const templateUrlInput = document.getElementById('template-url-input');
+            
+            const subscriptionLinks = Array.from(subscriptionInputs)
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
+                
+            const templateLink = templateUrlInput.value.trim();
+            
+            if (subscriptionLinks.length === 0 && !templateLink) {
+                alert('请输入至少一个订阅链接或选择配置模板');
+                return;
+            }
+            
+            // 验证订阅链接
+            const allValid = subscriptionLinks.every(link => 
+                link.startsWith('http://') || link.startsWith('https://'));
+            
+            if (subscriptionLinks.length > 0 && !allValid) {
+                alert('请输入有效的订阅URL地址');
+                return;
+            }
+            
+            // 如果有模板URL，添加到链接数组开头
+            const allLinks = [];
+            if (templateLink) {
+                allLinks.push(\`template=\${encodeURIComponent(templateLink)}\`);
+            }
+            
+            // 添加订阅链接
+            subscriptionLinks.forEach(link => {
+                allLinks.push(\`url=\${encodeURIComponent(link)}\`);
+            });
+            
+            const domain = window.location.hostname;
+            const urlLink = \`https://\${domain}/?\${allLinks.join('&')}\`;
+            document.getElementById('result').value = urlLink;
+
+            // 生成二维码
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.innerHTML = '';
+            new QRCode(qrcodeDiv, {
+                text: urlLink,
+                width: 220,
+                height: 220,
+                colorDark: "#4a60ea",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L,
+                scale: 1
+            });
+        }
     </script>
 </body>
 
@@ -535,29 +758,83 @@ function isValidURL(url) {
 }
 
 // 初始化配置
-async function initconfig(urls, config) {
-    let index = 0, proxy = [];
-    for (const url of urls) {
-        const decodedUrl = decodeURIComponent(url)
-        proxy.push(`
-  provider${index + 1}:
-    <<: *p
-    url: "${decodedUrl}"
-    path: ./proxies/provider${index + 1}.yaml
-    override:
-      <<: *override
-      additional-suffix: ' ${index + 1}'
-`)
-        index++;
+async function initconfig(urls, template) {
+    console.log(`Initializing configuration with template: ${template}`);
+    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
+    if (!template) {
+        config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
+    } else {
+        const templateyaml = await loadtemplate(template);
+        templatedata = YAML.parse(templateyaml, { maxAliasCount: -1, merge: true });
     }
-    const ProxyProviders = `
-proxy-providers:
-${proxy.join('')}
-`
-
+    const mihomodata = await loadConfig(config);
+    let data = YAML.parse(mihomodata, { maxAliasCount: -1, merge: true });
+    const base = data.p || {};
+    const override = data.override || {};
+    const proxyProviders = {};
+    urls.forEach((url, i) => {
+        const decodedUrl = decodeURIComponent(url);
+        proxyProviders[`provider${i + 1}`] = {
+            ...base,
+            url: decodedUrl,
+            path: `./proxies/provider${i + 1}.yaml`,
+            override: {
+                ...override,
+                "additional-suffix": ` ${i + 1}`
+            }
+        };
+    });
+    if (!template) {
+        data['proxy-providers'] = proxyProviders;
+        return JSON.stringify(data);
+    } else {
+        data['proxy-providers'] = proxyProviders;
+        data.proxies = templatedata.proxies || [];
+        data['proxy-groups'] = templatedata['proxy-groups'] || [];
+        data.rules = templatedata.rules || [];
+        data['sub-rules'] = {};
+        data['rule-providers'] = templatedata['rule-providers'] || {};
+        return JSON.stringify(data);
+    }
+}
+async function loadConfig(config) {
+    if (configCache) return configCache;
     const response = await fetch(config);
-    let mihomodata = await response.text()
-    // 使用正则表达式替换 proxy-providers 和 u 锚点
-    mihomodata = mihomodata.replace(/proxy-providers:([\s\S]*?)(?=\n\S|$)/, ProxyProviders.trim());
-    return JSON.stringify(YAML.parse(mihomodata, { maxAliasCount: -1, merge: true }));
+    configCache = await response.text();
+    return configCache;
+}
+
+async function loadtemplate(template) {
+    if (templateCache) return templateCache;
+    const response = await fetch(template);
+    templateCache = await response.text();
+    return templateCache;
+}
+// 配置数据
+async function remoteConfig() {
+    const remoteConfig = [
+        {
+            label: "通用",
+            options: [
+                {
+                    label: "默认",
+                    value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
+                }
+            ]
+        },
+        {
+            label: "网络收集",
+            options: [
+                {
+                    label: "布丁狗的订阅转换 (与Github同步)",
+                    value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
+                },
+                {
+                    label: "ACL_全分组版 (与Github同步)",
+                    value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
+                },
+            ]
+        }
+    ];
+    return remoteConfig;
 }
