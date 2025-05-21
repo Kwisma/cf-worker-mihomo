@@ -14,7 +14,7 @@ export default {
         }
 
         if (urls.length === 0 || urls[0] === "") {
-            return new Response(await getFakePage(env.IMG), {
+            return new Response(await getFakePage(env.IMG, remoteConfig()), {
                 headers: {
                     "Content-Type": "text/html; charset=utf-8"
                 }
@@ -24,7 +24,7 @@ export default {
         // URL 校验
         for (let u of urls) {
             if (!isValidURL(u)) {
-                return new Response(await getFakePage(env.IMG), {
+                return new Response(await getFakePage(env.IMG, remoteConfig()), {
                     headers: {
                         "Content-Type": "text/html; charset=utf-8"
                     }
