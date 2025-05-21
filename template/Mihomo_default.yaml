@@ -1,9 +1,14 @@
+proxies:
+  - name: "🎯全局直连"
+    type: direct
+  - name: "🚫拒绝连接"
+    type: reject
 proxy-groups:
-  - {name: 🚀全球代理, type: select, proxies: [ ♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, DIRECT, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区 ]}
+  - {name: 🚀全球代理, type: select, proxies: [ ♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯全局直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区 ]}
   - {name: 🟢手动选择, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
-  - {name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [ REJECT, 🚀全球代理, DIRECT ]}
-  - {name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [ REJECT, 🚀全球代理, DIRECT ]}
-  - {name: 🎯全球直连, type: select, include-all-providers: true, proxies: [ DIRECT, 🚀全球代理 ]}
+  - {name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [ 🚫拒绝连接, 🚀全球代理, DIRECT ]}
+  - {name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [ 🚫拒绝连接, 🚀全球代理, DIRECT ]}
+  - {name: 🎯全球直连, type: select, include-all-providers: true, proxies: [ 🎯全局直连, 🚀全球代理 ]}
   - {name: ♻️自动选择, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
   - {name: ⚡️均衡负载, type: load-balance, tolerance: 1, strategy: round-robin, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
   - {name: 🔯故障转移, type: fallback, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
@@ -28,5 +33,5 @@ rules:
   - GEOIP,CN,🎯全球直连
   - MATCH,🚀全球代理
 rule-providers:
-  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://github.akams.cn/https://raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
-  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://github.akams.cn/https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
+  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://gh-proxy.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
+  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
