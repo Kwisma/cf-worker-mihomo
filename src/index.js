@@ -136,6 +136,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             max-width: 600px;
             margin: 60px 0;
             width: 90%;
+            height: 90%;
             padding: 2rem;
             border-radius: 20px;
             /* 调整阴影效果增加通透感 */
