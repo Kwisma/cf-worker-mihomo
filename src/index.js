@@ -640,6 +640,10 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                         {
                             label: "默认",
                             value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
+                        },
+                        {
+                            label: "自用",
+                            value: ""
                         }
                     ]
                 },
