@@ -122,7 +122,8 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             min-height: 100vh;
             display: flex;
             justify-content: center;
-            padding: 20px 0;
+            padding: 60px 0;
+            align-items: center;
         }
 
         .container {
@@ -134,7 +135,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             -webkit-backdrop-filter: blur(10px);
             /* Safari兼容 */
             max-width: 600px;
-            margin: 60px 0;
+            margin: 0;
             width: 90%;
             height: 90%;
             padding: 2rem;
