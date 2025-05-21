@@ -14,7 +14,7 @@ export default {
         }
 
         if (urls.length === 0 || urls[0] === "") {
-            return new Response(await getFakePage(env.IMG, remoteConfig()), {
+            return new Response(await getFakePage(env.IMG), {
                 headers: {
                     "Content-Type": "text/html; charset=utf-8"
                 }
@@ -24,7 +24,7 @@ export default {
         // URL 校验
         for (let u of urls) {
             if (!isValidURL(u)) {
-                return new Response(await getFakePage(env.IMG, remoteConfig()), {
+                return new Response(await getFakePage(env.IMG), {
                     headers: {
                         "Content-Type": "text/html; charset=utf-8"
                     }
@@ -87,7 +87,7 @@ export default {
 };
 
 // 获取伪装页面
-async function getFakePage(image = 'https://t.alcy.cc/ycy', remoteConfig = []) {
+async function getFakePage(image = 'https://t.alcy.cc/ycy') {
     return `
 <!DOCTYPE html>
 <html>
@@ -629,9 +629,34 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy', remoteConfig = []) {
             // 创建模板选项容器
             const optionsContainer = document.createElement('div');
             optionsContainer.className = 'template-options';
-            
+
+            // 配置数据
+            const remoteConfig = [
+                {
+                    label: "通用",
+                    options: [
+                        {
+                            label: "默认",
+                            value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
+                        }
+                    ]
+                },
+                {
+                    label: "网络收集",
+                    options: [
+                        {
+                            label: "布丁狗的订阅转换 (与Github同步)",
+                            value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
+                        },
+                        {
+                            label: "ACL_全分组版 (与Github同步)",
+                            value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
+                        },
+                    ]
+                }
+            ];
             // 生成所有模板选项
-            ${remoteConfig}.forEach(group => {
+            remoteConfig.forEach(group => {
                 // 添加分组标签
                 const groupLabel = document.createElement('div');
                 groupLabel.style.padding = '10px 20px';
@@ -809,32 +834,4 @@ async function loadtemplate(template) {
     const response = await fetch(template);
     templateCache = await response.text();
     return templateCache;
-}
-// 配置数据
-async function remoteConfig() {
-    const remoteConfig = [
-        {
-            label: "通用",
-            options: [
-                {
-                    label: "默认",
-                    value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
-                }
-            ]
-        },
-        {
-            label: "网络收集",
-            options: [
-                {
-                    label: "布丁狗的订阅转换 (与Github同步)",
-                    value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
-                },
-                {
-                    label: "ACL_全分组版 (与Github同步)",
-                    value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
-                },
-            ]
-        }
-    ];
-    return remoteConfig;
 }
