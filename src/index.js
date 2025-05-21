@@ -655,7 +655,44 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                             value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
                         },
                     ]
-                }
+                },
+                {
+                    label: "Lanlan13-14",
+                    options: [
+                        {
+                            label: "全分组版 (与Github同步)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (无广告)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (无广告) (Stash)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (无广告) (精简版) (Stash)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash_lite.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (无广告) (精简版)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (Stash)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (精简版) (Stash)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash_lite.yaml"
+                        },
+                        {
+                            label: "全分组版 (与Github同步) (精简版)",
+                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_lite.yaml"
+                        },
+                    ]
+                },
             ];
             // 生成所有模板选项
             remoteConfig.forEach(group => {
