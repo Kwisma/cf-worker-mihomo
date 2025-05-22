@@ -208,7 +208,6 @@ sniffer:
 
 # tun 配置：用于启用 TUN 模式，优化流量路由和 IP 设置
 tun:
-  exclude-package: []
   enable: true # 启用 TUN 模式，用于透明代理
   stack: gvisor # 使用空间网络栈处理流量，可用值： system/gvisor/mixed
   auto-route: true # 自动设置全局路由，可以自动将全局流量路由进入 tun 网卡。
