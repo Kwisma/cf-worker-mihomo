@@ -646,6 +646,35 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                     ]
                 },
                 {
+                    label: "Mihomo-Party-ACL4SSR",
+                    options: [
+                        {
+                            label: "ACL4SSR_Online_Full 全包重度用户使用（与Github同步）",
+                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full.yaml"
+                        },
+                        {
+                            label: "ACL4SSR_Online_Full_AdblockPlus 全包重度用户使用更多去广告（与Github同步）",
+                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_AdblockPlus.yaml"
+                        },
+                        {
+                            label: "ACL4SSR_Online_Full_Tiktok 全包重度用户使用抖音全量（与Github同步）",
+                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_Tiktok.yaml"
+                        },
+                        {
+                            label: "ACL4SSR_Online_Full_WithIcon 全包重度用户使用（与Github同步）（无图标）",
+                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_WithIcon.yaml"
+                        },
+                        {
+                            label: "ACL4SSR_Online_Mini_MultiMode 专业版自动测速、故障转移、负载均衡（与Github同步）",
+                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Mini_MultiMode.yaml"
+                        },
+                        {
+                            label: "极简分流规则",
+                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/极简分流规则.yaml"
+                        }
+                    ]
+                },
+                {
                     label: "网络收集",
                     options: [
                         {
@@ -653,11 +682,11 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                             value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
                         },
                         {
-                            label: "ACL_全分组版 (与Github同步)",
+                            label: "ACL4SSR_Online_Full 全分组版 (与Github同步)",
                             value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
                         },
                         {
-                            label: "ACL_全分组版 (与Github同步) (无图标)",
+                            label: "ACL4SSR_Online_Full_WithIcon 全分组版 (与Github同步) (无图标)",
                             value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full_WithIcon.yaml"
                         },
                     ]
@@ -666,35 +695,35 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                     label: "Lanlan13-14",
                     options: [
                         {
-                            label: "全分组版 (与Github同步)",
+                            label: "configfull 全分组版 (与Github同步)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (无广告)",
+                            label: "configfull_NoAd 全分组版 (与Github同步) (无广告)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (无广告) (Stash)",
+                            label: "configfull_NoAd_Stash 全分组版 (与Github同步) (无广告) (Stash)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (无广告) (精简版) (Stash)",
+                            label: "configfull_NoAd_Stash_lite 全分组版 (与Github同步) (无广告) (精简版) (Stash)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash_lite.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (无广告) (精简版)",
+                            label: "configfull_NoAd_lite 全分组版 (与Github同步) (无广告) (精简版)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (Stash)",
+                            label: "configfull_Stash 全分组版 (与Github同步) (Stash)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (精简版) (Stash)",
+                            label: "configfull_Stash_lite 全分组版 (与Github同步) (精简版) (Stash)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash_lite.yaml"
                         },
                         {
-                            label: "全分组版 (与Github同步) (精简版)",
+                            label: "configfull_lite 全分组版 (与Github同步) (精简版)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_lite.yaml"
                         },
                     ]
