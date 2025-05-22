@@ -15,6 +15,10 @@ const formatEntry = (obj) => {
 
   return str;
 };
+let proxiesContent = 'proxies:\n';
+parsedData.proxies.forEach(item => {
+  proxiesContent += `  - ${formatEntry(item)}\n`;
+});
 
 // 3. 处理 proxy-groups
 let proxyGroupsContent = 'proxy-groups:\n';
@@ -43,6 +47,7 @@ Object.entries(parsedData['sub-rules'] || {}).forEach(([key, value]) => {
   });
 });// 5. 合并内容并写入文件
 const finalContent = [
+  proxiesContent,
   proxyGroupsContent,
   rulesContent,
   subRulesContent,
