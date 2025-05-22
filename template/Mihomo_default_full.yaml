@@ -167,10 +167,175 @@ rules:
   - MATCH,🚀全球代理
 
 sub-rules:
-  SUB-REJECT: [ RULE-SET,Advertising-ads,🪧广告拦截, RULE-SET,BlockHttpDNS,🔎HttpDNS, RULE-SET,BlockHttpDNScidr,🔎HttpDNS,no-resolve, DOMAIN-KEYWORD,httpdns,🔎HttpDNS, RULE-SET,STUN,💧泄漏拦截, DST-PORT,3478,💧泄漏拦截, AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截, AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截, AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截, AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截, DOMAIN-KEYWORD,stun,💧泄漏拦截 ]
-  SUB-LAN: [ RULE-SET,Private,🎯全球直连, RULE-SET,Privatecidr,🎯全球直连,no-resolve ]
-  SUB-DOMAIN: [ DOMAIN,ghfast.top,🎯全球直连, RULE-SET,AppStore,AppStore, RULE-SET,AppleMail,Apple邮箱, RULE-SET,AppleMusic,Apple音乐, RULE-SET,AppleNews,Apple新闻, RULE-SET,AppleDaily,Apple日报, RULE-SET,FitnessPlus,FitnessPlus, RULE-SET,AppleTV,AppleTV, RULE-SET,AppleMedia,AppleTV, OR,((RULE-SET,AppleProxy),(DOMAIN-KEYWORD,smp-device),(DOMAIN-KEYWORD,testflight)),Apple, RULE-SET,Biliintl,哔哩东南亚, OR,((RULE-SET,TikTok),(DOMAIN-KEYWORD,tiktok)),TikTok, OR,((RULE-SET,YouTube),(DOMAIN-KEYWORD,youtube)),YouTube, RULE-SET,YouTubeMusic,YouTubeMusic, RULE-SET,Disney,Disney, RULE-SET,Bahamut,巴哈姆特, RULE-SET,HuluJP,Hulu, RULE-SET,HuluUSA,Hulu, RULE-SET,Hulu,Hulu, RULE-SET,TVB,TVB, RULE-SET,Niconico,ニコニコ, RULE-SET,AbemaTV,AbemaTV, OR,((RULE-SET,AmazonPrimeVideo),(DOMAIN-KEYWORD,avoddashs)),亚马逊TV, RULE-SET,IMDB,IMDB, RULE-SET,Qobuz,Qobuz, RULE-SET,SoundCloud,SoundCloud, RULE-SET,Spotify,Spotify, RULE-SET,LastFM,LastFM, RULE-SET,4GTV,4GTV, OR,((RULE-SET,Spotify),(DOMAIN-KEYWORD,spotify)),Spotify, OR,((RULE-SET,Twitch),(DOMAIN-KEYWORD,ttvnw)),Twitch, OR,((RULE-SET,PikPak),(DOMAIN-KEYWORD,pikpak)),PikPak, RULE-SET,Discord,Discord, OR,((RULE-SET,Telegram),(DOMAIN-KEYWORD,nicegram)),Telegram, OR,((RULE-SET,GitHub),(DOMAIN-KEYWORD,github)),GitHub, OR,((RULE-SET,Amazon),(DOMAIN-KEYWORD,avoddashs)),亚马逊电商, OR,((RULE-SET,Adobe),(DOMAIN-KEYWORD,adobe)),Adobe, RULE-SET,Docker,Docker, OR,((RULE-SET,Instagram),(DOMAIN-KEYWORD,instagram)),Instagram, RULE-SET,PayPal,PayPal, OR,((RULE-SET,Claude),(RULE-SET,OpenAI),(RULE-SET,Gemini),(AND,((RULE-SET,Copilot),(NOT,((DOMAIN,www.bing.com))))),(DOMAIN-KEYWORD,openai),(DOMAIN-KEYWORD,openaicom-api),(DOMAIN-KEYWORD,colab),(DOMAIN-KEYWORD,developerprofiles),(DOMAIN-KEYWORD,generativelanguage)),OpenAI, RULE-SET,Intel,因特尔, OR,((RULE-SET,Speedtest),(DOMAIN-KEYWORD,speedtest)),Speedtest, RULE-SET,Reddit,Reddit, RULE-SET,EHGallery,E站, RULE-SET,Pixiv,Pixiv, RULE-SET,Wikipedia,维基百科, RULE-SET,Blizzard,暴雪, OR,((RULE-SET,Steam),(DOMAIN-KEYWORD,steambroadcast),(DOMAIN-KEYWORD,steamstore),(DOMAIN-KEYWORD,steamuserimages)),Steam, RULE-SET,Rockstar,Rockstar, RULE-SET,PlayStation,PlayStation, RULE-SET,Epic,Epic, RULE-SET,Supercell,Supercell, RULE-SET,EA,EA, RULE-SET,Sony,索尼, RULE-SET,Hoyoverse,Hoyoverse, RULE-SET,18comic,禁漫天堂, RULE-SET,GoogleDrive,Google云盘, RULE-SET,GoogleEarth,Google地图, RULE-SET,GoogleFCM,FCM, RULE-SET,GoogleVoice,GoogleVoice, RULE-SET,Scholar,Google学术, RULE-SET,HBO,HBO, RULE-SET,Line,LINE, RULE-SET,Wise,Wise, RULE-SET,Signal,Signal, RULE-SET,Picacg,哔咔哔咔, RULE-SET,Pandora,潘朵拉珠宝, OR,((RULE-SET,Emby,Emby),(DOMAIN-KEYWORD,emby)),Emby, RULE-SET,Talkatone,Talkatone, OR,((RULE-SET,Facebook),(DOMAIN-KEYWORD,facebook),(DOMAIN-KEYWORD,fbcdn)),Facebook, OR,((RULE-SET,Twitter),(DOMAIN-KEYWORD,twitter)),Twitter, RULE-SET,Netflix,Netflix, RULE-SET,Tor,Tor, RULE-SET,Fastly,Fastly, RULE-SET,Google,Google, RULE-SET,GlobalMedia,国际媒体, RULE-SET,Cloudflare,Cloudflare, RULE-SET,iCloud,iCloud, OR,((RULE-SET,Siri),(RULE-SET,SystemOTA),(RULE-SET,AppleID),(RULE-SET,AppleDev),(RULE-SET,AppleFirmware),(RULE-SET,AppleHardware),(RULE-SET,Apple)),AppleCN, RULE-SET,Beats,Beats, RULE-SET,DouYin,抖音, RULE-SET,CCTV,CCTV, RULE-SET,BiliBili,哔哩哔哩, RULE-SET,iQIYI,爱奇艺, RULE-SET,Kugou,酷狗, RULE-SET,Kuwo,酷我, RULE-SET,NetEaseMusic,网易云音乐, RULE-SET,NGA,NGA, OR,((RULE-SET,Tracker),(DOMAIN-KEYWORD,announce),(DOMAIN-KEYWORD,chdbits),(DOMAIN-KEYWORD,m-team),(DOMAIN-KEYWORD,torrent)),BT追踪器, RULE-SET,BaiDuTieBa,百度贴吧, RULE-SET,GaoDe,高德, RULE-SET,MeiTuan,美团, RULE-SET,SMZDM,什么值得买, RULE-SET,12306,12306, OR,((RULE-SET,Sina),(DOMAIN-KEYWORD,weibo)),新浪, RULE-SET,DouBan,豆瓣, RULE-SET,Hupu,虎扑, RULE-SET,ABC,农业银行, RULE-SET,Baidu,百度, RULE-SET,DingTalk,钉钉, RULE-SET,SteamCN,Steam中国, RULE-SET,NetEase,网易, RULE-SET,JingDong,京东, RULE-SET,58TongCheng,58同城, RULE-SET,AliPay,支付宝, RULE-SET,Pinduoduo,拼多多, OR,((RULE-SET,115),(DOMAIN-SUFFIX,115vod.com)),115, RULE-SET,4399,4399, RULE-SET,WeChat,微信, RULE-SET,Mihoyo,Mihoyo, OR,((RULE-SET,OneDrive),(DOMAIN-KEYWORD,1drv),(DOMAIN-KEYWORD,onedrive),(DOMAIN-KEYWORD,skydrive)),微软云盘, OR,((RULE-SET,Bing),(RULE-SET,Teams),(RULE-SET,MicrosoftEdge),(RULE-SET,Microsoft),(DOMAIN-KEYWORD,microsoft),(DOMAIN-KEYWORD,skydrive)),微软, RULE-SET,ChinaMedia,中国媒体, RULE-SET,ByteDance,字节跳动, RULE-SET,Tencent,腾讯, RULE-SET,Alibaba,阿里巴巴, RULE-SET,China,PASS, RULE-SET,Fakeip_Filter,PASS ]
-  SUB-IPCIDR: [ RULE-SET,NetEasecidr,网易, RULE-SET,iQIYIcidr,爱奇艺, RULE-SET,NetEaseMusiccidr,网易云音乐, RULE-SET,ByteDancecidr,字节跳动, RULE-SET,Tencentcidr,腾讯, RULE-SET,Alibabacidr,阿里巴巴, RULE-SET,BiliBilicidr,哔哩哔哩, RULE-SET,ChinaMediacidr,中国媒体, RULE-SET,Chinacidr,🎯全球直连, RULE-SET,Applecidr,Apple, RULE-SET,Spotifycidr,Spotify, RULE-SET,Twitchcidr,Twitch, RULE-SET,Telegramcidr,Telegram, RULE-SET,Amazoncidr,亚马逊电商, RULE-SET,Copilotcidr,OpenAI, RULE-SET,OpenAIcidr,OpenAI, RULE-SET,EHGallerycidr,E站,no-resolve, RULE-SET,Blizzardcidr,暴雪, RULE-SET,Supercellcidr,Supercell, RULE-SET,GoogleFCMcidr,FCM, RULE-SET,Linecidr,LINE, RULE-SET,Talkatonecidr,Talkatone, RULE-SET,Facebookcidr,Facebook, RULE-SET,Twittercidr,Twitter, RULE-SET,Netflixcidr,Netflix, RULE-SET,Torcidr,Tor, RULE-SET,Fastlycidr,Fastly, RULE-SET,Googlecidr,Google, RULE-SET,Trackercidr,BT追踪器,no-resolve, RULE-SET,Qobuzcidr,Qobuz, RULE-SET,YouTubecidr,YouTube, RULE-SET,GlobalMediacidr,国际媒体,no-resolve, RULE-SET,Cloudflarecidr,Cloudflare ]
+  SUB-REJECT:
+    - RULE-SET,Advertising-ads,🪧广告拦截
+    - RULE-SET,BlockHttpDNS,🔎HttpDNS
+    - RULE-SET,BlockHttpDNScidr,🔎HttpDNS,no-resolve
+    - DOMAIN-KEYWORD,httpdns,🔎HttpDNS
+    - RULE-SET,STUN,💧泄漏拦截
+    - DST-PORT,3478,💧泄漏拦截
+    - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截
+    - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截
+    - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截
+    - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截
+    - DOMAIN-KEYWORD,stun,💧泄漏拦截
+  SUB-LAN:
+    - RULE-SET,Private,🎯全球直连
+    - RULE-SET,Privatecidr,🎯全球直连,no-resolve
+  SUB-DOMAIN:
+    - DOMAIN,ghfast.top,🎯全球直连
+    - RULE-SET,AppStore,AppStore
+    - RULE-SET,AppleMail,Apple邮箱
+    - RULE-SET,AppleMusic,Apple音乐
+    - RULE-SET,AppleNews,Apple新闻
+    - RULE-SET,AppleDaily,Apple日报
+    - RULE-SET,FitnessPlus,FitnessPlus
+    - RULE-SET,AppleTV,AppleTV
+    - RULE-SET,AppleMedia,AppleTV
+    - OR,((RULE-SET,AppleProxy),(DOMAIN-KEYWORD,smp-device),(DOMAIN-KEYWORD,testflight)),Apple
+    - RULE-SET,Biliintl,哔哩东南亚
+    - OR,((RULE-SET,TikTok),(DOMAIN-KEYWORD,tiktok)),TikTok
+    - OR,((RULE-SET,YouTube),(DOMAIN-KEYWORD,youtube)),YouTube
+    - RULE-SET,YouTubeMusic,YouTubeMusic
+    - RULE-SET,Disney,Disney
+    - RULE-SET,Bahamut,巴哈姆特
+    - RULE-SET,HuluJP,Hulu
+    - RULE-SET,HuluUSA,Hulu
+    - RULE-SET,Hulu,Hulu
+    - RULE-SET,TVB,TVB
+    - RULE-SET,Niconico,ニコニコ
+    - RULE-SET,AbemaTV,AbemaTV
+    - OR,((RULE-SET,AmazonPrimeVideo),(DOMAIN-KEYWORD,avoddashs)),亚马逊TV
+    - RULE-SET,IMDB,IMDB
+    - RULE-SET,Qobuz,Qobuz
+    - RULE-SET,SoundCloud,SoundCloud
+    - RULE-SET,Spotify,Spotify
+    - RULE-SET,LastFM,LastFM
+    - RULE-SET,4GTV,4GTV
+    - OR,((RULE-SET,Spotify),(DOMAIN-KEYWORD,spotify)),Spotify
+    - OR,((RULE-SET,Twitch),(DOMAIN-KEYWORD,ttvnw)),Twitch
+    - OR,((RULE-SET,PikPak),(DOMAIN-KEYWORD,pikpak)),PikPak
+    - RULE-SET,Discord,Discord
+    - OR,((RULE-SET,Telegram),(DOMAIN-KEYWORD,nicegram)),Telegram
+    - OR,((RULE-SET,GitHub),(DOMAIN-KEYWORD,github)),GitHub
+    - OR,((RULE-SET,Amazon),(DOMAIN-KEYWORD,avoddashs)),亚马逊电商
+    - OR,((RULE-SET,Adobe),(DOMAIN-KEYWORD,adobe)),Adobe
+    - RULE-SET,Docker,Docker
+    - OR,((RULE-SET,Instagram),(DOMAIN-KEYWORD,instagram)),Instagram
+    - RULE-SET,PayPal,PayPal
+    - OR,((RULE-SET,Claude),(RULE-SET,OpenAI),(RULE-SET,Gemini),(AND,((RULE-SET,Copilot),(NOT,((DOMAIN,www.bing.com))))),(DOMAIN-KEYWORD,openai),(DOMAIN-KEYWORD,openaicom-api),(DOMAIN-KEYWORD,colab),(DOMAIN-KEYWORD,developerprofiles),(DOMAIN-KEYWORD,generativelanguage)),OpenAI
+    - RULE-SET,Intel,因特尔
+    - OR,((RULE-SET,Speedtest),(DOMAIN-KEYWORD,speedtest)),Speedtest
+    - RULE-SET,Reddit,Reddit
+    - RULE-SET,EHGallery,E站
+    - RULE-SET,Pixiv,Pixiv
+    - RULE-SET,Wikipedia,维基百科
+    - RULE-SET,Blizzard,暴雪
+    - OR,((RULE-SET,Steam),(DOMAIN-KEYWORD,steambroadcast),(DOMAIN-KEYWORD,steamstore),(DOMAIN-KEYWORD,steamuserimages)),Steam
+    - RULE-SET,Rockstar,Rockstar
+    - RULE-SET,PlayStation,PlayStation
+    - RULE-SET,Epic,Epic
+    - RULE-SET,Supercell,Supercell
+    - RULE-SET,EA,EA
+    - RULE-SET,Sony,索尼
+    - RULE-SET,Hoyoverse,Hoyoverse
+    - RULE-SET,18comic,禁漫天堂
+    - RULE-SET,GoogleDrive,Google云盘
+    - RULE-SET,GoogleEarth,Google地图
+    - RULE-SET,GoogleFCM,FCM
+    - RULE-SET,GoogleVoice,GoogleVoice
+    - RULE-SET,Scholar,Google学术
+    - RULE-SET,HBO,HBO
+    - RULE-SET,Line,LINE
+    - RULE-SET,Wise,Wise
+    - RULE-SET,Signal,Signal
+    - RULE-SET,Picacg,哔咔哔咔
+    - RULE-SET,Pandora,潘朵拉珠宝
+    - OR,((RULE-SET,Emby,Emby),(DOMAIN-KEYWORD,emby)),Emby
+    - RULE-SET,Talkatone,Talkatone
+    - OR,((RULE-SET,Facebook),(DOMAIN-KEYWORD,facebook),(DOMAIN-KEYWORD,fbcdn)),Facebook
+    - OR,((RULE-SET,Twitter),(DOMAIN-KEYWORD,twitter)),Twitter
+    - RULE-SET,Netflix,Netflix
+    - RULE-SET,Tor,Tor
+    - RULE-SET,Fastly,Fastly
+    - RULE-SET,Google,Google
+    - RULE-SET,GlobalMedia,国际媒体
+    - RULE-SET,Cloudflare,Cloudflare
+    - RULE-SET,iCloud,iCloud
+    - OR,((RULE-SET,Siri),(RULE-SET,SystemOTA),(RULE-SET,AppleID),(RULE-SET,AppleDev),(RULE-SET,AppleFirmware),(RULE-SET,AppleHardware),(RULE-SET,Apple)),AppleCN
+    - RULE-SET,Beats,Beats
+    - RULE-SET,DouYin,抖音
+    - RULE-SET,CCTV,CCTV
+    - RULE-SET,BiliBili,哔哩哔哩
+    - RULE-SET,iQIYI,爱奇艺
+    - RULE-SET,Kugou,酷狗
+    - RULE-SET,Kuwo,酷我
+    - RULE-SET,NetEaseMusic,网易云音乐
+    - RULE-SET,NGA,NGA
+    - OR,((RULE-SET,Tracker),(DOMAIN-KEYWORD,announce),(DOMAIN-KEYWORD,chdbits),(DOMAIN-KEYWORD,m-team),(DOMAIN-KEYWORD,torrent)),BT追踪器
+    - RULE-SET,BaiDuTieBa,百度贴吧
+    - RULE-SET,GaoDe,高德
+    - RULE-SET,MeiTuan,美团
+    - RULE-SET,SMZDM,什么值得买
+    - RULE-SET,12306,12306
+    - OR,((RULE-SET,Sina),(DOMAIN-KEYWORD,weibo)),新浪
+    - RULE-SET,DouBan,豆瓣
+    - RULE-SET,Hupu,虎扑
+    - RULE-SET,ABC,农业银行
+    - RULE-SET,Baidu,百度
+    - RULE-SET,DingTalk,钉钉
+    - RULE-SET,SteamCN,Steam中国
+    - RULE-SET,NetEase,网易
+    - RULE-SET,JingDong,京东
+    - RULE-SET,58TongCheng,58同城
+    - RULE-SET,AliPay,支付宝
+    - RULE-SET,Pinduoduo,拼多多
+    - OR,((RULE-SET,115),(DOMAIN-SUFFIX,115vod.com)),115
+    - RULE-SET,4399,4399
+    - RULE-SET,WeChat,微信
+    - RULE-SET,Mihoyo,Mihoyo
+    - OR,((RULE-SET,OneDrive),(DOMAIN-KEYWORD,1drv),(DOMAIN-KEYWORD,onedrive),(DOMAIN-KEYWORD,skydrive)),微软云盘
+    - OR,((RULE-SET,Bing),(RULE-SET,Teams),(RULE-SET,MicrosoftEdge),(RULE-SET,Microsoft),(DOMAIN-KEYWORD,microsoft),(DOMAIN-KEYWORD,skydrive)),微软
+    - RULE-SET,ChinaMedia,中国媒体
+    - RULE-SET,ByteDance,字节跳动
+    - RULE-SET,Tencent,腾讯
+    - RULE-SET,Alibaba,阿里巴巴
+    - RULE-SET,China,PASS
+    - RULE-SET,Fakeip_Filter,PASS
+  SUB-IPCIDR:
+    - RULE-SET,NetEasecidr,网易
+    - RULE-SET,iQIYIcidr,爱奇艺
+    - RULE-SET,NetEaseMusiccidr,网易云音乐
+    - RULE-SET,ByteDancecidr,字节跳动
+    - RULE-SET,Tencentcidr,腾讯
+    - RULE-SET,Alibabacidr,阿里巴巴
+    - RULE-SET,BiliBilicidr,哔哩哔哩
+    - RULE-SET,ChinaMediacidr,中国媒体
+    - RULE-SET,Chinacidr,🎯全球直连
+    - RULE-SET,Applecidr,Apple
+    - RULE-SET,Spotifycidr,Spotify
+    - RULE-SET,Twitchcidr,Twitch
+    - RULE-SET,Telegramcidr,Telegram
+    - RULE-SET,Amazoncidr,亚马逊电商
+    - RULE-SET,Copilotcidr,OpenAI
+    - RULE-SET,OpenAIcidr,OpenAI
+    - RULE-SET,EHGallerycidr,E站,no-resolve
+    - RULE-SET,Blizzardcidr,暴雪
+    - RULE-SET,Supercellcidr,Supercell
+    - RULE-SET,GoogleFCMcidr,FCM
+    - RULE-SET,Linecidr,LINE
+    - RULE-SET,Talkatonecidr,Talkatone
+    - RULE-SET,Facebookcidr,Facebook
+    - RULE-SET,Twittercidr,Twitter
+    - RULE-SET,Netflixcidr,Netflix
+    - RULE-SET,Torcidr,Tor
+    - RULE-SET,Fastlycidr,Fastly
+    - RULE-SET,Googlecidr,Google
+    - RULE-SET,Trackercidr,BT追踪器,no-resolve
+    - RULE-SET,Qobuzcidr,Qobuz
+    - RULE-SET,YouTubecidr,YouTube
+    - RULE-SET,GlobalMediacidr,国际媒体,no-resolve
+    - RULE-SET,Cloudflarecidr,Cloudflare
 
 rule-providers:
   115: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://cdn.jsdmirror.cn/gh/peiyingyao/Rule-for-OCD@master/rule/Clash/115/115_OCD_Domain.mrs, path: ./ruleset/115_Domain.mrs}
