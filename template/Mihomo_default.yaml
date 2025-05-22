@@ -33,5 +33,5 @@ rules:
   - GEOIP,CN,🎯全球直连
   - MATCH,🚀全球代理
 rule-providers:
-  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gitclone.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
-  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
+  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://gitclone.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
+  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
