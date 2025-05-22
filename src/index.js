@@ -395,13 +395,14 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
         }
         
         .template-toggle:after {
-            content: "▼";
+            content: "▶"; /* 改为向右箭头 */
             font-size: 12px;
             transition: transform 0.3s;
+            margin-left: 8px; /* 增加间距 */
         }
         
         .template-toggle.collapsed:after {
-            transform: rotate(-90deg);
+            transform: rotate(90deg);
         }
         
         .template-options {
@@ -438,17 +439,17 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             font-weight: bold;
         }
         
-        .template-url {
-            width: 100%;
-            padding: 12px;
-            border: 2px solid rgba(0, 0, 0, 0.15);
-            border-radius: 10px;
-            font-size: 1rem;
-            background-color: #f8f9fa;
-            color: #666;
-            cursor: not-allowed;
-            margin-top: 10px;
-        }
+        // .template-url {
+        //     width: 100%;
+        //     padding: 12px;
+        //     border: 2px solid rgba(0, 0, 0, 0.15);
+        //     border-radius: 10px;
+        //     font-size: 1rem;
+        //     background-color: #f8f9fa;
+        //     color: #666;
+        //     cursor: not-allowed;
+        //     margin-top: 10px;
+        // }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
 </head>
@@ -607,18 +608,18 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             templateDiv.className = 'template-selector';
             
             // 创建模板URL显示框
-            const templateUrlLabel = document.createElement('label');
-            templateUrlLabel.className = 'template-label';
-            templateUrlLabel.textContent = '模板URL';
-            templateDiv.appendChild(templateUrlLabel);
+            // const templateUrlLabel = document.createElement('label');
+            // templateUrlLabel.className = 'template-label';
+            // templateUrlLabel.textContent = '模板URL';
+            // templateDiv.appendChild(templateUrlLabel);
             
-            const templateUrlInput = document.createElement('input');
-            templateUrlInput.className = 'template-url';
-            templateUrlInput.type = 'text';
-            templateUrlInput.placeholder = '选择模板后将显示URL';
-            templateUrlInput.id = 'template-url-input';
-            templateUrlInput.readOnly = true;
-            templateDiv.appendChild(templateUrlInput);
+            // const templateUrlInput = document.createElement('input');
+            // templateUrlInput.className = 'template-url';
+            // templateUrlInput.type = 'text';
+            // templateUrlInput.placeholder = '选择模板后将显示URL';
+            // templateUrlInput.id = 'template-url-input';
+            // templateUrlInput.readOnly = true;
+            // templateDiv.appendChild(templateUrlInput);
             
             // 创建模板切换按钮
             const templateToggle = document.createElement('div');
@@ -758,7 +759,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                         this.classList.add('selected');
                         
                         // 更新模板URL显示
-                        document.getElementById('template-url-input').value = this.dataset.value;
+                        // document.getElementById('template-url-input').value = this.dataset.value;
                         
                         // 点击后自动折叠选项面板
                         templateToggle.classList.add('collapsed');
@@ -776,7 +777,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             const firstOption = document.querySelector('.template-option');
             if (firstOption) {
                 firstOption.classList.add('selected');
-                document.getElementById('template-url-input').value = firstOption.dataset.value;
+                // document.getElementById('template-url-input').value = firstOption.dataset.value;
                 templateToggle.textContent = \`选择配置模板（\${firstOption.textContent}）\`;
             }
             
@@ -790,13 +791,13 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
         // 修改generateLink函数以包含模板URL
         function generateLink() {
             const subscriptionInputs = document.querySelectorAll('.link-input');
-            const templateUrlInput = document.getElementById('template-url-input');
+            const selectedOption = document.getElementById('.template-option.selected');
             
             const subscriptionLinks = Array.from(subscriptionInputs)
                 .map(input => input.value.trim())
                 .filter(val => val !== '');
                 
-            const templateLink = templateUrlInput.value.trim();
+            const templateLink = selectedOption ? selectedOption.dataset.value : '';
             
             if (subscriptionLinks.length === 0 && !templateLink) {
                 alert('请输入至少一个订阅链接或选择配置模板');
@@ -897,24 +898,24 @@ async function initconfig(urls, template) {
 }
 
 async function loadConfig(configUrl) {
-  const cacheKey = new Request(configUrl); // 使用 Request 对象作为缓存键
-  const cache = caches.default;
+    const cacheKey = new Request(configUrl); // 使用 Request 对象作为缓存键
+    const cache = caches.default;
 
-  // 尝试从缓存读取
-  let cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    return cachedResponse.text();
-  }
+    // 尝试从缓存读取
+    let cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+        return cachedResponse.text();
+    }
 
-  // 缓存未命中，发起新请求
-  const response = await fetch(configUrl);
-  const data = await response.text();
+    // 缓存未命中，发起新请求
+    const response = await fetch(configUrl);
+    const data = await response.text();
 
-  // 将响应存入缓存（克隆响应以复用）
-  const cacheResponse = new Response(data, {
-    headers: { 'Cache-Control': 'public, max-age=1800' }
-  });
-  await cache.put(cacheKey, cacheResponse.clone());
+    // 将响应存入缓存（克隆响应以复用）
+    const cacheResponse = new Response(data, {
+        headers: { 'Cache-Control': 'public, max-age=1800' }
+    });
+    await cache.put(cacheKey, cacheResponse.clone());
 
-  return data;
+    return data;
 }
