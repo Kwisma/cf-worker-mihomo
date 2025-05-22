@@ -1,5 +1,4 @@
 import YAML from 'yaml';
-let configCache = null, templateCache = null;
 export default {
     async fetch(request, env) {
         const url = new URL(request.url);
@@ -80,7 +79,7 @@ export default {
                 }
             );
         }
-        return new Response(await initconfig(urls, template), {
+        return new Response(await initconfig(urls, template, env), {
             headers: { "Content-Type": "text/plain; charset=utf-8" }
         });
     }
@@ -830,16 +829,16 @@ function isValidURL(url) {
 }
 
 // 初始化配置
-async function initconfig(urls, template) {
+async function initconfig(urls, template, env) {
     console.log(`Initializing configuration with template: ${template}`);
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
-        const templateyaml = await loadtemplate(template);
+        const templateyaml = await loadConfig(template, env);
         templatedata = YAML.parse(templateyaml, { maxAliasCount: -1, merge: true });
     }
-    const mihomodata = await loadConfig(config);
+    const mihomodata = await loadConfig(config, env);
     let data = YAML.parse(mihomodata, { maxAliasCount: -1, merge: true });
     const base = data.p || {};
     const override = data.override || {};
@@ -869,16 +868,12 @@ async function initconfig(urls, template) {
         return JSON.stringify(data);
     }
 }
-async function loadConfig(config) {
-    if (configCache) return configCache;
-    const response = await fetch(config);
-    configCache = await response.text();
-    return configCache;
-}
-
-async function loadtemplate(template) {
-    if (templateCache) return templateCache;
-    const response = await fetch(template);
-    templateCache = await response.text();
-    return templateCache;
+async function loadConfig(configUrl, env) {
+  const cacheKey = `config:${configUrl}`;
+  let data = await env.CACHE.get(cacheKey);
+  if (!data) {
+    data = await fetch(configUrl).then(res => res.text());
+    await env.CACHE.put(cacheKey, data, { expirationTtl: 1800 });
+  }
+  return data;
 }
