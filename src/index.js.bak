@@ -79,7 +79,7 @@ export default {
                 }
             );
         }
-        return new Response(await initconfig(urls, template), {
+        return new Response(await initconfig(urls, template, env), {
             headers: { "Content-Type": "text/plain; charset=utf-8" }
         });
     }
@@ -829,16 +829,16 @@ function isValidURL(url) {
 }
 
 // 初始化配置
-async function initconfig(urls, template) {
+async function initconfig(urls, template, env) {
     console.log(`Initializing configuration with template: ${template}`);
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
-        const templateyaml = await loadConfig(template);
+        const templateyaml = await loadConfig(template, env);
         templatedata = YAML.parse(templateyaml, { maxAliasCount: -1, merge: true });
     }
-    const mihomodata = await loadConfig(config);
+    const mihomodata = await loadConfig(config, env);
     let data = YAML.parse(mihomodata, { maxAliasCount: -1, merge: true });
     const base = data.p || {};
     const override = data.override || {};
@@ -868,26 +868,12 @@ async function initconfig(urls, template) {
         return JSON.stringify(data);
     }
 }
-
-async function loadConfig(configUrl) {
-  const cacheKey = new Request(configUrl); // 使用 Request 对象作为缓存键
-  const cache = caches.default;
-
-  // 尝试从缓存读取
-  let cachedResponse = await cache.match(cacheKey);
-  if (cachedResponse) {
-    return cachedResponse.text();
+async function loadConfig(configUrl, env) {
+  const cacheKey = `config:${configUrl}`;
+  let data = await env.CACHE.get(cacheKey);
+  if (!data) {
+    data = await fetch(configUrl).then(res => res.text());
+    await env.CACHE.put(cacheKey, data, { expirationTtl: 1800 });
   }
-
-  // 缓存未命中，发起新请求
-  const response = await fetch(configUrl);
-  const data = await response.text();
-
-  // 将响应存入缓存（克隆响应以复用）
-  const cacheResponse = new Response(data, {
-    headers: { 'Cache-Control': 'public, max-age=1800' }
-  });
-  await cache.put(cacheKey, cacheResponse.clone());
-
   return data;
 }
