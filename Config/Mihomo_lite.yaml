@@ -415,6 +415,7 @@ proxy-groups:
   - { name: 🇸🇬新加坡自动, <<: *u, hidden: true, filter: '(?i)🇸🇬|\bSG\b|新加坡|Singapore' }
   - { name: 🇰🇷韩国自动, <<: *u, hidden: true, filter: '(?i)🇰🇷|\bKR\b|韩国|South Korea' }
   - { name: 🌐其它地区, <<: *u, type: select, exclude-filter: '(?i)^.*(?:🇨🇳|\bCN\b|中国|China|
+        ‎|🇭🇰|\bHK\b|香港|Hong Kong|
         ‎|🇹🇼|\bTW\b|台湾|Taiwan|Tai wan|
         ‎|🇯🇵|\bJP\b|日本|Japan|
         ‎|🇺🇸|\bUS\b|美国|United States|CT|
