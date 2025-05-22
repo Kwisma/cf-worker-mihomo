@@ -637,8 +637,12 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                     label: "通用",
                     options: [
                         {
-                            label: "默认（精简版）",
+                            label: "默认（精简版）（仅国内外分流）",
                             value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
+                        },
+                        {
+                            label: "默认（精简版）（无去广告）",
+                            value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_NoAds.yaml"
                         },
                         {
                             label: "默认（全分组）",
@@ -700,19 +704,19 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml"
                         },
                         {
-                            label: "configfull_NoAd 全分组版 (与Github同步) (无广告)",
+                            label: "configfull_NoAd 全分组版 (与Github同步) (无去广告)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml"
                         },
                         {
-                            label: "configfull_NoAd_Stash 全分组版 (与Github同步) (无广告) (Stash)",
+                            label: "configfull_NoAd_Stash 全分组版 (与Github同步) (无去广告) (Stash)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash.yaml"
                         },
                         {
-                            label: "configfull_NoAd_Stash_lite 全分组版 (与Github同步) (无广告) (精简版) (Stash)",
+                            label: "configfull_NoAd_Stash_lite 全分组版 (与Github同步) (无去广告) (精简版) (Stash)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash_lite.yaml"
                         },
                         {
-                            label: "configfull_NoAd_lite 全分组版 (与Github同步) (无广告) (精简版)",
+                            label: "configfull_NoAd_lite 全分组版 (与Github同步) (无去广告) (精简版)",
                             value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml"
                         },
                         {
