@@ -135,8 +135,9 @@ secret: "" # 控制接口密钥
 
 # RESTful API CORS标头配置
 external-controller-cors: # CORS 配置
-  allow-origins:
-    - "*" # 允许所有来源
+  allow-origins: #允许来源
+    - "http://127.0.0.1"
+    - "http://localhost"
   allow-private-network: true # 允许私有网络访问
 #external-controller-unix: mihomo.sock  # Unix Socket 控制接口
 #external-controller-pipe: \\.\pipe\mihomo  # Windows 管道接口
