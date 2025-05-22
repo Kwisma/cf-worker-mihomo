@@ -1,8 +1,6 @@
 proxies:
-  - name: "🎯全局直连"
-    type: direct
-  - name: "🚫拒绝连接"
-    type: reject
+  - {name: 🎯全局直连, type: direct}
+  - {name: 🚫拒绝连接, type: reject}
 
 proxy-groups:
   - {name: 🚀全球代理, type: select, proxies: [ ♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯全局直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区 ]}
