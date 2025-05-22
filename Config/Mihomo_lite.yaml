@@ -407,7 +407,7 @@ proxy-groups:
   - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯全局直连, 🚀全球代理] }
   - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
   - { name: ⚡️均衡负载, <<: *u, strategy: round-robin, type: load-balance }
-  - { name: 🔯故障转移, <<: *u, type: fallback }  
+  - { name: 🔯故障转移, <<: *u, type: fallback }
   - { name: 🇭🇰香港自动, <<: *u, hidden: true, filter: (?i)🇭🇰|\\bHK\\b|香港|Hong Kong }
   - { name: 🇹🇼台湾自动, <<: *u, hidden: true, filter: '(?i)🇹🇼|\bTW\b|台湾|Taiwan|Tai wan' }
   - { name: 🇯🇵日本自动, <<: *u, hidden: true, filter: '(?i)🇯🇵|\bJP\b|日本|Japan' }
