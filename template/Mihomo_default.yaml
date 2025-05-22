@@ -23,17 +23,21 @@ proxy-groups:
   - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/100/GLOBAL.webp}
 
 rules:
-  - GEOSITE,private,🎯全球直连
-  - RULE-SET,Advertising-ads,🪧广告拦截
-  - RULE-SET,STUN,💧泄漏拦截
-  - DST-PORT,3478,💧泄漏拦截
-  - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截
-  - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截
-  - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截
-  - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截
-  - DOMAIN-KEYWORD,stun,💧泄漏拦截
-  - GEOIP,CN,🎯全球直连
+  - SUB-RULE,(OR,((NETWORK,UDP),(NETWORK,TCP))),SUB-DEFAULT
   - MATCH,🚀全球代理
+
+sub-rules:
+  SUB-DEFAULT:
+    - GEOSITE,private,🎯全球直连
+    - RULE-SET,Advertising-ads,🪧广告拦截
+    - RULE-SET,STUN,💧泄漏拦截
+    - DST-PORT,3478,💧泄漏拦截
+    - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截
+    - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截
+    - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截
+    - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截
+    - DOMAIN-KEYWORD,stun,💧泄漏拦截
+    - GEOIP,CN,🎯全球直连
 
 rule-providers:
   Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://cdn.jsdmirror.cn/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
