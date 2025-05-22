@@ -2,7 +2,7 @@
 # 版本：v1.19.4
 # 作者：Kwisma
 # 频道：https://t.me/Marisa_kristi
-# 配置：https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/main/Config/Mihomo.yaml
+# 配置：https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo/main/main/Config/Mihomo.yaml
 # Github：https://github.com/Kwisma/cf-worker-mihomo
 # 修改自官方示例规则 https://wiki.metacubex.one/example/#meta
 # 不理解的地方建议对照 虚空终端 (Clash Meta) Docs 进行理解
@@ -100,10 +100,10 @@ geodata-mode: false # 更改 geoip 使用文件，mmdb 或者 dat，可选 true/
 # memconservative：专为内存受限 (小内存) 设备优化的加载器 (默认值)
 geodata-loader: memconservative
 geox-url: # Geo 数据库配置，用于地理位置和 ASN 匹配
-  geoip: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.dat" # GeoIP 数据库
-  geosite: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geosite.dat" # GeoSite 数据库
-  mmdb: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/geoip.metadb" # GeoIP mmdb 数据库
-  asn: "https://gh-proxy.com/raw.githubusercontent.com/MetaCubeX/meta-rules-dat/release/GeoLite2-ASN.mmdb" # ASN 数据库
+  geoip: "https://cdn.jsdmirror.cn/gh/MetaCubeX/meta-rules-dat@release/geoip.dat" # GeoIP 数据库
+  geosite: "https://cdn.jsdmirror.cn/gh/MetaCubeX/meta-rules-dat@release/geosite.dat" # GeoSite 数据库
+  mmdb: "https://cdn.jsdmirror.cn/gh/MetaCubeX/meta-rules-dat@release/geoip.metadb" # GeoIP mmdb 数据库
+  asn: "https://cdn.jsdmirror.cn/gh/MetaCubeX/meta-rules-dat@release/GeoLite2-ASN.mmdb" # ASN 数据库
 geo-auto-update: false # 开启自动更新 Geo 数据库
 geo-update-interval: 24 # Geo 数据库更新间隔 (单位: 小时)
 # GeoSite 使用的匹配器实现，可用的实现：
@@ -145,7 +145,7 @@ unified-delay: true # 开启统一延迟时
 tcp-concurrent: true # 启用 TCP 并发连接
 external-ui: ui # 外部 UI 目录
 external-ui-name: xd # 外部 UI 名称
-external-ui-url: "https://gh-proxy.com/github.com/Zephyruso/zashboard/releases/latest/download/dist.zip" # 外部 UI 下载链接
+external-ui-url: "https://ghfast.top/github.com/Zephyruso/zashboard/releases/latest/download/dist.zip" # 外部 UI 下载链接
 external-doh-server: /dns-query # 外部 DoH 服务器
 #interface-name:  # 使用的网络接口名称
 #routing-mark:  # 路由标记
@@ -414,7 +414,7 @@ proxy-groups:
   - {name: 🇸🇬新加坡自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇸🇬|\\bSG\\b|新加坡|Singapore}
   - {name: 🇰🇷韩国自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇰🇷|\\bKR\\b|韩国|South Korea}
   - {name: 🌐其它地区, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, exclude-filter: (?i)^.*(?:🇨🇳|\\bCN\\b|中国|China|🇭🇰|\\bHK\\b|香港|Hong Kong|🇹🇼|\\bTW\\b|台湾|Taiwan|Tai wan|🇯🇵|\\bJP\\b|日本|Japan|🇺🇸|\\bUS\\b|美国|United States|CT|🇸🇬|\\bSG\\b|新加坡|Singapore|🇰🇷|\\bKR\\b|韩国|South Korea).*$}
-  - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp}
+  - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo/main/icon/webp/100/GLOBAL.webp}
 rules:
   - GEOSITE,private,🎯全球直连
   - RULE-SET,Advertising-ads,🪧广告拦截
@@ -428,5 +428,5 @@ rules:
   - GEOIP,CN,🎯全球直连
   - MATCH,🚀全球代理
 rule-providers:
-  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gh-proxy.com/raw.githubusercontent.com/TG-Twilight/AWAvenue-Ads-Rule/main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
-  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://gh-proxy.com/raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
+  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://cdn.jsdmirror.cn/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
+  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🚀全球代理, url: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
