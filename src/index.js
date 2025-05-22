@@ -636,11 +636,11 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                     label: "通用",
                     options: [
                         {
-                            label: "默认（无分流）",
+                            label: "默认（精简版）",
                             value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
                         },
                         {
-                            label: "默认（全分流）",
+                            label: "默认（全分组）",
                             value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_full.yaml"
                         }
                     ]
