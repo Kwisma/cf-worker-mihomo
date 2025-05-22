@@ -580,7 +580,6 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             }
 	    const encodedLinks = links.map(link => encodeURIComponent(link));
             const domain = window.location.hostname;
-            console.log(domain);
             const urlLink = \`https://\${domain}/?url=\${encodedLinks.join(',')}\`;
             document.getElementById('result').value = urlLink;
 
@@ -830,7 +829,6 @@ function isValidURL(url) {
 
 // 初始化配置
 async function initconfig(urls, template) {
-    console.log(`Initializing configuration with template: ${template}`);
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
