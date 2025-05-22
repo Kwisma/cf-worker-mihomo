@@ -579,7 +579,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                 alert('请输入有效的url地址');
                 return;
             }
-	    const encodedLinks = links.map(link => encodeURIComponent(link));
+	        const encodedLinks = links.map(link => encodeURIComponent(link));
             const domain = window.location.hostname;
             const urlLink = \`https://\${domain}/?url=\${encodedLinks.join(',')}\`;
             document.getElementById('result').value = urlLink;
@@ -791,7 +791,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
         // 修改generateLink函数以包含模板URL
         function generateLink() {
             const subscriptionInputs = document.querySelectorAll('.link-input');
-            const selectedOption = document.getElementById('.template-option.selected');
+            const selectedOption = document.querySelector('.template-option.selected');
             
             const subscriptionLinks = Array.from(subscriptionInputs)
                 .map(input => input.value.trim())
