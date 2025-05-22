@@ -893,7 +893,7 @@ async function initconfig(urls, template) {
         data.rules = templatedata.rules || [];
         data['sub-rules'] = {};
         data['rule-providers'] = templatedata['rule-providers'] || {};
-        return JSON.stringify(data);
+        return JSON.stringify(data, null, 4);
     }
 }
 
