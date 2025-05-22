@@ -891,7 +891,7 @@ async function initconfig(urls, template) {
         data.proxies = templatedata.proxies || [];
         data['proxy-groups'] = templatedata['proxy-groups'] || [];
         data.rules = templatedata.rules || [];
-        data['sub-rules'] = {};
+        data['sub-rules'] = templatedata['sub-rules'] || {};
         data['rule-providers'] = templatedata['rule-providers'] || {};
         return JSON.stringify(data, null, 4);
     }
