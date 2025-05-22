@@ -136,22 +136,7 @@ secret: "" # 控制接口密钥
 # RESTful API CORS标头配置
 external-controller-cors: # CORS 配置
   allow-origins: #允许来源
-    - "http://127.0.0.1"
-    - "http://localhost"
-    - "http://192.168.0.0"
-    - "http://192.168.0.1"
-    - "http://192.168.1.1"
-    - "http://192.168.1.100"
-    - "http://192.168.2.0"
-    - "http://10.0.0.0"
-    - "http://10.0.0.1"
-    - "http://10.0.1.1"
-    - "http://172.16.0.0"
-    - "http://172.16.0.1"
-    - "http://172.17.0.1"
-    - "http://172.18.0.1"
-    - "http://172.19.0.1"
-    - "http://172.20.0.1"
+    - "*"
   allow-private-network: true # 允许私有网络访问
 #external-controller-unix: mihomo.sock  # Unix Socket 控制接口
 #external-controller-pipe: \\.\pipe\mihomo  # Windows 管道接口
@@ -414,22 +399,26 @@ proxies:
   - name: "🚫拒绝连接"
     type: reject
 proxy-groups:
-  - {name: 🚀全球代理, type: select, proxies: [ ♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯全局直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇰🇷韩国自动, 🌐其它地区 ]}
-  - {name: 🟢手动选择, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
-  - {name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [ 🚫拒绝连接, 🚀全球代理, 🎯全局直连 ]}
-  - {name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [ 🚫拒绝连接, 🚀全球代理, 🎯全局直连 ]}
-  - {name: 🎯全球直连, type: select, include-all-providers: true, proxies: [ 🎯全局直连, 🚀全球代理 ]}
-  - {name: ♻️自动选择, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
-  - {name: ⚡️均衡负载, type: load-balance, tolerance: 1, strategy: round-robin, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
-  - {name: 🔯故障转移, type: fallback, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true}
-  - {name: 🇭🇰香港自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇭🇰|\\bHK\\b|香港|Hong Kong}
-  - {name: 🇹🇼台湾自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇹🇼|\\bTW\\b|台湾|Taiwan|Tai wan}
-  - {name: 🇯🇵日本自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇯🇵|\\bJP\\b|日本|Japan}
-  - {name: 🇺🇸美国自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇺🇸|\\bUS\\b|美国|United States|CT}
-  - {name: 🇸🇬新加坡自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇸🇬|\\bSG\\b|新加坡|Singapore}
-  - {name: 🇰🇷韩国自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇰🇷|\\bKR\\b|韩国|South Korea}
-  - {name: 🌐其它地区, type: select, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, exclude-filter: (?i)^.*(?:🇨🇳|\\bCN\\b|中国|China|🇭🇰|\\bHK\\b|香港|Hong Kong|🇹🇼|\\bTW\\b|台湾|Taiwan|Tai wan|🇯🇵|\\bJP\\b|日本|Japan|🇺🇸|\\bUS\\b|美国|United States|CT|🇸🇬|\\bSG\\b|新加坡|Singapore|🇰🇷|\\bKR\\b|韩国|South Korea).*$}
-  - {name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/100/GLOBAL.webp}
+  - { name: 🚀全球代理, type: select, proxies: [♻️自动选择, 🟢手动选择, ⚡️均衡负载, 🔯故障转移, 🎯全局直连, 🇭🇰香港自动, 🇹🇼台湾自动, 🇯🇵日本自动, 🇺🇸美国自动, 🇸🇬新加坡自动, 🇬🇧英国自动, 🇩🇪德国自动, 🇫🇷法国自动, 🇨🇦加拿大自动, 🇦🇺澳大利亚自动, 🇰🇷韩国自动, 🇷🇺俄罗斯自动, 🇳🇱荷兰自动, 🇮🇳印度自动, 🇲🇾马来西亚自动, 🇵🇱波兰自动, 🇪🇪爱沙尼亚自动, 🇦🇪阿联酋自动, 🇳🇬尼日利亚自动, 🇧🇬保加利亚自动, 🇸🇨塞舌尔自动, 🇪🇸西班牙自动, 🇻🇳越南自动, 🇸🇽荷属圣马丁自动, 🇲🇴澳门自动, 🇵🇭菲律宾自动, 🇹🇭泰国自动, 🇲🇳蒙古自动, 🇫🇮芬兰自动, 🇸🇪瑞典自动, 🇦🇹奥地利自动, 🇧🇷巴西自动, 🇰🇿哈萨克斯坦自动, 🇮🇱以色列自动, 🇦🇪阿拉伯联合酋长国自动,  🇨🇭瑞士自动, 🌐其它地区] }
+  - { name: 🟢手动选择, <<: *u, type: select }
+  - { name: 🪧广告拦截, type: select, include-all-providers: true, proxies: [🚫拒绝连接, 🚀全球代理, 🎯全局直连] }
+  - { name: 💧泄漏拦截, type: select, include-all-providers: true, proxies: [🚫拒绝连接, 🚀全球代理, 🎯全局直连] }
+  - { name: 🎯全球直连, type: select, include-all-providers: true, proxies: [🎯全局直连, 🚀全球代理] }
+  - { name: ♻️自动选择, <<: *u, tolerance: 1, type: url-test }
+  - { name: ⚡️均衡负载, <<: *u, strategy: round-robin, type: load-balance }
+  - { name: 🔯故障转移, <<: *u, type: fallback }  - {name: 🇭🇰香港自动, type: url-test, tolerance: 1, strategy: consistent-hashing, url: https://www.gstatic.com/generate_204, interval: 300, lazy: true, timeout: 5000, max-failed-times: 5, include-all-providers: true, hidden: true, filter: (?i)🇭🇰|\\bHK\\b|香港|Hong Kong}
+  - { name: 🇹🇼台湾自动, <<: *u, hidden: true, filter: '(?i)🇹🇼|\bTW\b|台湾|Taiwan|Tai wan' }
+  - { name: 🇯🇵日本自动, <<: *u, hidden: true, filter: '(?i)🇯🇵|\bJP\b|日本|Japan' }
+  - { name: 🇺🇸美国自动, <<: *u, hidden: true, filter: '(?i)🇺🇸|\bUS\b|美国|United States|CT' }
+  - { name: 🇸🇬新加坡自动, <<: *u, hidden: true, filter: '(?i)🇸🇬|\bSG\b|新加坡|Singapore' }
+  - { name: 🇰🇷韩国自动, <<: *u, hidden: true, filter: '(?i)🇰🇷|\bKR\b|韩国|South Korea' }
+  - { name: 🌐其它地区, <<: *u, type: select, exclude-filter: '(?i)^.*(?:🇨🇳|\bCN\b|中国|China|
+        ‎|🇹🇼|\bTW\b|台湾|Taiwan|Tai wan|
+        ‎|🇯🇵|\bJP\b|日本|Japan|
+        ‎|🇺🇸|\bUS\b|美国|United States|CT|
+        ‎|🇸🇬|\bSG\b|新加坡|Singapore|
+        ‎|🇰🇷|\bKR\b|韩国|South Korea).*$' }
+  - { name: GLOBAL, type: select, include-all-providers: true, proxies: [ 🚀全球代理, 🟢手动选择, 🪧广告拦截, 💧泄漏拦截, 🎯全球直连, ♻️自动选择, ⚡️均衡负载, 🔯故障转移, 🌐其它地区 ], icon: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/icon/webp/100/GLOBAL.webp }
 rules:
   - GEOSITE,private,🎯全球直连
   - RULE-SET,Advertising-ads,🪧广告拦截
@@ -443,5 +432,11 @@ rules:
   - GEOIP,CN,🎯全球直连
   - MATCH,🚀全球代理
 rule-providers:
-  Advertising-ads: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://cdn.jsdmirror.cn/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs, path: ./ruleset/Advertising_ads_Domain.mrs}
-  STUN: {type: http, interval: 86400, behavior: domain, format: mrs, proxy: 🎯全球直连, url: https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/STUN/STUN_Domain.mrs, path: ./ruleset/STUN_Domain.mrs}
+  Advertising-ads:
+    <<: *domain_mrs
+    url: "https://cdn.jsdmirror.cn/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Clash.mrs"
+    path: ./ruleset/Advertising_ads_Domain.mrs
+  STUN:
+    <<: *domain_mrs
+    url: "https://cdn.jsdmirror.cn/gh/Kwisma/cf-worker-mihomo@main/rules/mihomo/STUN/STUN_Domain.mrs"
+    path: ./ruleset/STUN_Domain.mrs
