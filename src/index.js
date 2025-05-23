@@ -826,7 +826,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                 ],
                 singbox: [
                     {
-                        label: "通用",
+                        label: "1.12.X",
                         options: [
                             {
                                 label: "默认（精简版）",
