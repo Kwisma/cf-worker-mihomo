@@ -6742,28 +6742,32 @@ var browser_default = dist_exports;
 // src/index.js
 var index_default = {
   async fetch(request, env) {
-    const config = env.CONFIG || atob("aHR0cHM6Ly9yYXcuZ2l0aHVidXNlcmNvbnRlbnQuY29tL0t3aXNtYS9jZi13b3JrZXItbWlob21vL21haW4vQ29uZmlnL01paG9tby55YW1s");
     const url = new URL(request.url);
     const userAgent = request.headers.get("User-Agent");
     const isBrowser = /mozilla|chrome|safari|firefox|edge|opera|webkit|gecko|trident/i.test(userAgent);
+    const templateUrl = url.searchParams.get("template");
+    const singbox = url.searchParams.get("singbox");
     let urls = url.searchParams.getAll("url");
+    let headers = new Headers(), data = "";
     if (urls.length === 1 && urls[0].includes(",")) {
       urls = urls[0].split(",").map((u) => u.trim());
     }
     if (urls.length === 0 || urls[0] === "") {
       return new Response(await getFakePage(env.IMG), {
+        status: 200,
         headers: {
           "Content-Type": "text/html; charset=utf-8"
         }
-      }, { status: 400 });
+      });
     }
     for (let u of urls) {
       if (!isValidURL(u)) {
         return new Response(await getFakePage(env.IMG), {
+          status: 200,
           headers: {
             "Content-Type": "text/html; charset=utf-8"
           }
-        }, { status: 400 });
+        });
       }
     }
     if (isBrowser) {
@@ -6811,12 +6815,26 @@ var index_default = {
                 </html>
                 `,
         {
+          status: 400,
           headers: { "Content-Type": "text/html; charset=utf-8" }
         }
       );
     }
-    return new Response(await initconfig(urls, config), {
-      headers: { "Content-Type": "text/plain; charset=utf-8" }
+    if (singbox) {
+      const res = await singboxconfig(urls, templateUrl);
+      data = res.data;
+      const responseHeaders = res.ResponseHeaders?.headers || {};
+      headers = new Headers(responseHeaders);
+    } else {
+      const res = await mihomoconfig(urls, templateUrl);
+      data = res.data;
+      const responseHeaders = res.ResponseHeaders?.headers || {};
+      headers = new Headers(responseHeaders);
+    }
+    headers.set("Content-Type", "application/json; charset=utf-8");
+    return new Response(data, {
+      status: 200,
+      headers
     });
   }
 };
@@ -6855,6 +6873,7 @@ async function getFakePage(image = "https://t.alcy.cc/ycy") {
             min-height: 100vh;
             display: flex;
             justify-content: center;
+            padding: 60px 0;
             align-items: center;
         }
 
@@ -6867,7 +6886,9 @@ async function getFakePage(image = "https://t.alcy.cc/ycy") {
             -webkit-backdrop-filter: blur(10px);
             /* Safari\u517C\u5BB9 */
             max-width: 600px;
+            margin: 0;
             width: 90%;
+            height: 90%;
             padding: 2rem;
             border-radius: 20px;
             /* \u8C03\u6574\u9634\u5F71\u6548\u679C\u589E\u52A0\u901A\u900F\u611F */
@@ -7103,6 +7124,124 @@ async function getFakePage(image = "https://t.alcy.cc/ycy") {
             align-items: center;
             margin-top: 20px;
         }
+        
+        /* \u65B0\u589E\u6A21\u677F\u9009\u62E9\u5668\u6837\u5F0F - \u5355\u5C55\u5F00\u9762\u677F\u7248\u672C */
+        .template-selector {
+            margin-bottom: 1.5rem;
+        }
+        
+        .template-toggle {
+            padding: 12px 15px;
+            background-color: rgba(67, 97, 238, 0.1);
+            font-weight: bold;
+            cursor: pointer;
+            border-radius: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+        }
+        
+        .template-toggle:hover {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+        
+        .template-toggle:after {
+            content: "\u25B6"; /* \u6539\u4E3A\u5411\u53F3\u7BAD\u5934 */
+            font-size: 12px;
+            transition: transform 0.3s;
+            margin-left: 8px; /* \u589E\u52A0\u95F4\u8DDD */
+        }
+        
+        .template-toggle.collapsed:after {
+            transform: rotate(90deg);
+        }
+        
+        .template-options {
+            background-color: white;
+            border-radius: 0 0 10px 10px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            display: none;
+            margin-top: 5px;
+            max-height: 200px; /* \u53EF\u6839\u636E\u9700\u8981\u8C03\u6574\u9AD8\u5EA6 */
+            overflow-y: auto;
+        }
+        
+        .template-options.show {
+            display: block;
+        }
+        
+        .template-option {
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: all 0.2s;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .template-option:last-child {
+            border-bottom: none;
+        }
+        
+        .template-option:hover {
+            background-color: rgba(67, 97, 238, 0.1);
+        }
+        
+        .template-option.selected {
+            background-color: rgba(67, 97, 238, 0.2);
+            font-weight: bold;
+        }
+        
+        // .template-url {
+        //     width: 100%;
+        //     padding: 12px;
+        //     border: 2px solid rgba(0, 0, 0, 0.15);
+        //     border-radius: 10px;
+        //     font-size: 1rem;
+        //     background-color: #f8f9fa;
+        //     color: #666;
+        //     cursor: not-allowed;
+        //     margin-top: 10px;
+        // }
+        /* Add new styles for the toggle switch */
+        .config-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            padding: 8px;
+        }
+
+        .toggle-option {
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+        }
+
+        .toggle-option.active {
+            background-color: #4361ee;
+            color: white;
+        }
+
+        .toggle-option:not(.active):hover {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+
+        .singbox-options {
+            display: none;
+        }
+
+        .singbox-mode .singbox-options {
+            display: block;
+        }
+
+        .singbox-mode .mihomo-options {
+            display: none;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"><\/script>
 </head>
@@ -7122,19 +7261,55 @@ async function getFakePage(image = "https://t.alcy.cc/ycy") {
     </a>
     <div class="container">
         <div class="logo-title">
-            <h1>mihomo\u6C47\u805A\u5DE5\u5177</h1>
+            <h1>mihomo/singbox\u6C47\u805A\u5DE5\u5177</h1>
         </div>
-        <div class="input-group">
-            <label for="link">\u8BA2\u9605\u94FE\u63A5</label>
-            <div id="link-container">
-                <div class="link-row">
-                    <input type="text" class="link-input" placeholder="https://www.example.com/answer/land?token=xxx" />
-                    <div class="add-btn" onclick="addLinkInput(this)">\u2795</div>
+        <div class="config-toggle">
+            <div class="toggle-option active" data-mode="mihomo">Clash (mihomo)</div>
+            <div class="toggle-option" data-mode="singbox">Singbox</div>
+        </div>
+        <div class="mihomo-options">
+            <div class="template-selector">
+                <div class="template-toggle collapsed">\u9009\u62E9\u914D\u7F6E\u6A21\u677F\uFF08\u672A\u9009\u62E9\uFF09</div>
+                <div class="template-options">
+                    <!-- \u6A21\u677F\u9009\u9879\u5C06\u901A\u8FC7JavaScript\u586B\u5145 -->
                 </div>
             </div>
+
+            <div class="input-group">
+                <label for="link">\u8BA2\u9605\u94FE\u63A5</label>
+                <div id="link-container">
+                    <div class="link-row">
+                        <input type="text" class="link-input"
+                            placeholder="https://www.example.com/answer/land?token=xxx" />
+                        <div class="add-btn" onclick="addLinkInput(this)">\u2795</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="generateLink()">\u751F\u6210mihomo\u914D\u7F6E</button>
         </div>
 
-        <button onclick="generateLink()">\u751F\u6210mihomo\u914D\u7F6E</button>
+        <div class="singbox-options">
+            <div class="template-selector">
+                <div class="template-toggle collapsed">\u9009\u62E9\u914D\u7F6E\u6A21\u677F\uFF08\u672A\u9009\u62E9\uFF09</div>
+                <div class="template-options">
+                    <!-- \u6A21\u677F\u9009\u9879\u5C06\u901A\u8FC7JavaScript\u586B\u5145 -->
+                </div>
+            </div>
+            <div class="input-group">
+                <label for="link">\u8BA2\u9605\u94FE\u63A5</label>
+                <div id="link-container-singbox">
+                    <div class="link-row">
+                        <input type="text" class="link-input"
+                            placeholder="https://www.example.com/answer/land?token=xxx" />
+                        <div class="add-btn" onclick="addLinkInput(this, 'singbox')">\u2795</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="generateSingboxLink()">\u751F\u6210Singbox\u914D\u7F6E</button>
+        </div>
+
 
         <div class="input-group">
             <div style="display: flex; align-items: center;">
@@ -7190,29 +7365,27 @@ async function getFakePage(image = "https://t.alcy.cc/ycy") {
             });
         }
 
-        function addLinkInput(button) {
-            const container = document.getElementById('link-container'); // \u83B7\u53D6\u5BB9\u5668
+        // \u4FEE\u6539addLinkInput\u4EE5\u652F\u6301singbox\u5BB9\u5668
+        function addLinkInput(button, mode = 'mihomo') {
+            const containerId = mode === 'singbox' ? 'link-container-singbox' : 'link-container';
+            const container = document.getElementById(containerId);
             const row = document.createElement('div');
-            row.className = 'link-row'; // \u6DFB\u52A0\u76F8\u540C\u7684\u5E03\u5C40\u6837\u5F0F
+            row.className = 'link-row';
 
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'link-input';
             input.placeholder = 'https://www.example.com/answer/land?token=xxx';
 
-            // \u9690\u85CF\u5F53\u524D\u6309\u94AE
             button.style.display = 'none';
-
-            // \u5C06\u65B0\u884C\u6DFB\u52A0\u5230\u5BB9\u5668\u4E2D
             row.appendChild(input);
             container.appendChild(row);
 
-            // \u4E3A\u65B0\u8F93\u5165\u6846\u6DFB\u52A0\u6309\u94AE
             const btn = document.createElement('div');
             btn.className = 'add-btn';
             btn.textContent = '\u2795';
             btn.onclick = function () {
-                addLinkInput(btn); // \u9012\u5F52\u8C03\u7528\uFF0C\u6309\u94AE\u8DDF\u968F\u65B0\u884C
+                addLinkInput(btn, mode);
             };
 
             row.appendChild(btn);
@@ -7232,10 +7405,307 @@ async function getFakePage(image = "https://t.alcy.cc/ycy") {
                 alert('\u8BF7\u8F93\u5165\u6709\u6548\u7684url\u5730\u5740');
                 return;
             }
-	    const encodedLinks = links.map(link => encodeURIComponent(link));
+	        const encodedLinks = links.map(link => encodeURIComponent(link));
             const domain = window.location.hostname;
-            console.log(domain);
             const urlLink = \`https://\${domain}/?url=\${encodedLinks.join(',')}\`;
+            document.getElementById('result').value = urlLink;
+
+            // \u751F\u6210\u4E8C\u7EF4\u7801
+            const qrcodeDiv = document.getElementById('qrcode');
+            qrcodeDiv.innerHTML = '';
+            new QRCode(qrcodeDiv, {
+                text: urlLink,
+                width: 220,
+                height: 220,
+                colorDark: "#4a60ea",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.L,
+                scale: 1
+            });
+        }
+
+        // \u5728mihomo\u548Csingbox\u6A21\u5F0F\u4E4B\u95F4\u5207\u6362
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleOptions = document.querySelectorAll('.toggle-option');
+            const container = document.querySelector('.container');
+
+            toggleOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // \u8BBE\u7F6E\u6D3B\u52A8\u72B6\u6001
+                    toggleOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // \u5207\u6362\u6A21\u5F0F
+                    if (this.dataset.mode === 'singbox') {
+                        container.classList.add('singbox-mode');
+                    } else {
+                        container.classList.remove('singbox-mode');
+                    }
+                });
+            });
+
+            // \u521D\u59CB\u5316\u6A21\u677F\u9009\u62E9\u5668
+            initTemplateSelector('mihomo');
+            initTemplateSelector('singbox');
+        });
+        // \u521D\u59CB\u5316\u6A21\u677F\u9009\u62E9\u5668
+        function initTemplateSelector(mode = 'mihomo') {
+            const selectorClass = mode === 'singbox' ? '.singbox-options .template-selector' : '.mihomo-options .template-selector';
+            const templateToggle = document.querySelector(\`\${selectorClass} .template-toggle\`);
+            const optionsContainer = document.querySelector(\`\${selectorClass} .template-options\`);
+
+            // \u914D\u7F6E\u6570\u636E
+            const configs = {
+                mihomo: [
+                    {
+                        label: "\u901A\u7528",
+                        options: [
+                            {
+                                label: "\u9ED8\u8BA4\uFF08\u7CBE\u7B80\u7248\uFF09\uFF08\u4EC5\u56FD\u5185\u5916\u5206\u6D41\uFF09",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
+                            },
+                            {
+                                label: "\u9ED8\u8BA4\uFF08\u7CBE\u7B80\u7248\uFF09\uFF08\u65E0\u53BB\u5E7F\u544A\uFF09",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_NoAds.yaml"
+                            },
+                            {
+                                label: "\u9ED8\u8BA4\uFF08\u5168\u5206\u7EC4\uFF09",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_full.yaml"
+                            }
+                        ]
+                    },
+                    {
+                        label: "Mihomo-Party-ACL4SSR",
+                        options: [
+                            {
+                                label: "ACL4SSR_Online_Full \u5168\u5305\u91CD\u5EA6\u7528\u6237\u4F7F\u7528\uFF08\u4E0EGithub\u540C\u6B65\uFF09",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_AdblockPlus \u5168\u5305\u91CD\u5EA6\u7528\u6237\u4F7F\u7528\u66F4\u591A\u53BB\u5E7F\u544A\uFF08\u4E0EGithub\u540C\u6B65\uFF09",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_AdblockPlus.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_Tiktok \u5168\u5305\u91CD\u5EA6\u7528\u6237\u4F7F\u7528\u6296\u97F3\u5168\u91CF\uFF08\u4E0EGithub\u540C\u6B65\uFF09",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_Tiktok.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_WithIcon \u5168\u5305\u91CD\u5EA6\u7528\u6237\u4F7F\u7528\uFF08\u4E0EGithub\u540C\u6B65\uFF09\uFF08\u65E0\u56FE\u6807\uFF09",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_WithIcon.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Mini_MultiMode \u4E13\u4E1A\u7248\u81EA\u52A8\u6D4B\u901F\u3001\u6545\u969C\u8F6C\u79FB\u3001\u8D1F\u8F7D\u5747\u8861\uFF08\u4E0EGithub\u540C\u6B65\uFF09",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Mini_MultiMode.yaml"
+                            },
+                            {
+                                label: "\u6781\u7B80\u5206\u6D41\u89C4\u5219",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/\u6781\u7B80\u5206\u6D41\u89C4\u5219.yaml"
+                            }
+                        ]
+                    },
+                    {
+                        label: "\u7F51\u7EDC\u6536\u96C6",
+                        options: [
+                            {
+                                label: "\u5E03\u4E01\u72D7\u7684\u8BA2\u9605\u8F6C\u6362 (\u4E0EGithub\u540C\u6B65)",
+                                value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65)",
+                                value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_WithIcon \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u65E0\u56FE\u6807)",
+                                value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full_WithIcon.yaml"
+                            },
+                        ]
+                    },
+                    {
+                        label: "Lanlan13-14",
+                        options: [
+                            {
+                                label: "configfull \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u65E0\u53BB\u5E7F\u544A)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd_Stash \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u65E0\u53BB\u5E7F\u544A) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd_Stash_lite \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u65E0\u53BB\u5E7F\u544A) (\u7CBE\u7B80\u7248) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash_lite.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd_lite \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u65E0\u53BB\u5E7F\u544A) (\u7CBE\u7B80\u7248)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml"
+                            },
+                            {
+                                label: "configfull_Stash \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash.yaml"
+                            },
+                            {
+                                label: "configfull_Stash_lite \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u7CBE\u7B80\u7248) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash_lite.yaml"
+                            },
+                            {
+                                label: "configfull_lite \u5168\u5206\u7EC4\u7248 (\u4E0EGithub\u540C\u6B65) (\u7CBE\u7B80\u7248)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_lite.yaml"
+                            },
+                        ]
+                    },
+                ],
+                singbox: [
+                    {
+                        label: "\u901A\u7528",
+                        options: [
+                            {
+                                label: "\u9ED8\u8BA4\uFF08\u7CBE\u7B80\u7248\uFF09",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox-1.12.0-beta.17.json"
+                            }
+                        ]
+                    }
+                ]
+            };
+            // \u751F\u6210\u6240\u6709\u6A21\u677F\u9009\u9879
+            configs[mode].forEach(group => {
+                // \u6DFB\u52A0\u5206\u7EC4\u6807\u7B7E
+                const groupLabel = document.createElement('div');
+                groupLabel.style.padding = '10px 20px';
+                groupLabel.style.fontWeight = 'bold';
+                groupLabel.style.color = '#555';
+                groupLabel.style.backgroundColor = '#f5f5f5';
+                groupLabel.textContent = group.label;
+                optionsContainer.appendChild(groupLabel);
+
+                // \u6DFB\u52A0\u9009\u9879
+                group.options.forEach(option => {
+                    const optionElement = document.createElement('div');
+                    optionElement.className = 'template-option';
+                    optionElement.textContent = option.label;
+                    optionElement.dataset.value = option.value;
+
+                    optionElement.addEventListener('click', function () {
+                        // \u79FB\u9664\u4E4B\u524D\u9009\u4E2D\u7684\u6837\u5F0F
+                        document.querySelectorAll(\`\${selectorClass} .template-option.selected\`).forEach(item => {
+                            item.classList.remove('selected');
+                        });
+
+                        // \u66F4\u65B0\u663E\u793A\u6587\u672C
+                        templateToggle.textContent = \`\u9009\u62E9\u914D\u7F6E\u6A21\u677F\uFF08\${option.label}\uFF09\`;
+
+                        // \u6DFB\u52A0\u9009\u4E2D\u6837\u5F0F
+                        this.classList.add('selected');
+
+                        // \u70B9\u51FB\u540E\u81EA\u52A8\u6298\u53E0\u9009\u9879\u9762\u677F
+                        templateToggle.classList.add('collapsed');
+                        optionsContainer.classList.remove('show');
+                    });
+
+                    optionsContainer.appendChild(optionElement);
+                });
+            });
+
+            // \u9ED8\u8BA4\u9009\u62E9\u7B2C\u4E00\u4E2A\u9009\u9879
+            const firstOption = document.querySelector(\`\${selectorClass} .template-option\`);
+            if (firstOption) {
+                firstOption.classList.add('selected');
+                templateToggle.textContent = \`\u9009\u62E9\u914D\u7F6E\u6A21\u677F\uFF08\${firstOption.textContent}\uFF09\`;
+            }
+
+            // \u70B9\u51FB\u5207\u6362\u6309\u94AE\u5C55\u5F00/\u6298\u53E0\u9009\u9879
+            templateToggle.addEventListener('click', function () {
+                this.classList.toggle('collapsed');
+                optionsContainer.classList.toggle('show');
+            });
+
+            // \u70B9\u51FB\u9875\u9762\u5176\u4ED6\u533A\u57DF\u5173\u95ED\u9009\u9879\u9762\u677F
+            document.addEventListener('click', function (event) {
+                if (!templateToggle.contains(event.target) && !optionsContainer.contains(event.target)) {
+                    templateToggle.classList.add('collapsed');
+                    optionsContainer.classList.remove('show');
+                }
+            });
+        }
+
+        // \u751F\u6210mihomo\u94FE\u63A5
+        function generateLink() {
+            const inputs = document.querySelectorAll('.mihomo-options .link-input');
+            const selectedOption = document.querySelector('.template-option.selected');
+
+            const subscriptionLinks = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
+
+            const templateLink = selectedOption ? selectedOption.dataset.value : '';
+
+            if (subscriptionLinks.length === 0 && !templateLink) {
+                alert('\u8BF7\u8F93\u5165\u81F3\u5C11\u4E00\u4E2A\u8BA2\u9605\u94FE\u63A5\u6216\u9009\u62E9\u914D\u7F6E\u6A21\u677F');
+                return;
+            }
+
+            const allValid = subscriptionLinks.every(link =>
+                link.startsWith('http://') || link.startsWith('https://'));
+
+            if (subscriptionLinks.length > 0 && !allValid) {
+                alert('\u8BF7\u8F93\u5165\u6709\u6548\u7684\u8BA2\u9605URL\u5730\u5740');
+                return;
+            }
+
+            const allLinks = [];
+            if (templateLink) {
+                allLinks.push(\`template=\${encodeURIComponent(templateLink)}\`);
+            }
+
+            subscriptionLinks.forEach(link => {
+                allLinks.push(\`url=\${encodeURIComponent(link)}\`);
+            });
+
+            const domain = window.location.hostname;
+            const urlLink = \`https://\${domain}/?\${allLinks.join('&')}\`;
+            updateResult(urlLink);
+        }
+        // \u751F\u6210singbox\u94FE\u63A5
+        function generateSingboxLink() {
+            const inputs = document.querySelectorAll('.singbox-options .link-input');
+            const selectedOption = document.querySelector('.singbox-options .template-option.selected');
+            const subscriptionLinks = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
+
+            const templateLink = selectedOption ? selectedOption.dataset.value : '';
+
+            if (subscriptionLinks.length === 0 && !templateLink) {
+                alert('\u8BF7\u8F93\u5165\u81F3\u5C11\u4E00\u4E2A\u8BA2\u9605\u94FE\u63A5\u6216\u9009\u62E9\u914D\u7F6E\u6A21\u677F');
+                return;
+            }
+
+             const allValid = subscriptionLinks.every(link =>
+                link.startsWith('http://') || link.startsWith('https://'));
+
+            if (subscriptionLinks.length > 0 && !allValid) {
+                alert('\u8BF7\u8F93\u5165\u6709\u6548\u7684\u8BA2\u9605URL\u5730\u5740');
+                return;
+            }
+
+            const allLinks = [];
+            if (templateLink) {
+                allLinks.push(\`template=\${encodeURIComponent(templateLink)}\`);
+            }
+
+            subscriptionLinks.forEach(link => {
+                allLinks.push(\`url=\${encodeURIComponent(link)}\`);
+            });
+
+            const domain = window.location.hostname;
+            const urlLink = \`https://\${domain}/?\${allLinks.join('&')}&singbox=true\`;
+            updateResult(urlLink);
+        }
+        // \u66F4\u65B0\u7ED3\u679C\u548C\u4E8C\u7EF4\u7801
+        function updateResult(urlLink) {
             document.getElementById('result').value = urlLink;
 
             // \u751F\u6210\u4E8C\u7EF4\u7801
@@ -7266,31 +7736,174 @@ function isValidURL(url) {
   }
 }
 __name(isValidURL, "isValidURL");
-async function initconfig(urls, config) {
-  let index = 0, proxy = [];
-  for (const url of urls) {
-    const decodedUrl = decodeURIComponent(url);
-    proxy.push(`
-  provider${index + 1}:
-    <<: *p
-    url: "${decodedUrl}"
-    path: ./proxies/provider${index + 1}.yaml
-    override:
-      <<: *override
-      additional-suffix: ' ${index + 1}'
-`);
-    index++;
+async function mihomoconfig(urls, templateUrl) {
+  urls = urls.map((u) => decodeURIComponent(u));
+  templateUrl = decodeURIComponent(templateUrl);
+  let config = "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml", templatedata;
+  if (!templateUrl) {
+    config = "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml";
+  } else {
+    const templateyaml = await loadConfig(template);
+    templatedata = browser_default.parse(templateyaml, { maxAliasCount: -1, merge: true });
   }
-  const ProxyProviders = `
-proxy-providers:
-${proxy.join("")}
-`;
-  const response = await fetch(config);
-  let mihomodata = await response.text();
-  mihomodata = mihomodata.replace(/proxy-providers:([\s\S]*?)(?=\n\S|$)/, ProxyProviders.trim());
-  return JSON.stringify(browser_default.parse(mihomodata, { maxAliasCount: -1, merge: true }));
+  const mihomodata = await loadConfig(config);
+  let data = browser_default.parse(mihomodata, { maxAliasCount: -1, merge: true });
+  const base = data.p || {};
+  const override = data.override || {};
+  const proxyProviders = {};
+  const ResponseHeaders = await handleRequest(urls, templateUrl);
+  urls.forEach((url, i) => {
+    proxyProviders[`provider${i + 1}`] = {
+      ...base,
+      url,
+      path: `./proxies/provider${i + 1}.yaml`,
+      override: {
+        ...override,
+        "additional-suffix": ` ${i + 1}`
+      }
+    };
+  });
+  data["proxy-providers"] = proxyProviders;
+  if (templatedata) {
+    data.proxies = templatedata.proxies || [];
+    data["proxy-groups"] = templatedata["proxy-groups"] || [];
+    data.rules = templatedata.rules || [];
+    data["sub-rules"] = templatedata["sub-rules"] || {};
+    data["rule-providers"] = templatedata["rule-providers"] || {};
+  }
+  return {
+    data: JSON.stringify(data, null, 4),
+    ResponseHeaders
+  };
 }
-__name(initconfig, "initconfig");
+__name(mihomoconfig, "mihomoconfig");
+async function loadConfig(configUrl) {
+  const cacheKey = new Request(configUrl);
+  const cache = caches.default;
+  let cachedResponse = await cache.match(cacheKey);
+  if (cachedResponse) {
+    return cachedResponse.text();
+  }
+  const response = await fetch(configUrl);
+  const data = await response.text();
+  const cacheResponse = new Response(data, {
+    headers: { "Cache-Control": "public, max-age=1800" }
+  });
+  await cache.put(cacheKey, cacheResponse.clone());
+  return data;
+}
+__name(loadConfig, "loadConfig");
+async function fetchResponseHeaders(url) {
+  const response = await fetch(url);
+  const headersObj = {};
+  for (const [key, value] of response.headers.entries()) {
+    headersObj[key] = value;
+  }
+  return {
+    status: response.status,
+    headers: headersObj
+  };
+}
+__name(fetchResponseHeaders, "fetchResponseHeaders");
+function getFileNameFromUrl(url) {
+  try {
+    const pathname = new URL(url).pathname;
+    const parts = pathname.split("/").filter(Boolean);
+    const lastPart = parts.length > 0 ? parts[parts.length - 1] : "";
+    return lastPart || null;
+  } catch {
+    return null;
+  }
+}
+__name(getFileNameFromUrl, "getFileNameFromUrl");
+async function singboxconfig(urls, templateUrl) {
+  try {
+    templateUrl = decodeURIComponent(templateUrl);
+    const ResponseHeaders = await handleRequest(urls, templateUrl);
+    const templateJson = await loadConfig(templateUrl);
+    const templateData = JSON.parse(templateJson);
+    if (!Array.isArray(templateData.outbounds)) throw new Error("template JSON \u4E2D\u6CA1\u6709 outbounds \u6570\u7EC4");
+    const urlList = Array.isArray(urls) ? urls : [urls];
+    const allTargetOutbounds = [];
+    const skipTags = ["\u{1F680} \u8282\u70B9\u9009\u62E9", "\u{1F7E2} \u624B\u52A8\u9009\u62E9", "\u{1F388} \u81EA\u52A8\u9009\u62E9"];
+    for (let rawUrl of urlList) {
+      const apiUrl = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(rawUrl)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
+      const resp = await fetch(apiUrl);
+      if (!resp.ok) throw new Error(`\u83B7\u53D6 ${apiUrl} \u5931\u8D25\uFF0C\u72B6\u6001\u7801\uFF1A${resp.status}`);
+      const data2 = await resp.json();
+      if (!Array.isArray(data2.outbounds)) throw new Error(`URL ${rawUrl} \u4E2D\u6CA1\u6709 outbounds \u6570\u7EC4`);
+      const filteredOutbounds = data2.outbounds.filter((o) => !skipTags.includes(o.tag));
+      allTargetOutbounds.push(...filteredOutbounds);
+    }
+    const uniqueTargetMap = /* @__PURE__ */ new Map();
+    for (const ob of allTargetOutbounds) {
+      if (ob.tag && !uniqueTargetMap.has(ob.tag)) {
+        uniqueTargetMap.set(ob.tag, ob);
+      }
+    }
+    const uniqueOutbounds = Array.from(uniqueTargetMap.values());
+    const templateNonSelectors = templateData.outbounds.filter(
+      (o) => !skipTags.includes(o.tag)
+    );
+    const mergedOutbounds = [...uniqueOutbounds];
+    const existingTags = new Set(mergedOutbounds.map((o) => o.tag));
+    for (const obj of templateNonSelectors) {
+      if (obj.tag && !existingTags.has(obj.tag)) {
+        mergedOutbounds.push(obj);
+        existingTags.add(obj.tag);
+      }
+    }
+    const subscriberNodeTags = uniqueOutbounds.map((o) => o.tag).filter((tag) => typeof tag === "string" && !skipTags.includes(tag));
+    for (const tag of skipTags) {
+      const selector = templateData.outbounds.find((o) => o.tag === tag);
+      if (!selector) {
+        continue;
+      }
+      if (!Array.isArray(selector.outbounds)) selector.outbounds = [];
+      const mergedTags = /* @__PURE__ */ new Set([...selector.outbounds, ...subscriberNodeTags]);
+      selector.outbounds = Array.from(mergedTags);
+    }
+    const finalOutbounds = [
+      ...templateData.outbounds.filter((o) => skipTags.includes(o.tag)),
+      ...mergedOutbounds
+    ];
+    const finalConfig = { ...templateData, outbounds: finalOutbounds };
+    const data = JSON.stringify(finalConfig, null, 4);
+    return {
+      ResponseHeaders,
+      data
+    };
+  } catch (error) {
+    return error.message;
+  }
+}
+__name(singboxconfig, "singboxconfig");
+async function handleRequest(urls, templateUrl) {
+  let ResponseHeaders = {};
+  let headers = {};
+  if (urls.length === 1) {
+    const ResponseHeadersRaw = await fetchResponseHeaders(urls[0]);
+    if (ResponseHeadersRaw?.headers) {
+      headers = { ...ResponseHeadersRaw.headers };
+      const hasContentDisposition = Object.keys(headers).some(
+        (key) => key.toLowerCase() === "content-disposition"
+      );
+      if (!hasContentDisposition) {
+        const domain = new URL(urls[0]).hostname;
+        headers["Content-Disposition"] = `attachment; filename="${domain}"; filename*=utf-8''${encodeURIComponent(domain)}`;
+      }
+      ResponseHeaders = { headers };
+    }
+    return ResponseHeaders;
+  } else {
+    const fileName = getFileNameFromUrl(templateUrl);
+    const fallbackName = fileName ? `mihomo\u6C47\u805A\u8BA2\u9605(${fileName})` : "mihomo\u6C47\u805A\u8BA2\u9605";
+    headers["Content-Disposition"] = `attachment; filename="${fallbackName}"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
+    ResponseHeaders = { headers };
+    return ResponseHeaders;
+  }
+}
+__name(handleRequest, "handleRequest");
 export {
   index_default as default
 };
