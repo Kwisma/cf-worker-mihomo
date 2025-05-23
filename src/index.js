@@ -885,24 +885,30 @@ async function initconfig(urls, template) {
     const proxyProviders = {};
     if (urls.length === 1) {
         ResponseHeaders = await fetchResponseHeaders(urls[0])
-    }
-    if (ResponseHeaders) {
-        const headers = { ...ResponseHeaders.headers };
+        if (ResponseHeaders?.headers) {
+            headers = { ...ResponseHeaders.headers };
 
-        const hasContentDisposition = Object.keys(headers).some(
-            key => key.toLowerCase() === "content-disposition"
-        );
+            const hasContentDisposition = Object.keys(headers).some(
+                key => key.toLowerCase() === "content-disposition"
+            );
 
-        if (!hasContentDisposition) {
-            const name = urls.length === 1
-                ? new URL(urls[0]).hostname
-                : "mihomo汇聚订阅";
-
-            headers["Content-Disposition"] =
-                `attachment; filename="${name}"; filename*=utf-8''${name}`;
+            if (!hasContentDisposition) {
+                const domain = new URL(urls[0]).hostname;
+                headers["Content-Disposition"] =
+                    `attachment; filename="${domain}"; filename*=utf-8''${domain}`;
+            }
+            ResponseHeaders.headers = headers
         }
-
-        ResponseHeaders.headers = headers;
+    }else {
+        const fileName = getFileNameFromUrl(config);
+        const fallbackName = fileName
+            ? `mihomo汇聚订阅(${fileName})`
+            : "mihomo汇聚订阅";
+        headers["Content-Disposition"] =
+            `attachment; filename="${fallbackName}"; filename*=utf-8''${fallbackName}`;
+        ResponseHeaders = {
+            headers,
+        };
     }
     urls.forEach((url, i) => {
         proxyProviders[`provider${i + 1}`] = {
@@ -964,4 +970,14 @@ async function fetchResponseHeaders(url) {
     status: response.status,
     headers: headersObj
   };
+}
+function getFileNameFromUrl(url) {
+    try {
+        const pathname = new URL(url).pathname;
+        const parts = pathname.split('/').filter(Boolean);
+        const lastPart = parts.length > 0 ? parts[parts.length - 1] : '';
+        return lastPart || null;
+    } catch {
+        return null;
+    }
 }
