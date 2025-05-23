@@ -905,7 +905,7 @@ async function initconfig(urls, template) {
             ? `mihomo汇聚订阅(${fileName})`
             : "mihomo汇聚订阅";
         headers["Content-Disposition"] =
-            `attachment; filename="${fallbackName}"; filename*="utf-8''${fallbackName}`;
+            `attachment; filename="${fallbackName}"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
         ResponseHeaders = {
             headers,
         };
