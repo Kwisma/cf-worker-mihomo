@@ -871,7 +871,7 @@ function isValidURL(url) {
 // 初始化配置
 async function initconfig(urls, template) {
     urls = urls.map(u => decodeURIComponent(u));
-    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata, ResponseHeaders;
+    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata, ResponseHeaders, headers = {};
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
