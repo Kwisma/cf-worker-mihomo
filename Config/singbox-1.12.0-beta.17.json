@@ -59,8 +59,14 @@
             "interrupt_exist_connections": true,
             "outbounds": [
                 "🎈 自动选择",
-                "🇨🇦加拿大1@Marisa_kristi"
+                "🚀 手动选择"
             ]
+        },
+        {
+            "type": "selector",
+            "tag": "🟢 手动选择",
+            "interrupt_exist_connections": true,
+            "outbounds": []
         },
         {
             "type": "urltest",
@@ -69,9 +75,7 @@
             "interval": "3m",
             "tolerance": 150,
             "interrupt_exist_connections": true,
-            "outbounds": [
-                "🇨🇦加拿大1@Marisa_kristi"
-            ]
+            "outbounds": []
         },
         {
             "type": "direct",
@@ -92,38 +96,11 @@
             "interrupt_exist_connections": true,
             "outbounds": [
                 "🚀 节点选择",
+                "🟢 手动选择",
                 "🎈 自动选择",
                 "🎯 全球直连",
                 "🐟 漏网之鱼"
             ]
-        },
-        {
-            "tag": "🇨🇦加拿大1@Marisa_kristi",
-            "type": "vless",
-            "server": "45.95.186.147",
-            "server_port": 50002,
-            "uuid": "073b8bbc-f997-43ed-9dee-ab1d2799d2ac",
-            "tls": {
-                "enabled": true,
-                "server_name": "mot.majusti.dpdns.org",
-                "insecure": false,
-                "alpn": [
-                    "h3"
-                ],
-                "utls": {
-                    "enabled": true,
-                    "fingerprint": "random"
-                }
-            },
-            "transport": {
-                "type": "ws",
-                "headers": {
-                    "Host": "mot.majusti.dpdns.org"
-                },
-                "path": "/",
-                "early_data_header_name": "Sec-WebSocket-Protocol",
-                "max_early_data": 2560
-            }
         }
     ],
     "route": {

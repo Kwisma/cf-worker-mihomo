@@ -5,8 +5,10 @@ export default {
         const userAgent = request.headers.get('User-Agent');
         const isBrowser = /mozilla|chrome|safari|firefox|edge|opera|webkit|gecko|trident/i.test(userAgent);
         const template = url.searchParams.get("template");
+        const singbox = url.searchParams.get("singbox");
         // 处理 URL 参数
         let urls = url.searchParams.getAll("url");
+        let headers = new Headers(), data = "";
 
         if (urls.length === 1 && urls[0].includes(",")) {
             urls = urls[0].split(",").map(u => u.trim()); // 拆分并去除空格
@@ -82,8 +84,14 @@ export default {
                 }
             );
         }
-        const {data, ResponseHeaders} = await initconfig(urls, template)
-        const headers = new Headers(ResponseHeaders?.headers || {});
+        if (singbox === '1.12.0' && !template) {
+            data = await singboxconfig(urls);
+        } else {
+            const res = await mihomoconfig(urls, template)
+            data = res.data;
+            const responseHeaders = res.ResponseHeaders?.headers || {};
+            headers = new Headers(responseHeaders);
+        }
         headers.set("Content-Type", "application/json; charset=utf-8");
         return new Response(data, {
             status: 200,
@@ -869,7 +877,7 @@ function isValidURL(url) {
 }
 
 // 初始化配置
-async function initconfig(urls, template) {
+async function mihomoconfig(urls, template) {
     urls = urls.map(u => decodeURIComponent(u));
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata, ResponseHeaders, headers = {};
     if (!template) {
@@ -899,7 +907,7 @@ async function initconfig(urls, template) {
             }
             ResponseHeaders.headers = headers
         }
-    }else {
+    } else {
         const fileName = getFileNameFromUrl(config);
         const fallbackName = fileName
             ? `mihomo汇聚订阅(${fileName})`
@@ -959,17 +967,17 @@ async function loadConfig(configUrl) {
 }
 
 async function fetchResponseHeaders(url) {
-  const response = await fetch(url);
+    const response = await fetch(url);
 
-  const headersObj = {};
-  for (const [key, value] of response.headers.entries()) {
-    headersObj[key] = value;
-  }
+    const headersObj = {};
+    for (const [key, value] of response.headers.entries()) {
+        headersObj[key] = value;
+    }
 
-  return {
-    status: response.status,
-    headers: headersObj
-  };
+    return {
+        status: response.status,
+        headers: headersObj
+    };
 }
 function getFileNameFromUrl(url) {
     try {
@@ -979,5 +987,77 @@ function getFileNameFromUrl(url) {
         return lastPart || null;
     } catch {
         return null;
+    }
+}
+
+/**
+ * @param {string} urls - 节点文件URL或路径
+ * @returns {Promise<Object|undefined>} - 返回修改后的目标 JSON 对象，失败时返回 undefined
+ */
+async function singboxconfig(urls) {
+    try {
+        const templateUrl = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/singbox-1.12.0-beta.17.json';
+        const templateResp = await fetch(templateUrl);
+        const templateData = await templateResp.json();
+        if (!Array.isArray(templateData.outbounds)) throw new Error('template JSON 中没有 outbounds 数组');
+        const urlList = Array.isArray(urls) ? urls : [urls];
+
+        const allTargetOutbounds = [];
+        for (let url of urlList) {
+            url = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(url)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
+            const resp = await fetch(url);
+            const data = await resp.json();
+            if (!Array.isArray(data.outbounds)) throw new Error(`URL ${url} 中没有 outbounds 数组`);
+            allTargetOutbounds.push(...data.outbounds);
+        }
+
+        // 合并多个目标文件的 outbounds（按 tag 去重）
+        const uniqueTargetMap = new Map();
+        for (const ob of allTargetOutbounds) {
+            if (ob.tag && !uniqueTargetMap.has(ob.tag)) {
+                uniqueTargetMap.set(ob.tag, ob);
+            }
+        }
+        const mergedTargetData = { outbounds: Array.from(uniqueTargetMap.values()) };
+
+        // 过滤 template 中除 "🚀 节点选择" 以外的完整对象
+        const templateObjectsToAdd = templateData.outbounds.filter(o => o.tag !== '🚀 节点选择');
+
+        // 获取所有 template 的 tag，去重
+        const templateTags = Array.from(new Set(templateObjectsToAdd.map(o => o.tag).filter(t => typeof t === 'string')));
+
+        // 目标 tags
+        const targetTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
+
+        // 找出目标中的相关对象
+        const targetObjects = mergedTargetData.outbounds.filter(o => targetTags.includes(o.tag));
+
+        if (!targetObjects.length) {
+            console.log('目标 JSON 中没有找到对应的目标 tag 对象');
+            return;
+        }
+
+        // 利用 Set 存已有 tag 做去重判断
+        const existingTags = new Set(mergedTargetData.outbounds.map(o => o.tag));
+
+        // 添加不重复的 template 完整对象到目标顶层 outbounds
+        for (const obj of templateObjectsToAdd) {
+            if (!existingTags.has(obj.tag)) {
+                mergedTargetData.outbounds.push(obj);
+                existingTags.add(obj.tag);
+            }
+        }
+
+        // 把所有 templateTags 添加进目标对象的 outbounds 内部数组，去重
+        for (const obj of targetObjects) {
+            if (!Array.isArray(obj.outbounds)) obj.outbounds = [];
+            const merged = new Set([...obj.outbounds, ...templateTags]);
+            obj.outbounds = Array.from(merged);
+        }
+
+        return mergedTargetData;
+
+    } catch (error) {
+        console.error('错误:', error.message);
     }
 }
