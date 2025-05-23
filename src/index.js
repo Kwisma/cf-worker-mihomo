@@ -1008,7 +1008,7 @@ async function mihomoconfig(urls, templateUrl) {
     urls = urls.map(u => decodeURIComponent(u));
     templateUrl = decodeURIComponent(templateUrl)
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
-    if (!template) {
+    if (!templateUrl) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
         const templateyaml = await loadConfig(template);
@@ -1032,7 +1032,7 @@ async function mihomoconfig(urls, templateUrl) {
         };
     });
     data['proxy-providers'] = proxyProviders;
-    if (template) {
+    if (templatedata) {
         data.proxies = templatedata.proxies || [];
         data['proxy-groups'] = templatedata['proxy-groups'] || [];
         data.rules = templatedata.rules || [];
@@ -1101,10 +1101,8 @@ async function singboxconfig(urls, templateUrl) {
     try {
         templateUrl = decodeURIComponent(templateUrl)
         const ResponseHeaders = await handleRequest(urls, templateUrl)
-        const templateResp = await fetch(decodeURIComponent(templateUrl));
-        if (!templateResp.ok) throw new Error('获取 template JSON 失败');
-
-        const templateData = await templateResp.json();
+        const templateJson = await loadConfig(templateUrl); // 使用缓存
+        const templateData = JSON.parse(templateJson);
         if (!Array.isArray(templateData.outbounds)) throw new Error('template JSON 中没有 outbounds 数组');
 
         const urlList = Array.isArray(urls) ? urls : [urls];
