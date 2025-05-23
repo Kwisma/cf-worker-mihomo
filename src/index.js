@@ -1133,7 +1133,7 @@ async function singboxconfig(urls) {
 
         // 最终合并全部：策略组 + 节点 + 其他模板节点
         const finalOutbounds = [
-            ...templateData.outbounds.filter(o => targetGroupTags.includes(o.tag)),
+            ...templateData.outbounds.filter(o => skipTags.includes(o.tag)),
             ...mergedOutbounds
         ];
 
