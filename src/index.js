@@ -1004,8 +1004,9 @@ function isValidURL(url) {
 }
 
 // 初始化配置
-async function mihomoconfig(urls, template) {
+async function mihomoconfig(urls, templateUrl) {
     urls = urls.map(u => decodeURIComponent(u));
+    templateUrl = decodeURIComponent(templateUrl)
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
@@ -1018,7 +1019,7 @@ async function mihomoconfig(urls, template) {
     const base = data.p || {};
     const override = data.override || {};
     const proxyProviders = {};
-    const ResponseHeaders = await handleRequest(urls)
+    const ResponseHeaders = await handleRequest(urls, templateUrl)
     urls.forEach((url, i) => {
         proxyProviders[`provider${i + 1}`] = {
             ...base,
@@ -1098,7 +1099,8 @@ function getFileNameFromUrl(url) {
  */
 async function singboxconfig(urls, templateUrl) {
     try {
-        const ResponseHeaders = await handleRequest(urls)
+        templateUrl = decodeURIComponent(templateUrl)
+        const ResponseHeaders = await handleRequest(urls, templateUrl)
         const templateResp = await fetch(decodeURIComponent(templateUrl));
         if (!templateResp.ok) throw new Error('获取 template JSON 失败');
 
@@ -1184,7 +1186,7 @@ async function singboxconfig(urls, templateUrl) {
     }
 }
 
-async function handleRequest(urls) {
+async function handleRequest(urls, templateUrl) {
     let ResponseHeaders = {};
     let headers = {};
     if (urls.length === 1) {
@@ -1204,7 +1206,7 @@ async function handleRequest(urls) {
         }
         return ResponseHeaders;
     } else {
-        const fileName = getFileNameFromUrl(config);
+        const fileName = getFileNameFromUrl(templateUrl);
         const fallbackName = fileName
             ? `mihomo汇聚订阅(${fileName})`
             : "mihomo汇聚订阅";
