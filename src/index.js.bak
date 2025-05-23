@@ -83,11 +83,13 @@ export default {
             );
         }
         const {data, ResponseHeaders} = await initconfig(urls, template)
-        const headers = new Headers(ResponseHeaders?.headers || {});
-        headers.set("Content-Type", "application/json; charset=utf-8");
-        return new Response(data, {
+       Content-Type为什么没有被覆盖，而合并了
+         return new Response(data, {
             status: 200,
-            headers
+            headers: {
+                ...(ResponseHeaders?.headers || {}),
+                "Content-Type": "application/json; charset=utf-8"
+            }
         });
     }
 };
