@@ -895,7 +895,7 @@ async function initconfig(urls, template) {
             );
 
             if (!hasContentDisposition) {
-                headers["Content-Disposition"] = `attachment; filename="${domain}"; filename*=utf-8''${(domain)}`;
+                headers["Content-Disposition"] = `attachment; filename="${domain}"; filename*=utf-8''${encodeURIComponent(domain)}`;
             }
 
             ResponseHeaders.headers = headers;
