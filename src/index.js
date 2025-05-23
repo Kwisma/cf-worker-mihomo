@@ -829,7 +829,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                         label: "通用",
                         options: [
                             {
-                                label: "默认（精简版）（仅国内外分流）",
+                                label: "默认（精简版）",
                                 value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox-1.12.0-beta.17.yaml"
                             }
                         ]
