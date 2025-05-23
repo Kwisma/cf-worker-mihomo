@@ -1011,7 +1011,7 @@ async function mihomoconfig(urls, templateUrl) {
     if (!templateUrl) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
-        const templateyaml = await loadConfig(template);
+        const templateyaml = await loadConfig(templateUrl);
         templatedata = YAML.parse(templateyaml, { maxAliasCount: -1, merge: true });
     }
     const mihomodata = await loadConfig(config);
