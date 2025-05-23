@@ -85,9 +85,12 @@ export default {
             );
         }
         if (singbox === '1.12.0' && !template) {
-            data = await singboxconfig(urls);
+            const res = await singboxconfig(urls);
+            data = res.data;
+            const responseHeaders = res.ResponseHeaders?.headers || {};
+            headers = new Headers(responseHeaders);
         } else {
-            const res = await mihomoconfig(urls, template)
+            const res = await mihomoconfig(urls, template);
             data = res.data;
             const responseHeaders = res.ResponseHeaders?.headers || {};
             headers = new Headers(responseHeaders);
@@ -465,6 +468,46 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
         //     cursor: not-allowed;
         //     margin-top: 10px;
         // }
+        /* Add new styles for the toggle switch */
+        .config-toggle {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 1.5rem;
+            background: rgba(67, 97, 238, 0.1);
+            border-radius: 10px;
+            padding: 8px;
+        }
+
+        .toggle-option {
+            padding: 8px 16px;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: bold;
+            text-align: center;
+            flex: 1;
+        }
+
+        .toggle-option.active {
+            background-color: #4361ee;
+            color: white;
+        }
+
+        .toggle-option:not(.active):hover {
+            background-color: rgba(67, 97, 238, 0.2);
+        }
+
+        .singbox-options {
+            display: none;
+        }
+
+        .singbox-mode .singbox-options {
+            display: block;
+        }
+
+        .singbox-mode .mihomo-options {
+            display: none;
+        }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/@keeex/qrcodejs-kx@1.0.2/qrcode.min.js"></script>
 </head>
@@ -484,19 +527,49 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
     </a>
     <div class="container">
         <div class="logo-title">
-            <h1>mihomo汇聚工具</h1>
+            <h1>mihomo/singbox汇聚工具</h1>
         </div>
-        <div class="input-group">
-            <label for="link">订阅链接</label>
-            <div id="link-container">
-                <div class="link-row">
-                    <input type="text" class="link-input" placeholder="https://www.example.com/answer/land?token=xxx" />
-                    <div class="add-btn" onclick="addLinkInput(this)">➕</div>
+        <div class="config-toggle">
+            <div class="toggle-option active" data-mode="mihomo">Clash (mihomo)</div>
+            <div class="toggle-option" data-mode="singbox">Singbox</div>
+        </div>
+        <div class="mihomo-options">
+            <div class="template-selector">
+                <div class="template-toggle collapsed">选择配置模板（未选择）</div>
+                <div class="template-options">
+                    <!-- 模板选项将通过JavaScript填充 -->
                 </div>
             </div>
+
+            <div class="input-group">
+                <label for="link">订阅链接</label>
+                <div id="link-container">
+                    <div class="link-row">
+                        <input type="text" class="link-input"
+                            placeholder="https://www.example.com/answer/land?token=xxx" />
+                        <div class="add-btn" onclick="addLinkInput(this)">➕</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="generateLink()">生成mihomo配置</button>
         </div>
 
-        <button onclick="generateLink()">生成mihomo配置</button>
+        <div class="singbox-options">
+            <div class="input-group">
+                <label for="link">订阅链接</label>
+                <div id="link-container-singbox">
+                    <div class="link-row">
+                        <input type="text" class="link-input"
+                            placeholder="https://www.example.com/answer/land?token=xxx" />
+                        <div class="add-btn" onclick="addLinkInput(this, 'singbox')">➕</div>
+                    </div>
+                </div>
+            </div>
+
+            <button onclick="generateSingboxLink()">生成Singbox配置</button>
+        </div>
+
 
         <div class="input-group">
             <div style="display: flex; align-items: center;">
@@ -552,29 +625,27 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             });
         }
 
-        function addLinkInput(button) {
-            const container = document.getElementById('link-container'); // 获取容器
+        // 修改addLinkInput以支持singbox容器
+        function addLinkInput(button, mode = 'mihomo') {
+            const containerId = mode === 'singbox' ? 'link-container-singbox' : 'link-container';
+            const container = document.getElementById(containerId);
             const row = document.createElement('div');
-            row.className = 'link-row'; // 添加相同的布局样式
+            row.className = 'link-row';
 
             const input = document.createElement('input');
             input.type = 'text';
             input.className = 'link-input';
             input.placeholder = 'https://www.example.com/answer/land?token=xxx';
 
-            // 隐藏当前按钮
             button.style.display = 'none';
-
-            // 将新行添加到容器中
             row.appendChild(input);
             container.appendChild(row);
 
-            // 为新输入框添加按钮
             const btn = document.createElement('div');
             btn.className = 'add-btn';
             btn.textContent = '➕';
             btn.onclick = function () {
-                addLinkInput(btn); // 递归调用，按钮跟随新行
+                addLinkInput(btn, mode);
             };
 
             row.appendChild(btn);
@@ -613,38 +684,33 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             });
         }
 
-        // 页面加载完成后初始化模板选择器
-        document.addEventListener('DOMContentLoaded', function() {
+        // 在mihomo和singbox模式之间切换
+        document.addEventListener('DOMContentLoaded', function () {
+            const toggleOptions = document.querySelectorAll('.toggle-option');
             const container = document.querySelector('.container');
-            const firstInputGroup = document.querySelector('.input-group');
-            
-            // 创建模板选择器
-            const templateDiv = document.createElement('div');
-            templateDiv.className = 'template-selector';
-            
-            // 创建模板URL显示框
-            // const templateUrlLabel = document.createElement('label');
-            // templateUrlLabel.className = 'template-label';
-            // templateUrlLabel.textContent = '模板URL';
-            // templateDiv.appendChild(templateUrlLabel);
-            
-            // const templateUrlInput = document.createElement('input');
-            // templateUrlInput.className = 'template-url';
-            // templateUrlInput.type = 'text';
-            // templateUrlInput.placeholder = '选择模板后将显示URL';
-            // templateUrlInput.id = 'template-url-input';
-            // templateUrlInput.readOnly = true;
-            // templateDiv.appendChild(templateUrlInput);
-            
-            // 创建模板切换按钮
-            const templateToggle = document.createElement('div');
-            templateToggle.className = 'template-toggle';
-            templateToggle.textContent = '选择配置模板（未选择）';
-            templateDiv.appendChild(templateToggle);
-            
-            // 创建模板选项容器
-            const optionsContainer = document.createElement('div');
-            optionsContainer.className = 'template-options';
+
+            toggleOptions.forEach(option => {
+                option.addEventListener('click', function () {
+                    // 设置活动状态
+                    toggleOptions.forEach(opt => opt.classList.remove('active'));
+                    this.classList.add('active');
+
+                    // 切换模式
+                    if (this.dataset.mode === 'singbox') {
+                        container.classList.add('singbox-mode');
+                    } else {
+                        container.classList.remove('singbox-mode');
+                    }
+                });
+            });
+
+            // 初始化模板选择器
+            initTemplateSelector();
+        });
+        // 初始化模板选择器
+        function initTemplateSelector() {
+            const templateToggle = document.querySelector('.template-toggle');
+            const optionsContainer = document.querySelector('.template-options');
 
             // 配置数据
             const remoteConfig = [
@@ -759,92 +825,117 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                 groupLabel.style.backgroundColor = '#f5f5f5';
                 groupLabel.textContent = group.label;
                 optionsContainer.appendChild(groupLabel);
-                
+
                 // 添加选项
                 group.options.forEach(option => {
                     const optionElement = document.createElement('div');
                     optionElement.className = 'template-option';
                     optionElement.textContent = option.label;
                     optionElement.dataset.value = option.value;
-                    
-                    optionElement.addEventListener('click', function() {
+
+                    optionElement.addEventListener('click', function () {
                         // 移除之前选中的样式
                         document.querySelectorAll('.template-option.selected').forEach(item => {
                             item.classList.remove('selected');
                         });
-                        templateToggle.textContent = \`选择配置模板（\${this.textContent}）\`;
+
+                        // 更新显示文本
+                        templateToggle.textContent = \`选择配置模板（\${option.label}）\`;
 
                         // 添加选中样式
                         this.classList.add('selected');
-                        
-                        // 更新模板URL显示
-                        // document.getElementById('template-url-input').value = this.dataset.value;
-                        
+
                         // 点击后自动折叠选项面板
                         templateToggle.classList.add('collapsed');
                         optionsContainer.classList.remove('show');
                     });
-                    
+
                     optionsContainer.appendChild(optionElement);
                 });
             });
-            
-            templateDiv.appendChild(optionsContainer);
-            container.insertBefore(templateDiv, firstInputGroup);
-            
-            // 默认选择第一个选项并显示其URL
+
+            // 默认选择第一个选项
             const firstOption = document.querySelector('.template-option');
             if (firstOption) {
                 firstOption.classList.add('selected');
-                // document.getElementById('template-url-input').value = firstOption.dataset.value;
                 templateToggle.textContent = \`选择配置模板（\${firstOption.textContent}）\`;
             }
-            
+
             // 点击切换按钮展开/折叠选项
-            templateToggle.addEventListener('click', function() {
+            templateToggle.addEventListener('click', function () {
                 this.classList.toggle('collapsed');
                 optionsContainer.classList.toggle('show');
             });
-        });
 
-        // 修改generateLink函数以包含模板URL
+            // 点击页面其他区域关闭选项面板
+            document.addEventListener('click', function (event) {
+                if (!templateToggle.contains(event.target) && !optionsContainer.contains(event.target)) {
+                    templateToggle.classList.add('collapsed');
+                    optionsContainer.classList.remove('show');
+                }
+            });
+        }
+
+        // 生成mihomo链接
         function generateLink() {
-            const subscriptionInputs = document.querySelectorAll('.link-input');
+            const inputs = document.querySelectorAll('.mihomo-options .link-input');
             const selectedOption = document.querySelector('.template-option.selected');
-            
-            const subscriptionLinks = Array.from(subscriptionInputs)
+
+            const subscriptionLinks = Array.from(inputs)
                 .map(input => input.value.trim())
                 .filter(val => val !== '');
-                
+
             const templateLink = selectedOption ? selectedOption.dataset.value : '';
-            
+
             if (subscriptionLinks.length === 0 && !templateLink) {
                 alert('请输入至少一个订阅链接或选择配置模板');
                 return;
             }
-            
-            // 验证订阅链接
-            const allValid = subscriptionLinks.every(link => 
+
+            const allValid = subscriptionLinks.every(link =>
                 link.startsWith('http://') || link.startsWith('https://'));
-            
+
             if (subscriptionLinks.length > 0 && !allValid) {
                 alert('请输入有效的订阅URL地址');
                 return;
             }
-            
-            // 如果有模板URL，添加到链接数组开头
+
             const allLinks = [];
             if (templateLink) {
                 allLinks.push(\`template=\${encodeURIComponent(templateLink)}\`);
             }
-            
-            // 添加订阅链接
+
             subscriptionLinks.forEach(link => {
                 allLinks.push(\`url=\${encodeURIComponent(link)}\`);
             });
-            
+
             const domain = window.location.hostname;
             const urlLink = \`https://\${domain}/?\${allLinks.join('&')}\`;
+            updateResult(urlLink);
+        }
+        // 生成singbox链接
+        function generateSingboxLink() {
+            const inputs = document.querySelectorAll('.singbox-options .link-input');
+            const links = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== '');
+
+            if (links.length === 0) {
+                alert('请输入至少一个链接');
+                return;
+            }
+
+            const allValid = links.every(link => link.startsWith('http://') || link.startsWith('https://'));
+            if (!allValid) {
+                alert('请输入有效的url地址');
+                return;
+            }
+
+            const encodedLinks = links.map(link => encodeURIComponent(link));
+            const domain = window.location.hostname;
+            const urlLink = \`https://\${domain}/?singbox=1.12.0&url=\${encodedLinks.join(',')}\`;
+            updateResult(urlLink);
+        }
+        // 更新结果和二维码
+        function updateResult(urlLink) {
             document.getElementById('result').value = urlLink;
 
             // 生成二维码
@@ -879,7 +970,7 @@ function isValidURL(url) {
 // 初始化配置
 async function mihomoconfig(urls, template) {
     urls = urls.map(u => decodeURIComponent(u));
-    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata, ResponseHeaders, headers = {};
+    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
@@ -891,33 +982,7 @@ async function mihomoconfig(urls, template) {
     const base = data.p || {};
     const override = data.override || {};
     const proxyProviders = {};
-    if (urls.length === 1) {
-        ResponseHeaders = await fetchResponseHeaders(urls[0])
-        if (ResponseHeaders?.headers) {
-            headers = { ...ResponseHeaders.headers };
-
-            const hasContentDisposition = Object.keys(headers).some(
-                key => key.toLowerCase() === "content-disposition"
-            );
-
-            if (!hasContentDisposition) {
-                const domain = new URL(urls[0]).hostname;
-                headers["Content-Disposition"] =
-                    `attachment; filename="${domain}"; filename*=utf-8''${domain}`;
-            }
-            ResponseHeaders.headers = headers
-        }
-    } else {
-        const fileName = getFileNameFromUrl(config);
-        const fallbackName = fileName
-            ? `mihomo汇聚订阅(${fileName})`
-            : "mihomo汇聚订阅";
-        headers["Content-Disposition"] =
-            `attachment; filename="${fallbackName}"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
-        ResponseHeaders = {
-            headers,
-        };
-    }
+    const ResponseHeaders = await handleRequest(urls)
     urls.forEach((url, i) => {
         proxyProviders[`provider${i + 1}`] = {
             ...base,
@@ -991,73 +1056,124 @@ function getFileNameFromUrl(url) {
 }
 
 /**
- * @param {string} urls - 节点文件URL或路径
- * @returns {Promise<Object|undefined>} - 返回修改后的目标 JSON 对象，失败时返回 undefined
+ * 合并多个 singbox URL 数据并注入模板配置
+ * @param {string|string[]} urls - 节点订阅链接，可传入一个 URL 或多个 URL 数组
+ * @returns {Promise<Object|undefined>} - 合并后的 JSON 数据
  */
 async function singboxconfig(urls) {
     try {
+        const ResponseHeaders = await handleRequest(urls)
         const templateUrl = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/singbox-1.12.0-beta.17.json';
         const templateResp = await fetch(templateUrl);
+        if (!templateResp.ok) throw new Error('获取 template JSON 失败');
+
         const templateData = await templateResp.json();
         if (!Array.isArray(templateData.outbounds)) throw new Error('template JSON 中没有 outbounds 数组');
-        const urlList = Array.isArray(urls) ? urls : [urls];
 
+        const urlList = Array.isArray(urls) ? urls : [urls];
         const allTargetOutbounds = [];
-        for (let url of urlList) {
-            url = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(url)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
-            const resp = await fetch(url);
+
+        for (let rawUrl of urlList) {
+            const apiUrl = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(rawUrl)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
+            const resp = await fetch(apiUrl);
+            if (!resp.ok) throw new Error(`获取 ${apiUrl} 失败，状态码：${resp.status}`);
+
             const data = await resp.json();
-            if (!Array.isArray(data.outbounds)) throw new Error(`URL ${url} 中没有 outbounds 数组`);
+            if (!Array.isArray(data.outbounds)) throw new Error(`URL ${rawUrl} 中没有 outbounds 数组`);
+
+            // console.log(`✅ 成功加载订阅 ${rawUrl}，共 ${data.outbounds.length} 个节点`);
             allTargetOutbounds.push(...data.outbounds);
         }
 
-        // 合并多个目标文件的 outbounds（按 tag 去重）
+        // 去重 outbounds（按 tag）
         const uniqueTargetMap = new Map();
         for (const ob of allTargetOutbounds) {
             if (ob.tag && !uniqueTargetMap.has(ob.tag)) {
                 uniqueTargetMap.set(ob.tag, ob);
             }
         }
-        const mergedTargetData = { outbounds: Array.from(uniqueTargetMap.values()) };
+        const uniqueOutbounds = Array.from(uniqueTargetMap.values());
 
-        // 过滤 template 中除 "🚀 节点选择" 以外的完整对象
-        const templateObjectsToAdd = templateData.outbounds.filter(o => o.tag !== '🚀 节点选择');
+        // 提取模板中除策略组的其他对象
+        const templateNonSelectors = templateData.outbounds.filter(
+            o => !["🚀 节点选择", "🟢 手动选择", "🎈 自动选择"].includes(o.tag)
+        );
 
-        // 获取所有 template 的 tag，去重
-        const templateTags = Array.from(new Set(templateObjectsToAdd.map(o => o.tag).filter(t => typeof t === 'string')));
+        // 合并：订阅节点 + 模板非策略组节点
+        const mergedOutbounds = [...uniqueOutbounds];
 
-        // 目标 tags
-        const targetTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
-
-        // 找出目标中的相关对象
-        const targetObjects = mergedTargetData.outbounds.filter(o => targetTags.includes(o.tag));
-
-        if (!targetObjects.length) {
-            console.log('目标 JSON 中没有找到对应的目标 tag 对象');
-            return;
-        }
-
-        // 利用 Set 存已有 tag 做去重判断
-        const existingTags = new Set(mergedTargetData.outbounds.map(o => o.tag));
-
-        // 添加不重复的 template 完整对象到目标顶层 outbounds
-        for (const obj of templateObjectsToAdd) {
-            if (!existingTags.has(obj.tag)) {
-                mergedTargetData.outbounds.push(obj);
+        const existingTags = new Set(mergedOutbounds.map(o => o.tag));
+        for (const obj of templateNonSelectors) {
+            if (obj.tag && !existingTags.has(obj.tag)) {
+                mergedOutbounds.push(obj);
                 existingTags.add(obj.tag);
             }
         }
 
-        // 把所有 templateTags 添加进目标对象的 outbounds 内部数组，去重
-        for (const obj of targetObjects) {
-            if (!Array.isArray(obj.outbounds)) obj.outbounds = [];
-            const merged = new Set([...obj.outbounds, ...templateTags]);
-            obj.outbounds = Array.from(merged);
+        // 提取订阅节点 tag
+        const subscriberNodeTags = uniqueOutbounds
+            .map(o => o.tag)
+            .filter(tag => typeof tag === 'string');
+
+        // 查找策略组对象
+        const targetGroupTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
+        for (const tag of targetGroupTags) {
+            const selector = templateData.outbounds.find(o => o.tag === tag);
+            if (!selector) {
+                // console.warn(`⚠️ 策略组 "${tag}" 不存在`);
+                continue;
+            }
+            if (!Array.isArray(selector.outbounds)) selector.outbounds = [];
+            const mergedTags = new Set([...selector.outbounds, ...subscriberNodeTags]);
+            selector.outbounds = Array.from(mergedTags);
+            // console.log(`✅ 策略组 "${tag}" 已添加 ${subscriberNodeTags.length} 个节点`);
         }
 
-        return mergedTargetData;
+        // 最终合并全部：策略组 + 节点 + 其他模板节点
+        const finalOutbounds = [
+            ...templateData.outbounds.filter(o => targetGroupTags.includes(o.tag)),
+            ...mergedOutbounds
+        ];
+
+        const finalConfig = { ...templateData, outbounds: finalOutbounds };
+        const data = JSON.stringify(finalConfig, null, 4);
+        return {
+            ResponseHeaders,
+            data: data
+        };
 
     } catch (error) {
-        console.error('错误:', error.message);
+        return error.message;
+    }
+}
+
+async function handleRequest(urls) {
+    let ResponseHeaders = {};
+    let headers = {};
+    if (urls.length === 1) {
+        // 处理单个 URL 的 headers
+        const ResponseHeadersRaw = await fetchResponseHeaders(urls[0]);
+        if (ResponseHeadersRaw?.headers) {
+            headers = { ...ResponseHeadersRaw.headers };
+            const hasContentDisposition = Object.keys(headers).some(
+                key => key.toLowerCase() === "content-disposition"
+            );
+            if (!hasContentDisposition) {
+                const domain = new URL(urls[0]).hostname;
+                headers["Content-Disposition"] =
+                    `attachment; filename="${domain}"; filename*=utf-8''${encodeURIComponent(domain)}`;
+            }
+            ResponseHeaders = { headers };
+        }
+        return ResponseHeaders;
+    } else {
+        const fileName = getFileNameFromUrl(config);
+        const fallbackName = fileName
+            ? `mihomo汇聚订阅(${fileName})`
+            : "mihomo汇聚订阅";
+        headers["Content-Disposition"] =
+            `attachment; filename="${fallbackName}"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
+        ResponseHeaders = { headers };
+        return ResponseHeaders;
     }
 }
