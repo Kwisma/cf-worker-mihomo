@@ -84,8 +84,8 @@ export default {
                 }
             );
         }
-        if (singbox === '1.12.0' && !template) {
-            const res = await singboxconfig(urls);
+        if (singbox) {
+            const res = await singboxconfig(urls, template);
             data = res.data;
             const responseHeaders = res.ResponseHeaders?.headers || {};
             headers = new Headers(responseHeaders);
@@ -556,6 +556,12 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
         </div>
 
         <div class="singbox-options">
+            <div class="template-selector">
+                <div class="template-toggle collapsed">选择配置模板（未选择）</div>
+                <div class="template-options">
+                    <!-- 模板选项将通过JavaScript填充 -->
+                </div>
+            </div>
             <div class="input-group">
                 <label for="link">订阅链接</label>
                 <div id="link-container-singbox">
@@ -705,118 +711,133 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             });
 
             // 初始化模板选择器
-            initTemplateSelector();
+            initTemplateSelector('mihomo');
+            initTemplateSelector('singbox');
         });
         // 初始化模板选择器
-        function initTemplateSelector() {
-            const templateToggle = document.querySelector('.template-toggle');
-            const optionsContainer = document.querySelector('.template-options');
+        function initTemplateSelector(mode = 'mihomo') {
+            const selectorClass = mode === 'singbox' ? '.singbox-options .template-selector' : '.mihomo-options .template-selector';
+            const templateToggle = document.querySelector(\`\${selectorClass} .template-toggle\`);
+            const optionsContainer = document.querySelector(\`\${selectorClass} .template-options\`);
 
             // 配置数据
-            const remoteConfig = [
-                {
-                    label: "通用",
-                    options: [
-                        {
-                            label: "默认（精简版）（仅国内外分流）",
-                            value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
-                        },
-                        {
-                            label: "默认（精简版）（无去广告）",
-                            value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_NoAds.yaml"
-                        },
-                        {
-                            label: "默认（全分组）",
-                            value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_full.yaml"
-                        }
-                    ]
-                },
-                {
-                    label: "Mihomo-Party-ACL4SSR",
-                    options: [
-                        {
-                            label: "ACL4SSR_Online_Full 全包重度用户使用（与Github同步）",
-                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full.yaml"
-                        },
-                        {
-                            label: "ACL4SSR_Online_Full_AdblockPlus 全包重度用户使用更多去广告（与Github同步）",
-                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_AdblockPlus.yaml"
-                        },
-                        {
-                            label: "ACL4SSR_Online_Full_Tiktok 全包重度用户使用抖音全量（与Github同步）",
-                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_Tiktok.yaml"
-                        },
-                        {
-                            label: "ACL4SSR_Online_Full_WithIcon 全包重度用户使用（与Github同步）（无图标）",
-                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_WithIcon.yaml"
-                        },
-                        {
-                            label: "ACL4SSR_Online_Mini_MultiMode 专业版自动测速、故障转移、负载均衡（与Github同步）",
-                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Mini_MultiMode.yaml"
-                        },
-                        {
-                            label: "极简分流规则",
-                            value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/极简分流规则.yaml"
-                        }
-                    ]
-                },
-                {
-                    label: "网络收集",
-                    options: [
-                        {
-                            label: "布丁狗的订阅转换 (与Github同步)",
-                            value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
-                        },
-                        {
-                            label: "ACL4SSR_Online_Full 全分组版 (与Github同步)",
-                            value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
-                        },
-                        {
-                            label: "ACL4SSR_Online_Full_WithIcon 全分组版 (与Github同步) (无图标)",
-                            value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full_WithIcon.yaml"
-                        },
-                    ]
-                },
-                {
-                    label: "Lanlan13-14",
-                    options: [
-                        {
-                            label: "configfull 全分组版 (与Github同步)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml"
-                        },
-                        {
-                            label: "configfull_NoAd 全分组版 (与Github同步) (无去广告)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml"
-                        },
-                        {
-                            label: "configfull_NoAd_Stash 全分组版 (与Github同步) (无去广告) (Stash)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash.yaml"
-                        },
-                        {
-                            label: "configfull_NoAd_Stash_lite 全分组版 (与Github同步) (无去广告) (精简版) (Stash)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash_lite.yaml"
-                        },
-                        {
-                            label: "configfull_NoAd_lite 全分组版 (与Github同步) (无去广告) (精简版)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml"
-                        },
-                        {
-                            label: "configfull_Stash 全分组版 (与Github同步) (Stash)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash.yaml"
-                        },
-                        {
-                            label: "configfull_Stash_lite 全分组版 (与Github同步) (精简版) (Stash)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash_lite.yaml"
-                        },
-                        {
-                            label: "configfull_lite 全分组版 (与Github同步) (精简版)",
-                            value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_lite.yaml"
-                        },
-                    ]
-                },
-            ];
+            const configs = {
+                mihomo: [
+                    {
+                        label: "通用",
+                        options: [
+                            {
+                                label: "默认（精简版）（仅国内外分流）",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default.yaml"
+                            },
+                            {
+                                label: "默认（精简版）（无去广告）",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_NoAds.yaml"
+                            },
+                            {
+                                label: "默认（全分组）",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/Mihomo_default_full.yaml"
+                            }
+                        ]
+                    },
+                    {
+                        label: "Mihomo-Party-ACL4SSR",
+                        options: [
+                            {
+                                label: "ACL4SSR_Online_Full 全包重度用户使用（与Github同步）",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_AdblockPlus 全包重度用户使用更多去广告（与Github同步）",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_AdblockPlus.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_Tiktok 全包重度用户使用抖音全量（与Github同步）",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_Tiktok.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_WithIcon 全包重度用户使用（与Github同步）（无图标）",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Full_WithIcon.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Mini_MultiMode 专业版自动测速、故障转移、负载均衡（与Github同步）",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/ACL4SSR_Online_Mini_MultiMode.yaml"
+                            },
+                            {
+                                label: "极简分流规则",
+                                value: "https://raw.githubusercontent.com/zhuqq2020/Mihomo-Party-ACL4SSR/main/极简分流规则.yaml"
+                            }
+                        ]
+                    },
+                    {
+                        label: "网络收集",
+                        options: [
+                            {
+                                label: "布丁狗的订阅转换 (与Github同步)",
+                                value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/%E5%B8%83%E4%B8%81%E7%8B%97%E7%9A%84%E8%AE%A2%E9%98%85%E8%BD%AC%E6%8D%A2.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full 全分组版 (与Github同步)",
+                                value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full.yaml"
+                            },
+                            {
+                                label: "ACL4SSR_Online_Full_WithIcon 全分组版 (与Github同步) (无图标)",
+                                value: "https://raw.githubusercontent.com/mihomo-party-org/override-hub/main/yaml/ACL4SSR_Online_Full_WithIcon.yaml"
+                            },
+                        ]
+                    },
+                    {
+                        label: "Lanlan13-14",
+                        options: [
+                            {
+                                label: "configfull 全分组版 (与Github同步)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd 全分组版 (与Github同步) (无去广告)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd_Stash 全分组版 (与Github同步) (无去广告) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd_Stash_lite 全分组版 (与Github同步) (无去广告) (精简版) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_Stash_lite.yaml"
+                            },
+                            {
+                                label: "configfull_NoAd_lite 全分组版 (与Github同步) (无去广告) (精简版)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_NoAd_lite.yaml"
+                            },
+                            {
+                                label: "configfull_Stash 全分组版 (与Github同步) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash.yaml"
+                            },
+                            {
+                                label: "configfull_Stash_lite 全分组版 (与Github同步) (精简版) (Stash)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_Stash_lite.yaml"
+                            },
+                            {
+                                label: "configfull_lite 全分组版 (与Github同步) (精简版)",
+                                value: "https://raw.githubusercontent.com/Lanlan13-14/Rules/main/configfull_lite.yaml"
+                            },
+                        ]
+                    },
+                ],
+                singbox: [
+                    {
+                        label: "通用",
+                        options: [
+                            {
+                                label: "默认（精简版）（仅国内外分流）",
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox-1.12.0-beta.17.yaml"
+                            }
+                        ]
+                    }
+                ]
+            };
             // 生成所有模板选项
-            remoteConfig.forEach(group => {
+            configs[mode].forEach(group => {
                 // 添加分组标签
                 const groupLabel = document.createElement('div');
                 groupLabel.style.padding = '10px 20px';
@@ -835,7 +856,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
 
                     optionElement.addEventListener('click', function () {
                         // 移除之前选中的样式
-                        document.querySelectorAll('.template-option.selected').forEach(item => {
+                        document.querySelectorAll(\`\${selectorClass} .template-option.selected\`).forEach(item => {
                             item.classList.remove('selected');
                         });
 
@@ -855,7 +876,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
             });
 
             // 默认选择第一个选项
-            const firstOption = document.querySelector('.template-option');
+            const firstOption = document.querySelector(\`\${selectorClass} .template-option\`);
             if (firstOption) {
                 firstOption.classList.add('selected');
                 templateToggle.textContent = \`选择配置模板（\${firstOption.textContent}）\`;
@@ -916,22 +937,37 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
         // 生成singbox链接
         function generateSingboxLink() {
             const inputs = document.querySelectorAll('.singbox-options .link-input');
-            const links = Array.from(inputs).map(input => input.value.trim()).filter(val => val !== '');
+            const selectedOption = document.querySelector('.singbox-options .template-option.selected');
+            const subscriptionLinks = Array.from(inputs)
+                .map(input => input.value.trim())
+                .filter(val => val !== '');
 
-            if (links.length === 0) {
-                alert('请输入至少一个链接');
+            const templateLink = selectedOption ? selectedOption.dataset.value : '';
+
+            if (subscriptionLinks.length === 0 && !templateLink) {
+                alert('请输入至少一个订阅链接或选择配置模板');
                 return;
             }
 
-            const allValid = links.every(link => link.startsWith('http://') || link.startsWith('https://'));
-            if (!allValid) {
-                alert('请输入有效的url地址');
+             const allValid = subscriptionLinks.every(link =>
+                link.startsWith('http://') || link.startsWith('https://'));
+
+            if (subscriptionLinks.length > 0 && !allValid) {
+                alert('请输入有效的订阅URL地址');
                 return;
             }
 
-            const encodedLinks = links.map(link => encodeURIComponent(link));
+            const allLinks = [];
+            if (templateLink) {
+                allLinks.push(\`template=\${encodeURIComponent(templateLink)}\`);
+            }
+
+            subscriptionLinks.forEach(link => {
+                allLinks.push(\`url=\${encodeURIComponent(link)}\`);
+            });
+
             const domain = window.location.hostname;
-            const urlLink = \`https://\${domain}/?singbox=1.12.0&url=\${encodedLinks.join(',')}\`;
+            const urlLink = \`https://\${domain}/?\${allLinks.join('&')}&singbox=true\`;
             updateResult(urlLink);
         }
         // 更新结果和二维码
@@ -1060,11 +1096,10 @@ function getFileNameFromUrl(url) {
  * @param {string|string[]} urls - 节点订阅链接，可传入一个 URL 或多个 URL 数组
  * @returns {Promise<Object|undefined>} - 合并后的 JSON 数据
  */
-async function singboxconfig(urls) {
+async function singboxconfig(urls, templateUrl) {
     try {
         const ResponseHeaders = await handleRequest(urls)
-        const templateUrl = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/singbox-1.12.0-beta.17.json';
-        const templateResp = await fetch(templateUrl);
+        const templateResp = await fetch(decodeURIComponent(templateUrl));
         if (!templateResp.ok) throw new Error('获取 template JSON 失败');
 
         const templateData = await templateResp.json();
