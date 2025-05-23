@@ -1,0 +1,315 @@
+{
+    "log": {
+        "disabled": false,
+        "level": "info",
+        "output": "",
+        "timestamp": false
+    },
+    "experimental": {
+        "clash_api": {
+            "external_controller": "127.0.0.1:20123",
+            "external_ui": "",
+            "external_ui_download_url": "",
+            "external_ui_download_detour": "🎯 全球直连",
+            "secret": "ID_llbnevlk",
+            "default_mode": "rule",
+            "access_control_allow_origin": [
+                "*"
+            ],
+            "access_control_allow_private_network": false
+        },
+        "cache_file": {
+            "enabled": true,
+            "path": "cache.db",
+            "cache_id": "",
+            "store_fakeip": true,
+            "store_rdrc": true,
+            "rdrc_timeout": "7d"
+        }
+    },
+    "inbounds": [
+        {
+            "type": "mixed",
+            "tag": "mixed-in",
+            "listen": "127.0.0.1",
+            "listen_port": 20122,
+            "tcp_fast_open": true,
+            "tcp_multi_path": true,
+            "udp_fragment": true
+        },
+        {
+            "type": "tun",
+            "tag": "tun-in",
+            "interface_name": "",
+            "address": [
+                "172.18.0.1/30",
+                "fdfe:dcba:9876::1/126"
+            ],
+            "mtu": 9000,
+            "auto_route": true,
+            "strict_route": true,
+            "endpoint_independent_nat": false,
+            "stack": "gvisor"
+        }
+    ],
+    "outbounds": [
+        {
+            "type": "selector",
+            "tag": "🚀 节点选择",
+            "interrupt_exist_connections": true,
+            "outbounds": [
+                "🎈 自动选择",
+                "🇨🇦加拿大1@Marisa_kristi"
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "🎈 自动选择",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [
+                "🇨🇦加拿大1@Marisa_kristi"
+            ]
+        },
+        {
+            "type": "direct",
+            "tag": "🎯 全球直连"
+        },
+        {
+            "type": "selector",
+            "tag": "🐟 漏网之鱼",
+            "interrupt_exist_connections": true,
+            "outbounds": [
+                "🚀 节点选择",
+                "🎯 全球直连"
+            ]
+        },
+        {
+            "type": "selector",
+            "tag": "GLOBAL",
+            "interrupt_exist_connections": true,
+            "outbounds": [
+                "🚀 节点选择",
+                "🎈 自动选择",
+                "🎯 全球直连",
+                "🐟 漏网之鱼"
+            ]
+        },
+        {
+            "tag": "🇨🇦加拿大1@Marisa_kristi",
+            "type": "vless",
+            "server": "45.95.186.147",
+            "server_port": 50002,
+            "uuid": "073b8bbc-f997-43ed-9dee-ab1d2799d2ac",
+            "tls": {
+                "enabled": true,
+                "server_name": "mot.majusti.dpdns.org",
+                "insecure": false,
+                "alpn": [
+                    "h3"
+                ],
+                "utls": {
+                    "enabled": true,
+                    "fingerprint": "random"
+                }
+            },
+            "transport": {
+                "type": "ws",
+                "headers": {
+                    "Host": "mot.majusti.dpdns.org"
+                },
+                "path": "/",
+                "early_data_header_name": "Sec-WebSocket-Protocol",
+                "max_early_data": 2560
+            }
+        }
+    ],
+    "route": {
+        "rules": [
+            {
+                "action": "sniff",
+                "inbound": "tun-in"
+            },
+            {
+                "action": "hijack-dns",
+                "protocol": "dns"
+            },
+            {
+                "action": "route",
+                "clash_mode": "direct",
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "clash_mode": "global",
+                "outbound": "GLOBAL"
+            },
+            {
+                "action": "reject",
+                "protocol": "quic"
+            },
+            {
+                "action": "reject",
+                "rule_set": [
+                    "Category-Ads"
+                ]
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoSite-Private"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoSite-CN"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoIP-Private"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoIP-CN"
+                ],
+                "outbound": "🎯 全球直连"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoLocation-!CN"
+                ],
+                "outbound": "🚀 节点选择"
+            }
+        ],
+        "rule_set": [
+            {
+                "tag": "Category-Ads",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/category-ads-all.srs",
+                "format": "binary",
+                "download_detour": "🎯 全球直连"
+            },
+            {
+                "tag": "GeoIP-Private",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/private.srs",
+                "format": "binary",
+                "download_detour": "🎯 全球直连"
+            },
+            {
+                "tag": "GeoSite-Private",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs",
+                "format": "binary",
+                "download_detour": "🎯 全球直连"
+            },
+            {
+                "tag": "GeoIP-CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
+                "format": "binary",
+                "download_detour": "🎯 全球直连"
+            },
+            {
+                "tag": "GeoSite-CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+                "format": "binary",
+                "download_detour": "🎯 全球直连"
+            },
+            {
+                "tag": "GeoLocation-!CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/geolocation-!cn.srs",
+                "format": "binary",
+                "download_detour": "🎯 全球直连"
+            }
+        ],
+        "auto_detect_interface": true,
+        "final": "🐟 漏网之鱼",
+        "default_domain_resolver": {
+            "server": "DIRECT-DNS"
+        }
+    },
+    "dns": {
+        "servers": [
+            {
+                "tag": "DIRECT-DNS",
+                "type": "https",
+                "domain_resolver": "DIRECT-DNS-Resolver",
+                "server_port": 443,
+                "server": "223.5.5.5"
+            },
+            {
+                "tag": "DIRECT-DNS-Resolver",
+                "type": "https",
+                "server_port": 443,
+                "server": "223.5.5.5"
+            },
+            {
+                "tag": "PROXY-DNS-Resolver",
+                "type": "https",
+                "detour": "🚀 节点选择",
+                "server_port": 443,
+                "server": "8.8.8.8"
+            },
+            {
+                "tag": "PROXY-DNS",
+                "type": "https",
+                "detour": "🚀 节点选择",
+                "domain_resolver": "PROXY-DNS-Resolver",
+                "server_port": 443,
+                "server": "8.8.8.8"
+            },
+            {
+                "tag": "PROXY-DNS-Resolver",
+                "type": "h3",
+                "detour": "🚀 节点选择",
+                "server_port": 443,
+                "server": "8.8.8.8"
+            }
+        ],
+        "rules": [
+            {
+                "action": "route",
+                "clash_mode": "direct",
+                "server": "DIRECT-DNS"
+            },
+            {
+                "action": "route",
+                "clash_mode": "global",
+                "server": "PROXY-DNS"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoSite-CN"
+                ],
+                "server": "DIRECT-DNS"
+            },
+            {
+                "action": "route",
+                "rule_set": [
+                    "GeoLocation-!CN"
+                ],
+                "server": "PROXY-DNS"
+            }
+        ],
+        "disable_cache": true,
+        "disable_expire": true,
+        "independent_cache": true,
+        "final": "PROXY-DNS",
+        "strategy": "prefer_ipv4"
+    }
+}
