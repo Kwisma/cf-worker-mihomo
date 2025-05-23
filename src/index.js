@@ -4,7 +4,7 @@ export default {
         const url = new URL(request.url);
         const userAgent = request.headers.get('User-Agent');
         const isBrowser = /mozilla|chrome|safari|firefox|edge|opera|webkit|gecko|trident/i.test(userAgent);
-        const template = url.searchParams.get("template");
+        const templateUrl = url.searchParams.get("template");
         const singbox = url.searchParams.get("singbox");
         // 处理 URL 参数
         let urls = url.searchParams.getAll("url");
@@ -85,12 +85,12 @@ export default {
             );
         }
         if (singbox) {
-            const res = await singboxconfig(urls, template);
+            const res = await singboxconfig(urls, templateUrl);
             data = res.data;
             const responseHeaders = res.ResponseHeaders?.headers || {};
             headers = new Headers(responseHeaders);
         } else {
-            const res = await mihomoconfig(urls, template);
+            const res = await mihomoconfig(urls, templateUrl);
             data = res.data;
             const responseHeaders = res.ResponseHeaders?.headers || {};
             headers = new Headers(responseHeaders);
