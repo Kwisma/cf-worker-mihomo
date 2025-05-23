@@ -14,20 +14,22 @@ export default {
 
         if (urls.length === 0 || urls[0] === "") {
             return new Response(await getFakePage(env.IMG), {
+                status: 200,
                 headers: {
                     "Content-Type": "text/html; charset=utf-8"
                 }
-            }, { status: 400 });
+            });
         }
 
         // URL 校验
         for (let u of urls) {
             if (!isValidURL(u)) {
                 return new Response(await getFakePage(env.IMG), {
+                    status: 200,
                     headers: {
                         "Content-Type": "text/html; charset=utf-8"
                     }
-                }, { status: 400 });
+                });
             }
         }
         if (isBrowser) {
@@ -75,12 +77,18 @@ export default {
                 </html>
                 `,
                 {
-                    headers: { 'Content-Type': 'text/html; charset=utf-8' },
+                    status: 400,
+                    headers: { 'Content-Type': 'text/html; charset=utf-8' }
                 }
             );
         }
-        return new Response(await initconfig(urls, template), {
-            headers: { "Content-Type": "text/plain; charset=utf-8" }
+        const {data, ResponseHeaders} = await initconfig(urls, template)
+        return new Response(data, {
+            status: 200,
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+                ...(ResponseHeaders?.headers || {})
+            }
         });
     }
 };
@@ -863,7 +871,7 @@ function isValidURL(url) {
 
 // 初始化配置
 async function initconfig(urls, template) {
-    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
+    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata, ResponseHeaders;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
@@ -875,6 +883,9 @@ async function initconfig(urls, template) {
     const base = data.p || {};
     const override = data.override || {};
     const proxyProviders = {};
+    if (urls.length === 1) {
+      ResponseHeaders = await fetchResponseHeaders(urls[0])
+    }
     urls.forEach((url, i) => {
         const decodedUrl = decodeURIComponent(url);
         proxyProviders[`provider${i + 1}`] = {
@@ -887,17 +898,17 @@ async function initconfig(urls, template) {
             }
         };
     });
-    if (!template) {
-        data['proxy-providers'] = proxyProviders;
-        return JSON.stringify(data);
-    } else {
-        data['proxy-providers'] = proxyProviders;
+    data['proxy-providers'] = proxyProviders;
+    if (template) {
         data.proxies = templatedata.proxies || [];
         data['proxy-groups'] = templatedata['proxy-groups'] || [];
         data.rules = templatedata.rules || [];
         data['sub-rules'] = templatedata['sub-rules'] || {};
         data['rule-providers'] = templatedata['rule-providers'] || {};
-        return JSON.stringify(data, null, 4);
+    }
+    return {
+        data: JSON.stringify(data, null, 4),
+        ResponseHeaders
     }
 }
 
@@ -922,4 +933,18 @@ async function loadConfig(configUrl) {
     await cache.put(cacheKey, cacheResponse.clone());
 
     return data;
+}
+
+async function fetchResponseHeaders(url) {
+  const response = await fetch(url);
+
+  const headersObj = {};
+  for (const [key, value] of response.headers.entries()) {
+    headersObj[key] = value;
+  }
+
+  return {
+    status: response.status,
+    headers: headersObj
+  };
 }
