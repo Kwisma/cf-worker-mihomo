@@ -871,6 +871,7 @@ function isValidURL(url) {
 
 // 初始化配置
 async function initconfig(urls, template) {
+    urls = urls.map(u => decodeURIComponent(u));
     let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata, ResponseHeaders;
     if (!template) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
@@ -884,13 +885,19 @@ async function initconfig(urls, template) {
     const override = data.override || {};
     const proxyProviders = {};
     if (urls.length === 1) {
-      ResponseHeaders = await fetchResponseHeaders(urls[0])
+        ResponseHeaders = await fetchResponseHeaders(urls[0])
+    }
+    if (ResponseHeaders) {
+        const domain = new URL(urls[0]).hostname;
+        ResponseHeaders.headers = {
+            ...ResponseHeaders.headers,
+            "Content-Disposition": `attachment; filename=${domain}`,
+        };
     }
     urls.forEach((url, i) => {
-        const decodedUrl = decodeURIComponent(url);
         proxyProviders[`provider${i + 1}`] = {
             ...base,
-            url: decodedUrl,
+            url: url,
             path: `./proxies/provider${i + 1}.yaml`,
             override: {
                 ...override,
