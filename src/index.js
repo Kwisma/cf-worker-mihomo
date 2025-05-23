@@ -1072,6 +1072,7 @@ async function singboxconfig(urls) {
 
         const urlList = Array.isArray(urls) ? urls : [urls];
         const allTargetOutbounds = [];
+        const skipTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
 
         for (let rawUrl of urlList) {
             const apiUrl = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(rawUrl)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
@@ -1082,7 +1083,9 @@ async function singboxconfig(urls) {
             if (!Array.isArray(data.outbounds)) throw new Error(`URL ${rawUrl} 中没有 outbounds 数组`);
 
             // console.log(`✅ 成功加载订阅 ${rawUrl}，共 ${data.outbounds.length} 个节点`);
-            allTargetOutbounds.push(...data.outbounds);
+            // 排除策略组名称
+            const filteredOutbounds = data.outbounds.filter(o => !skipTags.includes(o.tag));
+            allTargetOutbounds.push(...filteredOutbounds);
         }
 
         // 去重 outbounds（按 tag）
@@ -1096,7 +1099,7 @@ async function singboxconfig(urls) {
 
         // 提取模板中除策略组的其他对象
         const templateNonSelectors = templateData.outbounds.filter(
-            o => !["🚀 节点选择", "🟢 手动选择", "🎈 自动选择"].includes(o.tag)
+            o => !skipTags.includes(o.tag)
         );
 
         // 合并：订阅节点 + 模板非策略组节点
@@ -1113,11 +1116,10 @@ async function singboxconfig(urls) {
         // 提取订阅节点 tag
         const subscriberNodeTags = uniqueOutbounds
             .map(o => o.tag)
-            .filter(tag => typeof tag === 'string');
+            .filter(tag => typeof tag === 'string' && !skipTags.includes(tag));
 
         // 查找策略组对象
-        const targetGroupTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
-        for (const tag of targetGroupTags) {
+        for (const tag of skipTags) {
             const selector = templateData.outbounds.find(o => o.tag === tag);
             if (!selector) {
                 // console.warn(`⚠️ 策略组 "${tag}" 不存在`);
