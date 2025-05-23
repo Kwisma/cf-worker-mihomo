@@ -224,13 +224,6 @@
             {
                 "tag": "DIRECT-DNS",
                 "type": "https",
-                "domain_resolver": "DIRECT-DNS-Resolver",
-                "server_port": 443,
-                "server": "223.5.5.5"
-            },
-            {
-                "tag": "DIRECT-DNS-Resolver",
-                "type": "https",
                 "server_port": 443,
                 "server": "223.5.5.5"
             },
@@ -245,19 +238,24 @@
                 "tag": "PROXY-DNS",
                 "type": "https",
                 "detour": "🚀 节点选择",
-                "domain_resolver": "PROXY-DNS-Resolver",
                 "server_port": 443,
                 "server": "8.8.8.8"
             },
             {
-                "tag": "PROXY-DNS-Resolver",
-                "type": "h3",
-                "detour": "🚀 节点选择",
-                "server_port": 443,
-                "server": "8.8.8.8"
+                "type": "fakeip",
+                "tag": "FAKEIP-DNS",
+                "inet4_range": "198.18.0.0/15",
+                "inet6_range": "fc00::/18"
             }
         ],
         "rules": [
+            {
+                "query_type": [
+                    "A",
+                    "AAAA"
+                ],
+                "server": "FAKEIP-DNS"
+            },
             {
                 "action": "route",
                 "clash_mode": "direct",
@@ -280,11 +278,11 @@
                 "rule_set": [
                     "GeoLocation-!CN"
                 ],
-                "server": "PROXY-DNS"
+                "server": "FAKEIP-DNS"
             }
         ],
-        "disable_cache": true,
-        "disable_expire": true,
+        "disable_cache": false,
+        "disable_expire": false,
         "independent_cache": true,
         "final": "PROXY-DNS",
         "strategy": "prefer_ipv4"
