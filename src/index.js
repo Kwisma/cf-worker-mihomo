@@ -830,7 +830,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                         options: [
                             {
                                 label: "默认（精简版）",
-                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox-1.12.0-beta.17.yaml"
+                                value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox-1.12.0-beta.17.json"
                             }
                         ]
                     }
