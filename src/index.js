@@ -1249,16 +1249,17 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
         throw new Error('nodeTags 必须是字符串数组');
     }
 
-    // 先找匹配的节点tag
+    // 过滤出匹配的节点标签
     const matchedTags = nodeTags.filter(tag => matchRegex.test(tag));
     if (matchedTags.length === 0) {
-        // 没匹配到节点，不创建组，也不添加引用
+        // 没匹配到节点，则不创建组，也不添加引用
         return;
     }
 
-    // 查找目标策略组，没有就创建
+    // 查找已有的目标策略组
     let targetGroup = templateData.outbounds.find(o => o.tag === targetGroupTag);
     if (!targetGroup) {
+        // 不存在则创建新的策略组对象，放入顶层 templateData.outbounds 数组里
         targetGroup = {
             type: "urltest",
             tag: targetGroupTag,
@@ -1275,17 +1276,18 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
         targetGroup.outbounds = [];
     }
 
-    // 合并节点tag
+    // 将匹配到的节点标签合并到该策略组的 outbounds 中
     const outboundSet = new Set(targetGroup.outbounds);
     matchedTags.forEach(tag => outboundSet.add(tag));
     targetGroup.outbounds = Array.from(outboundSet);
 
-    // 找主策略组 “🚀 节点选择”
+    // 找到主策略组 "🚀 节点选择"
     const mainSelector = templateData.outbounds.find(o => o.tag === "🚀 节点选择");
     if (mainSelector) {
         if (!Array.isArray(mainSelector.outbounds)) {
             mainSelector.outbounds = [];
         }
+        // 把目标策略组的tag添加到主策略组的 outbounds 数组中
         const selectorSet = new Set(mainSelector.outbounds);
         selectorSet.add(targetGroupTag);
         mainSelector.outbounds = Array.from(selectorSet);
