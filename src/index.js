@@ -1160,6 +1160,49 @@ async function singboxconfig(urls, templateUrl) {
             .map(o => o.tag)
             .filter(tag => typeof tag === 'string' && !skipTags.includes(tag));
 
+        const regionConfigs = [
+            { tag: "🇭🇰 香港自动", regex: /🇭🇰|\bHK\b|香港|Hong Kong/i },
+            { tag: "🇹🇼 台湾自动", regex: /🇹🇼|\bTW\b|台湾|Taiwan|Tai wan/i },
+            { tag: "🇯🇵 日本自动", regex: /🇯🇵|\bJP\b|日本|Japan/i },
+            { tag: "🇺🇸 美国自动", regex: /🇺🇸|\bUS\b|美国|United States|CT/i },
+            { tag: "🇸🇬 新加坡自动", regex: /🇸🇬|\bSG\b|新加坡|Singapore/i },
+            { tag: "🇰🇷 韩国自动", regex: /🇰🇷|\bKR\b|韩国|South Korea/i },
+            { tag: "🇩🇪 德国自动", regex: /🇩🇪|\bDE\b|德国|Germany/i },
+            { tag: "🇫🇷 法国自动", regex: /🇫🇷|\bFR\b|法国|France/i },
+            { tag: "🇨🇦 加拿大自动", regex: /🇨🇦|\bCA\b|加拿大|Canada/i },
+            { tag: "🇦🇺 澳大利亚自动", regex: /🇦🇺|\bAU\b|澳大利亚|Australia/i },
+            { tag: "🇷🇺 俄罗斯自动", regex: /🇷🇺|\bRU\b|俄罗斯|Russia/i },
+            { tag: "🇳🇱 荷兰自动", regex: /🇳🇱|\bNL\b|荷兰|Netherlands/i },
+            { tag: "🇮🇳 印度自动", regex: /🇮🇳|\bIN\b|印度|India/i },
+            { tag: "🇲🇾 马来西亚自动", regex: /🇲🇾|\bMY\b|马来西亚|Malaysia/i },
+            { tag: "🇵🇱 波兰自动", regex: /🇵🇱|\bPL\b|波兰|Poland/i },
+            { tag: "🇪🇪 爱沙尼亚自动", regex: /🇪🇪|\bEE\b|爱沙尼亚|Estonia/i },
+            { tag: "🇦🇪 阿联酋自动", regex: /🇦🇪|\bAE\b|阿联酋|United Arab Emirates/i },
+            { tag: "🇳🇬 尼日利亚自动", regex: /🇳🇬|\bNG\b|尼日利亚|Nigeria/i },
+            { tag: "🇧🇬 保加利亚自动", regex: /🇧🇬|\bBG\b|保加利亚|Bulgaria/i },
+            { tag: "🇸🇨 塞舌尔自动", regex: /🇸🇨|\bSC\b|塞舌尔|Seychelles/i },
+            { tag: "🇬🇧 英国自动", regex: /🇬🇧|\bGB\b|英国|United Kingdom/i },
+            { tag: "🇪🇸 西班牙自动", regex: /🇪🇸|\bES\b|西班牙|Spain/i },
+            { tag: "🇻🇳 越南自动", regex: /🇻🇳|\bVN\b|越南|Vietnam/i },
+            { tag: "🇸🇽 荷属圣马丁自动", regex: /🇸🇽|\bSX\b|荷属圣马丁|Sint Maarten/i },
+            { tag: "🇲🇴 澳门自动", regex: /🇲🇴|\bMO\b|澳门|Macau|Macao/i },
+            { tag: "🇵🇭 菲律宾自动", regex: /🇵🇭|\bPH\b|菲律宾|Philippines/i },
+            { tag: "🇹🇭 泰国自动", regex: /🇹🇭|\bTH\b|泰国|Thailand/i },
+            { tag: "🇲🇳 蒙古自动", regex: /🇲🇳|\bMN\b|蒙古|Mongolia/i },
+            { tag: "🇫🇮 芬兰自动", regex: /🇫🇮|\bFI\b|芬兰|Finland/i },
+            { tag: "🇸🇪 瑞典自动", regex: /🇸🇪|\bSE\b|瑞典|Sweden/i },
+            { tag: "🇦🇹 奥地利自动", regex: /🇦🇹|\bAT\b|奥地利|Austria/i },
+            { tag: "🇧🇷 巴西自动", regex: /🇧🇷|\bBR\b|巴西|Brazil/i },
+            { tag: "🇰🇿 哈萨克斯坦自动", regex: /🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan/i },
+            { tag: "🇮🇱 以色列自动", regex: /🇮🇱|\bIL\b|以色列|Israel/i },
+            { tag: "🇦🇪 阿拉伯联合酋长国自动", regex: /🇦🇪|\bAE\b|阿拉伯联合酋长国|United Arab Emirates/i },
+            { tag: "🇨🇭 瑞士自动", regex: /🇨🇭|\bCH\b|瑞士|Switzerland/i },
+        ];
+
+        for (const { tag, regex } of regionConfigs) {
+            addNodesToGroupByTag(templateData, subscriberNodeTags, regex, tag);
+        }
+
         // 查找策略组对象
         for (const tag of skipTags) {
             const selector = templateData.outbounds.find(o => o.tag === tag);
@@ -1190,6 +1233,62 @@ async function singboxconfig(urls, templateUrl) {
         return error.message;
     }
 }
+
+/**
+ * 将符合匹配规则的节点 tag 添加到目标策略组的 outbounds 中
+ * @param {object} templateData - 配置 JSON 对象，包含 outbounds 数组
+ * @param {string[]} nodeTags - 节点 tag 数组（已经编号过）
+ * @param {RegExp} matchRegex - 用于匹配节点 tag 的正则表达式
+ * @param {string} targetGroupTag - 目标策略组的 tag 名称
+ */
+function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag) {
+    if (!templateData || !Array.isArray(templateData.outbounds)) {
+        throw new Error('templateData 必须有 outbounds 数组');
+    }
+    if (!Array.isArray(nodeTags)) {
+        throw new Error('nodeTags 必须是字符串数组');
+    }
+
+    // 查找目标策略组，没有就创建
+    let targetGroup = templateData.outbounds.find(o => o.tag === targetGroupTag);
+    if (!targetGroup) {
+        targetGroup = {
+            type: "urltest",
+            tag: targetGroupTag,
+            url: "https://www.gstatic.com/generate_204",
+            interval: "3m",
+            tolerance: 150,
+            interrupt_exist_connections: true,
+            outbounds: []
+        };
+        templateData.outbounds.push(targetGroup);
+    }
+
+    if (!Array.isArray(targetGroup.outbounds)) {
+        targetGroup.outbounds = [];
+    }
+
+    // 匹配符合的节点 tag
+    const matchedTags = nodeTags.filter(tag => matchRegex.test(tag));
+    const outboundSet = new Set(targetGroup.outbounds);
+    matchedTags.forEach(tag => outboundSet.add(tag));
+    targetGroup.outbounds = Array.from(outboundSet);
+
+    // 添加该策略组的 tag 到 "🚀 节点选择" 中
+    const mainSelector = templateData.outbounds.find(o => o.tag === "🚀 节点选择");
+    if (mainSelector) {
+        if (!Array.isArray(mainSelector.outbounds)) {
+            mainSelector.outbounds = [];
+        }
+        const selectorSet = new Set(mainSelector.outbounds);
+        selectorSet.add(targetGroupTag);
+        mainSelector.outbounds = Array.from(selectorSet);
+    } else {
+        console.warn('⚠️ 未找到主策略组 "🚀 节点选择"，未添加子组引用');
+    }
+}
+
+
 
 async function handleRequest(urls, templateUrl) {
     let ResponseHeaders = {};
