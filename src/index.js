@@ -1099,11 +1099,13 @@ function getFileNameFromUrl(url) {
  */
 async function singboxconfig(urls, templateUrl) {
     try {
-        templateUrl = decodeURIComponent(templateUrl)
-        const ResponseHeaders = await handleRequest(urls, templateUrl)
+        templateUrl = decodeURIComponent(templateUrl);
+        const ResponseHeaders = await handleRequest(urls, templateUrl);
         const templateJson = await loadConfig(templateUrl); // 使用缓存
         const templateData = JSON.parse(templateJson);
-        if (!Array.isArray(templateData.outbounds)) throw new Error('template JSON 中没有 outbounds 数组');
+
+        if (!templateData || !Array.isArray(templateData.outbounds)) 
+            throw new Error('template JSON 中没有 outbounds 数组');
 
         const urlList = Array.isArray(urls) ? urls : [urls];
         const allTargetOutbounds = [];
@@ -1114,23 +1116,24 @@ async function singboxconfig(urls, templateUrl) {
             const rawUrl = urlList[i];
             const index = String(i + 1).padStart(2, '0');
             const apiUrl = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(rawUrl)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
+
             const resp = await fetch(apiUrl);
             if (!resp.ok) throw new Error(`获取 ${apiUrl} 失败，状态码：${resp.status}`);
 
             const data = await resp.json();
-            if (!Array.isArray(data.outbounds)) throw new Error(`URL ${rawUrl} 中没有 outbounds 数组`);
+            if (!data || !Array.isArray(data.outbounds)) throw new Error(`URL ${rawUrl} 返回格式异常，没有 outbounds 数组`);
 
-            // console.log(`✅ 成功加载订阅 ${rawUrl}，共 ${data.outbounds.length} 个节点`);
-            // 排除策略组名称
-            const validOutbounds = data.outbounds.filter(o => !skipTags.includes(o.tag));
+            // 过滤跳过的策略组名
+            const validOutbounds = data.outbounds.filter(o => o && o.tag && !skipTags.includes(o.tag));
             const filteredOutbounds = validOutbounds.map(o => ({
                 ...o,
                 tag: needNumbering ? `${o.tag} [${index}]` : o.tag
             }));
+
             allTargetOutbounds.push(...filteredOutbounds);
         }
 
-        // 去重 outbounds（按 tag）
+        // 根据tag去重节点，防止重复
         const uniqueTargetMap = new Map();
         for (const ob of allTargetOutbounds) {
             if (ob.tag && !uniqueTargetMap.has(ob.tag)) {
@@ -1139,14 +1142,13 @@ async function singboxconfig(urls, templateUrl) {
         }
         const uniqueOutbounds = Array.from(uniqueTargetMap.values());
 
-        // 提取模板中除策略组的其他对象
+        // 模板中非策略组节点（除跳过的策略组tag）
         const templateNonSelectors = templateData.outbounds.filter(
-            o => !skipTags.includes(o.tag)
+            o => o && o.tag && !skipTags.includes(o.tag)
         );
 
-        // 合并：订阅节点 + 模板非策略组节点
+        // 合并唯一节点 + 模板非策略组节点，避免重复tag
         const mergedOutbounds = [...uniqueOutbounds];
-
         const existingTags = new Set(mergedOutbounds.map(o => o.tag));
         for (const obj of templateNonSelectors) {
             if (obj.tag && !existingTags.has(obj.tag)) {
@@ -1155,11 +1157,12 @@ async function singboxconfig(urls, templateUrl) {
             }
         }
 
-        // 提取订阅节点 tag
+        // 提取已编号后的订阅节点标签（字符串且不属于跳过标签）
         const subscriberNodeTags = uniqueOutbounds
             .map(o => o.tag)
             .filter(tag => typeof tag === 'string' && !skipTags.includes(tag));
 
+        // 区域策略组配置
         const regionConfigs = [
             { tag: "🇭🇰 香港自动", regex: /🇭🇰|\bHK\b|香港|Hong Kong/i },
             { tag: "🇹🇼 台湾自动", regex: /🇹🇼|\bTW\b|台湾|Taiwan|Tai wan/i },
@@ -1195,7 +1198,6 @@ async function singboxconfig(urls, templateUrl) {
             { tag: "🇧🇷 巴西自动", regex: /🇧🇷|\bBR\b|巴西|Brazil/i },
             { tag: "🇰🇿 哈萨克斯坦自动", regex: /🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan/i },
             { tag: "🇮🇱 以色列自动", regex: /🇮🇱|\bIL\b|以色列|Israel/i },
-            { tag: "🇦🇪 阿拉伯联合酋长国自动", regex: /🇦🇪|\bAE\b|阿拉伯联合酋长国|United Arab Emirates/i },
             { tag: "🇨🇭 瑞士自动", regex: /🇨🇭|\bCH\b|瑞士|Switzerland/i },
         ];
 
@@ -1203,20 +1205,21 @@ async function singboxconfig(urls, templateUrl) {
             addNodesToGroupByTag(templateData, subscriberNodeTags, regex, tag);
         }
 
-        // 查找策略组对象
+        // 添加订阅节点到模板中已有的策略组（跳过的组）
         for (const tag of skipTags) {
             const selector = templateData.outbounds.find(o => o.tag === tag);
             if (!selector) {
-                // console.warn(`⚠️ 策略组 "${tag}" 不存在`);
+                // 允许策略组不存在，跳过
                 continue;
             }
             if (!Array.isArray(selector.outbounds)) selector.outbounds = [];
+
+            // 合并去重策略组内节点
             const mergedTags = new Set([...selector.outbounds, ...subscriberNodeTags]);
             selector.outbounds = Array.from(mergedTags);
-            // console.log(`✅ 策略组 "${tag}" 已添加 ${subscriberNodeTags.length} 个节点`);
         }
 
-        // 最终合并全部：策略组 + 节点 + 其他模板节点
+        // 最终合并策略组 + 节点 + 模板其他非策略组节点
         const finalOutbounds = [
             ...templateData.outbounds.filter(o => skipTags.includes(o.tag)),
             ...mergedOutbounds
@@ -1226,11 +1229,12 @@ async function singboxconfig(urls, templateUrl) {
         const data = JSON.stringify(finalConfig, null, 4);
         return {
             ResponseHeaders,
-            data: data
+            data
         };
 
     } catch (error) {
-        return error.message;
+        // 捕获异常，确保返回字符串类型错误消息
+        return error.message || String(error);
     }
 }
 
@@ -1259,7 +1263,6 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
     // 查找已有的目标策略组
     let targetGroup = templateData.outbounds.find(o => o.tag === targetGroupTag);
     if (!targetGroup) {
-        // 不存在则创建新的策略组对象，放入顶层 templateData.outbounds 数组里
         targetGroup = {
             type: "urltest",
             tag: targetGroupTag,
@@ -1287,7 +1290,7 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
         if (!Array.isArray(mainSelector.outbounds)) {
             mainSelector.outbounds = [];
         }
-        // 把目标策略组的tag添加到主策略组的 outbounds 数组中
+        // 把目标策略组的tag添加到主策略组
         const selectorSet = new Set(mainSelector.outbounds);
         selectorSet.add(targetGroupTag);
         mainSelector.outbounds = Array.from(selectorSet);
