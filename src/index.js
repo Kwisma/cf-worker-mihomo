@@ -1202,7 +1202,7 @@ async function singboxconfig(urls, templateUrl) {
         ];
 
         for (const { tag, regex } of regionConfigs) {
-            //addNodesToGroupByTag(templateData, subscriberNodeTags, regex, tag);
+            addNodesToGroupByTag(templateData, subscriberNodeTags, regex, tag);
         }
 
         // 添加订阅节点到模板中已有的策略组（跳过的组）
@@ -1218,10 +1218,13 @@ async function singboxconfig(urls, templateUrl) {
             const mergedTags = new Set([...selector.outbounds, ...subscriberNodeTags]);
             selector.outbounds = Array.from(mergedTags);
         }
+        const regionTags = regionConfigs.map(c => c.tag);
+        const regionGroups = templateData.outbounds.filter(o => regionTags.includes(o.tag));
 
         // 最终合并策略组 + 节点 + 模板其他非策略组节点
         const finalOutbounds = [
             ...templateData.outbounds.filter(o => skipTags.includes(o.tag)),
+            ...regionGroups,
             ...mergedOutbounds
         ];
 
