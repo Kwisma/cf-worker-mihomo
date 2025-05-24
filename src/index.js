@@ -88,6 +88,7 @@ export default {
             const res = await singboxconfig(urls, templateUrl);
             data = res.data;
             const responseHeaders = res.ResponseHeaders?.headers || {};
+            console.log(responseHeaders);
             headers = new Headers(responseHeaders);
         } else {
             const res = await mihomoconfig(urls, templateUrl);
@@ -1091,155 +1092,188 @@ function getFileNameFromUrl(url) {
         return null;
     }
 }
+const REGION_CONFIGS = [
+    { tag: "🇭🇰 香港自动", regex: /🇭🇰|\bHK\b|香港|Hong Kong/i },
+    { tag: "🇹🇼 台湾自动", regex: /🇹🇼|\bTW\b|台湾|Taiwan|Tai wan/i },
+    { tag: "🇯🇵 日本自动", regex: /🇯🇵|\bJP\b|日本|Japan/i },
+    { tag: "🇺🇸 美国自动", regex: /🇺🇸|\bUS\b|美国|United States|CT/i },
+    { tag: "🇸🇬 新加坡自动", regex: /🇸🇬|\bSG\b|新加坡|Singapore/i },
+    { tag: "🇰🇷 韩国自动", regex: /🇰🇷|\bKR\b|韩国|South Korea/i },
+    { tag: "🇩🇪 德国自动", regex: /🇩🇪|\bDE\b|德国|Germany/i },
+    { tag: "🇫🇷 法国自动", regex: /🇫🇷|\bFR\b|法国|France/i },
+    { tag: "🇨🇦 加拿大自动", regex: /🇨🇦|\bCA\b|加拿大|Canada/i },
+    { tag: "🇦🇺 澳大利亚自动", regex: /🇦🇺|\bAU\b|澳大利亚|Australia/i },
+    { tag: "🇷🇺 俄罗斯自动", regex: /🇷🇺|\bRU\b|俄罗斯|Russia/i },
+    { tag: "🇳🇱 荷兰自动", regex: /🇳🇱|\bNL\b|荷兰|Netherlands/i },
+    { tag: "🇮🇳 印度自动", regex: /🇮🇳|\bIN\b|印度|India/i },
+    { tag: "🇲🇾 马来西亚自动", regex: /🇲🇾|\bMY\b|马来西亚|Malaysia/i },
+    { tag: "🇵🇱 波兰自动", regex: /🇵🇱|\bPL\b|波兰|Poland/i },
+    { tag: "🇪🇪 爱沙尼亚自动", regex: /🇪🇪|\bEE\b|爱沙尼亚|Estonia/i },
+    { tag: "🇦🇪 阿联酋自动", regex: /🇦🇪|\bAE\b|阿联酋|United Arab Emirates/i },
+    { tag: "🇳🇬 尼日利亚自动", regex: /🇳🇬|\bNG\b|尼日利亚|Nigeria/i },
+    { tag: "🇧🇬 保加利亚自动", regex: /🇧🇬|\bBG\b|保加利亚|Bulgaria/i },
+    { tag: "🇸🇨 塞舌尔自动", regex: /🇸🇨|\bSC\b|塞舌尔|Seychelles/i },
+    { tag: "🇬🇧 英国自动", regex: /🇬🇧|\bGB\b|英国|United Kingdom/i },
+    { tag: "🇪🇸 西班牙自动", regex: /🇪🇸|\bES\b|西班牙|Spain/i },
+    { tag: "🇻🇳 越南自动", regex: /🇻🇳|\bVN\b|越南|Vietnam/i },
+    { tag: "🇸🇽 荷属圣马丁自动", regex: /🇸🇽|\bSX\b|荷属圣马丁|Sint Maarten/i },
+    { tag: "🇲🇴 澳门自动", regex: /🇲🇴|\bMO\b|澳门|Macau|Macao/i },
+    { tag: "🇵🇭 菲律宾自动", regex: /🇵🇭|\bPH\b|菲律宾|Philippines/i },
+    { tag: "🇹🇭 泰国自动", regex: /🇹🇭|\bTH\b|泰国|Thailand/i },
+    { tag: "🇲🇳 蒙古自动", regex: /🇲🇳|\bMN\b|蒙古|Mongolia/i },
+    { tag: "🇫🇮 芬兰自动", regex: /🇫🇮|\bFI\b|芬兰|Finland/i },
+    { tag: "🇸🇪 瑞典自动", regex: /🇸🇪|\bSE\b|瑞典|Sweden/i },
+    { tag: "🇦🇹 奥地利自动", regex: /🇦🇹|\bAT\b|奥地利|Austria/i },
+    { tag: "🇧🇷 巴西自动", regex: /🇧🇷|\bBR\b|巴西|Brazil/i },
+    { tag: "🇰🇿 哈萨克斯坦自动", regex: /🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan/i },
+    { tag: "🇮🇱 以色列自动", regex: /🇮🇱|\bIL\b|以色列|Israel/i },
+    { tag: "🇨🇭 瑞士自动", regex: /🇨🇭|\bCH\b|瑞士|Switzerland/i },
+];
 
 /**
  * 合并多个 singbox URL 数据并注入模板配置
  * @param {string|string[]} urls - 节点订阅链接，可传入一个 URL 或多个 URL 数组
  * @returns {Promise<Object|undefined>} - 合并后的 JSON 数据
  */
+// 核心函数优化版本
 async function singboxconfig(urls, templateUrl) {
     try {
-        templateUrl = decodeURIComponent(templateUrl);
-        const ResponseHeaders = await handleRequest(urls, templateUrl);
-        const templateJson = await loadConfig(templateUrl); // 使用缓存
+        // 参数预处理
+        const decodedTemplateUrl = decodeURIComponent(templateUrl);
+        const [ResponseHeaders, templateJson] = await Promise.all([
+            handleRequest(urls, decodedTemplateUrl),
+            loadConfig(decodedTemplateUrl) // 确保loadConfig实现了缓存
+        ]);
+
         const templateData = JSON.parse(templateJson);
+        validateTemplate(templateData); // 验证模板结构
 
-        if (!templateData || !Array.isArray(templateData.outbounds)) 
-            throw new Error('template JSON 中没有 outbounds 数组');
-
+        // 数据初始化
         const urlList = Array.isArray(urls) ? urls : [urls];
-        const allTargetOutbounds = [];
-        const skipTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
-        const needNumbering = urlList.length > 1;
+        const [uniqueOutbounds, subscriberNodeTags] = await processSubscriptions(urlList);
+        const mergedOutbounds = mergeOutbounds(uniqueOutbounds, templateData);
 
-        for (let i = 0; i < urlList.length; i++) {
-            const rawUrl = urlList[i];
-            const index = String(i + 1).padStart(2, '0');
-            const apiUrl = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(rawUrl)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
+        // 处理策略组
+        processRegionGroups(templateData, subscriberNodeTags);
+        processSkipGroups(templateData, subscriberNodeTags);
 
-            const resp = await fetch(apiUrl);
-            if (!resp.ok) throw new Error(`获取 ${apiUrl} 失败，状态码：${resp.status}`);
-
-            const data = await resp.json();
-            if (!data || !Array.isArray(data.outbounds)) throw new Error(`URL ${rawUrl} 返回格式异常，没有 outbounds 数组`);
-
-            // 过滤跳过的策略组名
-            const validOutbounds = data.outbounds.filter(o => o && o.tag && !skipTags.includes(o.tag));
-            const filteredOutbounds = validOutbounds.map(o => ({
-                ...o,
-                tag: needNumbering ? `${o.tag} [${index}]` : o.tag
-            }));
-
-            allTargetOutbounds.push(...filteredOutbounds);
-        }
-
-        // 根据tag去重节点，防止重复
-        const uniqueTargetMap = new Map();
-        for (const ob of allTargetOutbounds) {
-            if (ob.tag && !uniqueTargetMap.has(ob.tag)) {
-                uniqueTargetMap.set(ob.tag, ob);
-            }
-        }
-        const uniqueOutbounds = Array.from(uniqueTargetMap.values());
-
-        // 模板中非策略组节点（除跳过的策略组tag）
-        const templateNonSelectors = templateData.outbounds.filter(
-            o => o && o.tag && !skipTags.includes(o.tag)
-        );
-
-        // 合并唯一节点 + 模板非策略组节点，避免重复tag
-        const mergedOutbounds = [...uniqueOutbounds];
-        const existingTags = new Set(mergedOutbounds.map(o => o.tag));
-        for (const obj of templateNonSelectors) {
-            if (obj.tag && !existingTags.has(obj.tag)) {
-                mergedOutbounds.push(obj);
-                existingTags.add(obj.tag);
-            }
-        }
-
-        // 提取已编号后的订阅节点标签（字符串且不属于跳过标签）
-        const subscriberNodeTags = uniqueOutbounds
-            .map(o => o.tag)
-            .filter(tag => typeof tag === 'string' && !skipTags.includes(tag));
-
-        // 区域策略组配置
-        const regionConfigs = [
-            { tag: "🇭🇰 香港自动", regex: /🇭🇰|\bHK\b|香港|Hong Kong/i },
-            { tag: "🇹🇼 台湾自动", regex: /🇹🇼|\bTW\b|台湾|Taiwan|Tai wan/i },
-            { tag: "🇯🇵 日本自动", regex: /🇯🇵|\bJP\b|日本|Japan/i },
-            { tag: "🇺🇸 美国自动", regex: /🇺🇸|\bUS\b|美国|United States|CT/i },
-            { tag: "🇸🇬 新加坡自动", regex: /🇸🇬|\bSG\b|新加坡|Singapore/i },
-            { tag: "🇰🇷 韩国自动", regex: /🇰🇷|\bKR\b|韩国|South Korea/i },
-            { tag: "🇩🇪 德国自动", regex: /🇩🇪|\bDE\b|德国|Germany/i },
-            { tag: "🇫🇷 法国自动", regex: /🇫🇷|\bFR\b|法国|France/i },
-            { tag: "🇨🇦 加拿大自动", regex: /🇨🇦|\bCA\b|加拿大|Canada/i },
-            { tag: "🇦🇺 澳大利亚自动", regex: /🇦🇺|\bAU\b|澳大利亚|Australia/i },
-            { tag: "🇷🇺 俄罗斯自动", regex: /🇷🇺|\bRU\b|俄罗斯|Russia/i },
-            { tag: "🇳🇱 荷兰自动", regex: /🇳🇱|\bNL\b|荷兰|Netherlands/i },
-            { tag: "🇮🇳 印度自动", regex: /🇮🇳|\bIN\b|印度|India/i },
-            { tag: "🇲🇾 马来西亚自动", regex: /🇲🇾|\bMY\b|马来西亚|Malaysia/i },
-            { tag: "🇵🇱 波兰自动", regex: /🇵🇱|\bPL\b|波兰|Poland/i },
-            { tag: "🇪🇪 爱沙尼亚自动", regex: /🇪🇪|\bEE\b|爱沙尼亚|Estonia/i },
-            { tag: "🇦🇪 阿联酋自动", regex: /🇦🇪|\bAE\b|阿联酋|United Arab Emirates/i },
-            { tag: "🇳🇬 尼日利亚自动", regex: /🇳🇬|\bNG\b|尼日利亚|Nigeria/i },
-            { tag: "🇧🇬 保加利亚自动", regex: /🇧🇬|\bBG\b|保加利亚|Bulgaria/i },
-            { tag: "🇸🇨 塞舌尔自动", regex: /🇸🇨|\bSC\b|塞舌尔|Seychelles/i },
-            { tag: "🇬🇧 英国自动", regex: /🇬🇧|\bGB\b|英国|United Kingdom/i },
-            { tag: "🇪🇸 西班牙自动", regex: /🇪🇸|\bES\b|西班牙|Spain/i },
-            { tag: "🇻🇳 越南自动", regex: /🇻🇳|\bVN\b|越南|Vietnam/i },
-            { tag: "🇸🇽 荷属圣马丁自动", regex: /🇸🇽|\bSX\b|荷属圣马丁|Sint Maarten/i },
-            { tag: "🇲🇴 澳门自动", regex: /🇲🇴|\bMO\b|澳门|Macau|Macao/i },
-            { tag: "🇵🇭 菲律宾自动", regex: /🇵🇭|\bPH\b|菲律宾|Philippines/i },
-            { tag: "🇹🇭 泰国自动", regex: /🇹🇭|\bTH\b|泰国|Thailand/i },
-            { tag: "🇲🇳 蒙古自动", regex: /🇲🇳|\bMN\b|蒙古|Mongolia/i },
-            { tag: "🇫🇮 芬兰自动", regex: /🇫🇮|\bFI\b|芬兰|Finland/i },
-            { tag: "🇸🇪 瑞典自动", regex: /🇸🇪|\bSE\b|瑞典|Sweden/i },
-            { tag: "🇦🇹 奥地利自动", regex: /🇦🇹|\bAT\b|奥地利|Austria/i },
-            { tag: "🇧🇷 巴西自动", regex: /🇧🇷|\bBR\b|巴西|Brazil/i },
-            { tag: "🇰🇿 哈萨克斯坦自动", regex: /🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan/i },
-            { tag: "🇮🇱 以色列自动", regex: /🇮🇱|\bIL\b|以色列|Israel/i },
-            { tag: "🇨🇭 瑞士自动", regex: /🇨🇭|\bCH\b|瑞士|Switzerland/i },
-        ];
-
-        for (const { tag, regex } of regionConfigs) {
-            addNodesToGroupByTag(templateData, subscriberNodeTags, regex, tag);
-        }
-
-        // 添加订阅节点到模板中已有的策略组（跳过的组）
-        for (const tag of skipTags) {
-            if (tag === '🚀 节点选择') continue;
-            const selector = templateData.outbounds.find(o => o.tag === tag);
-            if (!selector) {
-                // 允许策略组不存在，跳过
-                continue;
-            }
-            if (!Array.isArray(selector.outbounds)) selector.outbounds = [];
-
-            // 合并去重策略组内节点
-            const mergedTags = new Set([...selector.outbounds, ...subscriberNodeTags]);
-            selector.outbounds = Array.from(mergedTags);
-        }
-        const regionTags = regionConfigs.map(c => c.tag);
-        const regionGroups = templateData.outbounds.filter(o => regionTags.includes(o.tag));
-
-        // 最终合并策略组 + 节点 + 模板其他非策略组节点
-        const finalOutbounds = [
-            ...templateData.outbounds.filter(o => skipTags.includes(o.tag)),
-            ...regionGroups,
-            ...mergedOutbounds
-        ];
-
-        const finalConfig = { ...templateData, outbounds: finalOutbounds };
-        const data = JSON.stringify(finalConfig, null, 4);
+        // 构建最终配置
+        const finalConfig = buildFinalConfig(templateData, mergedOutbounds);
         return {
             ResponseHeaders,
-            data
+            data: JSON.stringify(finalConfig, null, 4)
         };
-
     } catch (error) {
-        // 捕获异常，确保返回字符串类型错误消息
-        return error.message || String(error);
+        // 统一错误返回格式
+        return {
+            error: error.message || String(error),
+            data: null
+        };
     }
+}
+
+// 工具函数
+function validateTemplate(template) {
+    if (!template?.outbounds?.length) {
+        throw new Error('无效模板：缺少outbounds数组');
+    }
+}
+
+async function processSubscriptions(urlList) {
+    const needNumbering = urlList.length > 1;
+    const allOutbounds = [];
+    const nodeTags = [];
+
+    await Promise.all(urlList.map(async (rawUrl, index) => {
+        const apiUrl = buildApiUrl(rawUrl);
+        const response = await fetch(apiUrl);
+
+        if (!response.ok) throw new Error(`请求失败：${apiUrl} (${response.status})`);
+        const data = await response.json();
+
+        processSubscriptionData(data, index + 1, needNumbering, allOutbounds, nodeTags);
+    }));
+
+    const uniqueOutbounds = deduplicateOutbounds(allOutbounds);
+    return [uniqueOutbounds, nodeTags];
+}
+
+function buildApiUrl(rawUrl) {
+    const BASE_API = 'https://url.v1.mk/sub';
+    const params = new URLSearchParams({
+        target: 'singbox',
+        url: rawUrl,
+        insert: 'false',
+        config: 'https://raw.githubusercontent.com/ACL4SSR/ACL4SSR/master/Clash/config/ACL4SSR_NoAuto_NoApple.ini',
+        emoji: 'true',
+        list: 'true',
+        xudp: 'false',
+        udp: 'false',
+        tfo: 'false',
+        expand: 'true',
+        scv: 'false',
+        fdn: 'false'
+    });
+    return `${BASE_API}?${params}`;
+}
+
+function processSubscriptionData(data, index, needNumbering, allOutbounds, nodeTags) {
+    if (!data?.outbounds) throw new Error('订阅返回数据格式异常');
+
+    const filtered = data.outbounds
+        .filter(o => o?.type && !['selector', 'urltest'].includes(o.type))
+        .map(o => ({
+            ...o,
+            tag: needNumbering ? `${o.tag} [${String(index).padStart(2, '0')}]` : o.tag
+        }));
+
+    allOutbounds.push(...filtered);
+    nodeTags.push(...filtered.map(o => o.tag));
+}
+
+function deduplicateOutbounds(outbounds) {
+    return [...new Map(outbounds.map(o => [o.tag, o])).values()];
+}
+
+function mergeOutbounds(uniqueOutbounds, templateData) {
+    const existingTags = new Set(uniqueOutbounds.map(o => o.tag));
+    const templateNodes = templateData.outbounds
+        .filter(o => !['selector', 'urltest'].includes(o.type))
+        .filter(o => !existingTags.has(o.tag));
+
+    return [...uniqueOutbounds, ...templateNodes];
+}
+
+function processRegionGroups(templateData, nodeTags) {
+    REGION_CONFIGS.forEach(({ tag, regex }) => {
+        addNodesToGroupByTag(templateData, nodeTags, regex, tag);
+    });
+}
+
+function processSkipGroups(templateData, nodeTags) {
+    const SKIP_TAGS = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
+
+    SKIP_TAGS.forEach(tag => {
+        if (tag === '🚀 节点选择') return;
+        const group = templateData.outbounds.find(o => o.tag === tag);
+        if (group) {
+            group.outbounds = [...new Set([...group.outbounds || [], ...nodeTags])];
+        }
+    });
+}
+
+function buildFinalConfig(templateData, mergedOutbounds) {
+    const selectorGroups = templateData.outbounds.filter(o =>
+        ['selector', 'urltest'].includes(o.type)
+    );
+
+    return {
+        ...templateData,
+        outbounds: [
+            ...selectorGroups,
+            ...mergedOutbounds
+        ]
+    };
 }
 
 /**
@@ -1323,12 +1357,12 @@ async function handleRequest(urls, templateUrl) {
         }
         return ResponseHeaders;
     } else {
-        const fileName = getFileNameFromUrl(templateUrl);
+        const fileName = getFileNameFromUrl(templateUrl).replace(/\.[^/.]+$/, '');
         const fallbackName = fileName
-            ? `mihomo汇聚订阅(${fileName})`
-            : "mihomo汇聚订阅";
+            ? `Subscribe(${fileName})`
+            : "Subscribe";
         headers["Content-Disposition"] =
-            `attachment; filename="${fallbackName}"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
+            `attachment; filename="${fallbackName}.json"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
         ResponseHeaders = { headers };
         return ResponseHeaders;
     }
