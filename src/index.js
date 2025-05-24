@@ -1207,6 +1207,7 @@ async function singboxconfig(urls, templateUrl) {
 
         // 添加订阅节点到模板中已有的策略组（跳过的组）
         for (const tag of skipTags) {
+            if (tag === '🚀 节点选择') continue;
             const selector = templateData.outbounds.find(o => o.tag === tag);
             if (!selector) {
                 // 允许策略组不存在，跳过
