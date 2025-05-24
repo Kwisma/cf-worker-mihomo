@@ -1122,8 +1122,8 @@ async function singboxconfig(urls, templateUrl) {
 
             // console.log(`✅ 成功加载订阅 ${rawUrl}，共 ${data.outbounds.length} 个节点`);
             // 排除策略组名称
-            const filteredOutbounds = data.outbounds.filter(o => !skipTags.includes(o.tag));
-            const renamedOutbounds = nonStrategyNodes.map(o => ({
+            const validOutbounds = data.outbounds.filter(o => !skipTags.includes(o.tag));
+            const filteredOutbounds = validOutbounds.map(o => ({
                 ...o,
                 tag: needNumbering ? `${o.tag} [${index}]` : o.tag
             }));
