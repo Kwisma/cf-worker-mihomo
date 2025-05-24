@@ -1249,6 +1249,13 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
         throw new Error('nodeTags 必须是字符串数组');
     }
 
+    // 先找匹配的节点tag
+    const matchedTags = nodeTags.filter(tag => matchRegex.test(tag));
+    if (matchedTags.length === 0) {
+        // 没匹配到节点，不创建组，也不添加引用
+        return;
+    }
+
     // 查找目标策略组，没有就创建
     let targetGroup = templateData.outbounds.find(o => o.tag === targetGroupTag);
     if (!targetGroup) {
@@ -1268,13 +1275,12 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
         targetGroup.outbounds = [];
     }
 
-    // 匹配符合的节点 tag
-    const matchedTags = nodeTags.filter(tag => matchRegex.test(tag));
+    // 合并节点tag
     const outboundSet = new Set(targetGroup.outbounds);
     matchedTags.forEach(tag => outboundSet.add(tag));
     targetGroup.outbounds = Array.from(outboundSet);
 
-    // 添加该策略组的 tag 到 "🚀 节点选择" 中
+    // 找主策略组 “🚀 节点选择”
     const mainSelector = templateData.outbounds.find(o => o.tag === "🚀 节点选择");
     if (mainSelector) {
         if (!Array.isArray(mainSelector.outbounds)) {
@@ -1287,8 +1293,6 @@ function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag
         console.warn('⚠️ 未找到主策略组 "🚀 节点选择"，未添加子组引用');
     }
 }
-
-
 
 async function handleRequest(urls, templateUrl) {
     let ResponseHeaders = {};
