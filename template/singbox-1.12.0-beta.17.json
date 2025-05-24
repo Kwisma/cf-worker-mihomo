@@ -136,20 +136,8 @@
             {
                 "action": "route",
                 "rule_set": [
-                    "GeoSite-Private"
-                ],
-                "outbound": "🎯 全球直连"
-            },
-            {
-                "action": "route",
-                "rule_set": [
-                    "GeoIP-Private"
-                ],
-                "outbound": "🎯 全球直连"
-            },
-            {
-                "action": "route",
-                "rule_set": [
+                    "GeoSite-Private",
+                    "GeoIP-Private",
                     "GeoIP-CN"
                 ],
                 "outbound": "🎯 全球直连"
