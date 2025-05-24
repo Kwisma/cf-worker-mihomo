@@ -88,7 +88,6 @@ export default {
             const res = await singboxconfig(urls, templateUrl);
             data = res.data;
             const responseHeaders = res.ResponseHeaders?.headers || {};
-            console.log(responseHeaders);
             headers = new Headers(responseHeaders);
         } else {
             const res = await mihomoconfig(urls, templateUrl);
