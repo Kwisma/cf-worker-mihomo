@@ -1108,8 +1108,11 @@ async function singboxconfig(urls, templateUrl) {
         const urlList = Array.isArray(urls) ? urls : [urls];
         const allTargetOutbounds = [];
         const skipTags = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
+        const needNumbering = urlList.length > 1;
 
-        for (let rawUrl of urlList) {
+        for (let i = 0; i < urlList.length; i++) {
+            const rawUrl = urlList[i];
+            const index = String(i + 1).padStart(2, '0');
             const apiUrl = `https://url.v1.mk/sub?target=singbox&url=${encodeURIComponent(rawUrl)}&insert=false&config=https%3A%2F%2Fraw.githubusercontent.com%2FACL4SSR%2FACL4SSR%2Fmaster%2FClash%2Fconfig%2FACL4SSR_Online_Full_NoAuto.ini&emoji=true&list=true&xudp=false&udp=false&tfo=false&expand=true&scv=false&fdn=false`;
             const resp = await fetch(apiUrl);
             if (!resp.ok) throw new Error(`获取 ${apiUrl} 失败，状态码：${resp.status}`);
@@ -1120,6 +1123,10 @@ async function singboxconfig(urls, templateUrl) {
             // console.log(`✅ 成功加载订阅 ${rawUrl}，共 ${data.outbounds.length} 个节点`);
             // 排除策略组名称
             const filteredOutbounds = data.outbounds.filter(o => !skipTags.includes(o.tag));
+            const renamedOutbounds = nonStrategyNodes.map(o => ({
+                ...o,
+                tag: needNumbering ? `${o.tag} [${index}]` : o.tag
+            }));
             allTargetOutbounds.push(...filteredOutbounds);
         }
 
