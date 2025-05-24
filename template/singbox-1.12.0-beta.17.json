@@ -222,24 +222,31 @@
     "dns": {
         "servers": [
             {
+                "type": "udp",
+                "tag": "Ali-DNS-UDP",
+                "server": "223.5.5.5",
+                "server_port": 53
+            },
+            {
+                "type": "udp",
+                "tag": "Google-DNS-UDP",
+                "server": "8.8.8.8",
+                "server_port": 53
+            },
+            {
                 "tag": "DIRECT-DNS",
                 "type": "https",
                 "server_port": 443,
-                "server": "223.5.5.5"
-            },
-            {
-                "tag": "PROXY-DNS-Resolver",
-                "type": "https",
-                "detour": "🚀 节点选择",
-                "server_port": 443,
-                "server": "8.8.8.8"
+                "server": "dns.alidns.com",
+                "domain_resolver": "Ali-DNS-UDP"
             },
             {
                 "tag": "PROXY-DNS",
                 "type": "https",
                 "detour": "🚀 节点选择",
                 "server_port": 443,
-                "server": "8.8.8.8"
+                "server": "dns.google",
+                "domain_resolver": "Google-DNS-UDP"
             },
             {
                 "type": "fakeip",
