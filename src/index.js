@@ -1032,7 +1032,7 @@ async function singboxconfig(urls, templateUrl) {
         ApiUrlname.push(res.tag)
     })
     // 策略组处理
-    loadAndSetOutbounds(templatejson.outbounds)
+    loadAndSetOutbounds(templatejson.outbounds, ApiUrlname)
     // 节点合并
     templatejson.outbounds.push(...outboundsjson)
     return {
@@ -1096,7 +1096,7 @@ export async function loadAndMergeOutbounds(urls) {
     };
 }
 // 策略组处理
-export function loadAndSetOutbounds(Array) {
+export function loadAndSetOutbounds(Array, ApiUrlname) {
     Array.forEach(res => {
         const originalOutbounds = res.outbounds ?? null;
         // 从完整 outbound 名称开始匹配
