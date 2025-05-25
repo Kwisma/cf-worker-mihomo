@@ -31,7 +31,7 @@
         {
             "type": "tun",
             "tag": "tun-in",
-            "interface_name": "",
+            "interface_name": "utun0",
             "address": [
                 "172.18.0.1/30",
                 "fdfe:dcba:9876::1/126"
@@ -96,6 +96,108 @@
             "tag": "🎯 全球直连"
         },
         {
+            "type": "urltest",
+            "tag": "🇭🇰香港自动",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "include",
+                    "keywords": [
+                        "🇭🇰|\bHK\b|香港|Hong Kong"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "🇹🇼台湾自动",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "include",
+                    "keywords": [
+                        "🇹🇼|\bTW\b|台湾|Taiwan|Tai wan"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "🇯🇵日本自动",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "include",
+                    "keywords": [
+                        "🇯🇵|\bJP\b|日本|Japan"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "🇺🇸美国自动",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "include",
+                    "keywords": [
+                        "🇺🇸|\bUS\b|美国|United States|CT"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "🇸🇬新加坡自动",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "include",
+                    "keywords": [
+                        "🇸🇬|\bSG\b|新加坡|Singapore"
+                    ]
+                }
+            ]
+        },
+        {
+            "type": "urltest",
+            "tag": "🇩🇪德国自动",
+            "url": "https://www.gstatic.com/generate_204",
+            "interval": "3m",
+            "tolerance": 150,
+            "interrupt_exist_connections": true,
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "include",
+                    "keywords": [
+                        "🇩🇪|\bDE\b|德国|Germany"
+                    ]
+                }
+            ]
+        },
+        {
             "type": "selector",
             "tag": "🐟 漏网之鱼",
             "interrupt_exist_connections": true,
@@ -120,22 +222,23 @@
     "route": {
         "rules": [
             {
-                "action": "sniff",
-                "inbound": "tun-in"
+                "action": "sniff"
             },
             {
-                "action": "hijack-dns",
-                "protocol": "dns"
+                "port": 53,
+                "action": "hijack-dns"
             },
             {
-                "action": "route",
+                "ip_is_private": true,
+                "outbound": "🎯 全球直连"
+            },
+            {
                 "clash_mode": "direct",
                 "outbound": "🎯 全球直连"
             },
             {
-                "action": "route",
                 "clash_mode": "global",
-                "outbound": "GLOBAL"
+                "outbound": "🚀 节点选择"
             },
             {
                 "action": "reject",
@@ -148,7 +251,6 @@
                 ]
             },
             {
-                "action": "route",
                 "rule_set": [
                     "GeoSite-Private",
                     "GeoIP-Private",
@@ -238,12 +340,10 @@
         ],
         "rules": [
             {
-                "action": "route",
                 "clash_mode": "direct",
                 "server": "DIRECT-DNS"
             },
             {
-                "action": "route",
                 "clash_mode": "global",
                 "server": "PROXY-DNS"
             },
@@ -258,8 +358,7 @@
                     "A",
                     "AAAA"
                 ],
-                "server": "FAKEIP-DNS",
-                "rewrite_ttl": 1
+                "server": "FAKEIP-DNS"
             }
         ],
         "disable_cache": false,
