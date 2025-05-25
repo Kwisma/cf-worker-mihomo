@@ -1097,26 +1097,11 @@ export async function loadAndMergeOutbounds(urls) {
 }
 // 策略组处理
 export function loadAndSetOutbounds(Array, ApiUrlname) {
-    let autoNodes = [];// 存储自动收集的节点
     Array.forEach(res => {
         // 从完整 outbound 名称开始匹配
         let matchedOutbounds = [...ApiUrlname];
         let hasValidAction = false;
-        let shouldRemoveRes = false;
         res.filter?.forEach(ac => {
-            // 收集含「自动」标签的节点
-            if (ac.tag && ac.tag.includes('自动')) {
-                const keywordReg = new RegExp(ac.keywords) || '';
-                let matched = [];
-                if (ac.action === 'include') {
-                    matched = ApiUrlname.filter(name => keywordReg.test(name));
-                } else if (ac.action === 'exclude') {
-                    matched = ApiUrlname.filter(name => !keywordReg.test(name));
-                } else if (ac.action === 'all') {
-                    matched = [...ApiUrlname];
-                }
-                autoNodes.push(...matched);
-            }
             // 转换为 RegExp 对象
             const keywordReg = new RegExp(ac.keywords) || '';
 
@@ -1124,9 +1109,6 @@ export function loadAndSetOutbounds(Array, ApiUrlname) {
                 // 只保留匹配的
                 matchedOutbounds = matchedOutbounds.filter(name => keywordReg.test(name));
                 hasValidAction = true
-                if (matchedOutbounds.length === 0) {
-                    shouldRemoveRes = true;
-                }
             } else if (ac.action === 'exclude') {
                 // 移除匹配的
                 matchedOutbounds = matchedOutbounds.filter(name => !keywordReg.test(name));
@@ -1148,21 +1130,10 @@ export function loadAndSetOutbounds(Array, ApiUrlname) {
         }
         // 删除 filter 字段
         delete res.filter;
-        if (shouldRemoveRes) {
-            return false; // 从 outbounds 中剔除该项
+        if (!res.outbounds || res.outbounds === '') {
+            delete res; // 从 outbounds 中剔除该项
         }
-        return true;
     });
-    // 去重自动收集的节点
-    autoNodes = [...new Set(autoNodes)];
-
-    // 找到目标组并添加自动节点
-    const targetGroup = Array.find(res => res.tag === '🚀 节点选择');
-    if (targetGroup) {
-        targetGroup.outbounds = [
-            ...new Set([...(targetGroup.outbounds || []), ...autoNodes])
-        ];
-    }
 }
 
 // 处理请求
