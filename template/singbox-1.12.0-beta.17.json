@@ -47,7 +47,13 @@
                     "server": "127.0.0.1",
                     "server_port": 8080
                 }
-            }
+            },
+        },
+        {
+            "tag": "mixed-in",
+            "type": "mixed",
+            "listen": "0.0.0.0",
+            "listen_port": 20120
         }
     ],
     "outbounds": [
