@@ -7,16 +7,16 @@
     },
     "experimental": {
         "clash_api": {
-            "external_controller": "127.0.0.1:20123",
-            "external_ui": "",
-            "external_ui_download_url": "",
+            "external_controller": "0.0.0.0:20123",
+            "external_ui": "ui",
+            "external_ui_download_url": "https://ghfast.top/https://github.com/Zephyruso/zashboard/archive/refs/heads/gh-pages.zip",
             "external_ui_download_detour": "🎯 全球直连",
-            "secret": "ID_llbnevlk",
+            "secret": "",
             "default_mode": "rule",
             "access_control_allow_origin": [
                 "*"
             ],
-            "access_control_allow_private_network": false
+            "access_control_allow_private_network": true
         },
         "cache_file": {
             "enabled": true,
@@ -24,19 +24,10 @@
             "cache_id": "",
             "store_fakeip": true,
             "store_rdrc": true,
-            "rdrc_timeout": "7d"
+            "rdrc_timeout": "1d"
         }
     },
     "inbounds": [
-        {
-            "type": "mixed",
-            "tag": "mixed-in",
-            "listen": "127.0.0.1",
-            "listen_port": 20122,
-            "tcp_fast_open": true,
-            "tcp_multi_path": true,
-            "udp_fragment": true
-        },
         {
             "type": "tun",
             "tag": "tun-in",
@@ -49,7 +40,14 @@
             "auto_route": true,
             "strict_route": true,
             "endpoint_independent_nat": false,
-            "stack": "gvisor"
+            "stack": "gvisor",
+            "platform": {
+                "http_proxy": {
+                    "enabled": true,
+                    "server": "127.0.0.1",
+                    "server_port": 8080
+                }
+            }
         }
     ],
     "outbounds": [
@@ -66,7 +64,15 @@
             "type": "selector",
             "tag": "🟢 手动选择",
             "interrupt_exist_connections": true,
-            "outbounds": []
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "all",
+                    "keywords": [
+                        ""
+                    ]
+                }
+            ]
         },
         {
             "type": "urltest",
@@ -75,7 +81,15 @@
             "interval": "3m",
             "tolerance": 150,
             "interrupt_exist_connections": true,
-            "outbounds": []
+            "outbounds": [],
+            "filter": [
+                {
+                    "action": "all",
+                    "keywords": [
+                        ""
+                    ]
+                }
+            ]
         },
         {
             "type": "direct",
@@ -166,6 +180,13 @@
                 "download_detour": "🚀 节点选择"
             },
             {
+                "tag": "Geosite-CN",
+                "type": "remote",
+                "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs",
+                "format": "binary",
+                "download_detour": "🚀 节点选择"
+            },
+            {
                 "tag": "GeoIP-CN",
                 "type": "remote",
                 "url": "https://testingcf.jsdelivr.net/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs",
@@ -217,13 +238,6 @@
         ],
         "rules": [
             {
-                "query_type": [
-                    "A",
-                    "AAAA"
-                ],
-                "server": "FAKEIP-DNS"
-            },
-            {
                 "action": "route",
                 "clash_mode": "direct",
                 "server": "DIRECT-DNS"
@@ -232,6 +246,20 @@
                 "action": "route",
                 "clash_mode": "global",
                 "server": "PROXY-DNS"
+            },
+            {
+                "rule_set": [
+                    "GeoSite-CN"
+                ],
+                "server": "DIRECT-DNS"
+            },
+            {
+                "query_type": [
+                    "A",
+                    "AAAA"
+                ],
+                "server": "FAKEIP-DNS",
+                "rewrite_ttl": 1
             }
         ],
         "disable_cache": false,

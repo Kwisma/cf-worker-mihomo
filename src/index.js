@@ -3,7 +3,7 @@ export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         const userAgent = request.headers.get('User-Agent');
-        const isBrowser = /mozilla|chrome|safari|firefox|edge|opera|webkit|gecko|trident/i.test(userAgent);
+        const isBrowser = /meta|clash.meta|clash|singbox/i.test(userAgent);
         const templateUrl = url.searchParams.get("template");
         const singbox = url.searchParams.get("singbox");
         // 处理 URL 参数
@@ -34,50 +34,8 @@ export default {
                 });
             }
         }
-        if (isBrowser) {
-            return new Response(
-                `
-                <!DOCTYPE html>
-                <html>
-                  <head>
-                    <title>Welcome</title>
-                    <style>
-                      /* 全局背景图（使用在线图片URL） */
-                      body {
-                        background:rgba(179, 172, 172, 0.5);
-                        background-size: cover;
-                        display: flex;
-                        justify-content: center;
-                        align-items: center;
-                        height: 100vh;
-                        margin: 0;
-                        font-family: 'Arial', sans-serif;
-                      }
-
-                      /* 文字框样式 */
-                      .text-box {
-                        background: rgba(255, 255, 255, 0.8); /* 半透明白色背景 */
-                        backdrop-filter: blur(5px); /* 毛玻璃效果 */
-                        border-radius: 15px;
-                        padding: 40px;
-                        max-width: 600px;
-                        text-align: center;
-                        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-                      }
-
-                      h1 {
-                        color: rgb(255, 0, 0);
-                        margin: 0 0 20px 0;
-                      }
-                    </style>
-                  </head>
-                  <body>
-                    <div class="text-box">
-                      <h1>请使用mihomo内核的代理工具订阅！</h1>
-                    </div>
-                  </body>
-                </html>
-                `,
+        if (!isBrowser) {
+            return new Response('不支持的客户端',
                 {
                     status: 400,
                     headers: { 'Content-Type': 'text/html; charset=utf-8' }
@@ -87,12 +45,12 @@ export default {
         if (singbox) {
             const res = await singboxconfig(urls, templateUrl);
             data = res.data;
-            const responseHeaders = res.ResponseHeaders?.headers || {};
+            const responseHeaders = res.headers || {};
             headers = new Headers(responseHeaders);
         } else {
             const res = await mihomoconfig(urls, templateUrl);
             data = res.data;
-            const responseHeaders = res.ResponseHeaders?.headers || {};
+            const responseHeaders = res.headers || {};
             headers = new Headers(responseHeaders);
         }
         headers.set("Content-Type", "application/json; charset=utf-8");
@@ -831,6 +789,19 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                             {
                                 label: "默认（精简版）",
                                 value: "https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/template/singbox-1.12.0-beta.17.json"
+                            },
+                            {
+                                label: "sukonzer（精简版）",
+                                value: "https://raw.githubusercontent.com/sukonzer/SIA/main/config-template/sb-1.12.x.json"
+                            }
+                        ]
+                    },
+                    {
+                        label: "1.11.X",
+                        options: [
+                            {
+                                label: "默认（精简版）",
+                                value: "https://raw.githubusercontent.com/sukonzer/SIA/main/config-template/sb-1.11.x.json"
                             }
                         ]
                     }
@@ -1003,23 +974,24 @@ function isValidURL(url) {
     }
 }
 
-// 初始化配置
+// mihomo 配置
 async function mihomoconfig(urls, templateUrl) {
     urls = urls.map(u => decodeURIComponent(u));
     templateUrl = decodeURIComponent(templateUrl)
-    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml', templatedata;
+    let config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo_lite.yaml';
+    let templatedata;
     if (!templateUrl) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
-        const templateyaml = await loadConfig(templateUrl);
+        const templateout = await loadConfig(templateUrl);
+        const templateyaml = templateout.data
         templatedata = YAML.parse(templateyaml, { maxAliasCount: -1, merge: true });
     }
     const mihomodata = await loadConfig(config);
-    let data = YAML.parse(mihomodata, { maxAliasCount: -1, merge: true });
+    let data = YAML.parse(mihomodata.data, { maxAliasCount: -1, merge: true });
     const base = data.p || {};
     const override = data.override || {};
     const proxyProviders = {};
-    const ResponseHeaders = await handleRequest(urls, templateUrl)
     urls.forEach((url, i) => {
         proxyProviders[`provider${i + 1}`] = {
             ...base,
@@ -1041,162 +1013,66 @@ async function mihomoconfig(urls, templateUrl) {
     }
     return {
         data: JSON.stringify(data, null, 4),
-        ResponseHeaders
+        headers: mihomodata.headers
     }
 }
+// singbox 配置
+async function singboxconfig(urls, templateUrl) {
+    // 模板
+    const templatedata = await loadConfig(templateUrl)
+    const templatejson = templatedata.data
+    // 节点
+    const outboundsdata = await loadAndMergeOutbounds(urls);
+    const outboundsjson = outboundsdata.data
+    const ApiUrlname = [] // 节点名
+    outboundsjson.forEach((res) => {
+        ApiUrlname.push(res.tag)
+    })
+    // 策略组处理
+    templatejson.outbounds.forEach(res => {
+        // 从完整 outbound 名称开始匹配
+        let matchedOutbounds = [...ApiUrlname];
+        let hasValidAction = false;
+        res.filter?.forEach(ac => {
+            // 转换为 RegExp 对象
+            const keywordReg = new RegExp(ac.keywords) || '';
 
-async function loadConfig(configUrl) {
-    const cacheKey = new Request(configUrl); // 使用 Request 对象作为缓存键
-    const cache = caches.default;
+            if (ac.action === 'include') {
+                // 只保留匹配的
+                matchedOutbounds = matchedOutbounds.filter(name => keywordReg.test(name));
+                hasValidAction = true
+            } else if (ac.action === 'exclude') {
+                // 移除匹配的
+                matchedOutbounds = matchedOutbounds.filter(name => !keywordReg.test(name));
+                hasValidAction = true
+            } else if (ac.action === 'all') {
+                // 全部保留
+                hasValidAction = true
+            }
+        });
+        if (hasValidAction) {
+            // 写入去重后的 outbounds
+            res.outbounds = [...new Set(matchedOutbounds)];
+        } else if (res.outbounds !== null) {
+            // 没有有效操作，但原始 outbounds 存在，保留原值
+            matchedOutbounds = res.outbounds;
+        } else {
+            // 无有效操作，且原始 outbounds 不存在，删除该字段（不写入）
+            delete res.outbounds;
+        }
+        // 删除 filter 字段
+        delete res.filter;
 
-    // 尝试从缓存读取
-    let cachedResponse = await cache.match(cacheKey);
-    if (cachedResponse) {
-        return cachedResponse.text();
-    }
-
-    // 缓存未命中，发起新请求
-    const response = await fetch(configUrl);
-    const data = await response.text();
-
-    // 将响应存入缓存（克隆响应以复用）
-    const cacheResponse = new Response(data, {
-        headers: { 'Cache-Control': 'public, max-age=1800' }
     });
-    await cache.put(cacheKey, cacheResponse.clone());
-
-    return data;
-}
-
-async function fetchResponseHeaders(url) {
-    const response = await fetch(url);
-
-    const headersObj = {};
-    for (const [key, value] of response.headers.entries()) {
-        headersObj[key] = value;
-    }
-
+    // 节点合并
+    templatejson.outbounds.push(...outboundsjson)
     return {
-        status: response.status,
-        headers: headersObj
+        data: JSON.stringify(templatejson),
+        headers: outboundsdata.headers
     };
 }
-function getFileNameFromUrl(url) {
-    try {
-        const pathname = new URL(url).pathname;
-        const parts = pathname.split('/').filter(Boolean);
-        const lastPart = parts.length > 0 ? parts[parts.length - 1] : '';
-        return lastPart || null;
-    } catch {
-        return null;
-    }
-}
-const REGION_CONFIGS = [
-    { tag: "🇭🇰 香港自动", regex: /🇭🇰|\bHK\b|香港|Hong Kong/i },
-    { tag: "🇹🇼 台湾自动", regex: /🇹🇼|\bTW\b|台湾|Taiwan|Tai wan/i },
-    { tag: "🇯🇵 日本自动", regex: /🇯🇵|\bJP\b|日本|Japan/i },
-    { tag: "🇺🇸 美国自动", regex: /🇺🇸|\bUS\b|美国|United States|CT/i },
-    { tag: "🇸🇬 新加坡自动", regex: /🇸🇬|\bSG\b|新加坡|Singapore/i },
-    { tag: "🇰🇷 韩国自动", regex: /🇰🇷|\bKR\b|韩国|South Korea/i },
-    { tag: "🇩🇪 德国自动", regex: /🇩🇪|\bDE\b|德国|Germany/i },
-    { tag: "🇫🇷 法国自动", regex: /🇫🇷|\bFR\b|法国|France/i },
-    { tag: "🇨🇦 加拿大自动", regex: /🇨🇦|\bCA\b|加拿大|Canada/i },
-    { tag: "🇦🇺 澳大利亚自动", regex: /🇦🇺|\bAU\b|澳大利亚|Australia/i },
-    { tag: "🇷🇺 俄罗斯自动", regex: /🇷🇺|\bRU\b|俄罗斯|Russia/i },
-    { tag: "🇳🇱 荷兰自动", regex: /🇳🇱|\bNL\b|荷兰|Netherlands/i },
-    { tag: "🇮🇳 印度自动", regex: /🇮🇳|\bIN\b|印度|India/i },
-    { tag: "🇲🇾 马来西亚自动", regex: /🇲🇾|\bMY\b|马来西亚|Malaysia/i },
-    { tag: "🇵🇱 波兰自动", regex: /🇵🇱|\bPL\b|波兰|Poland/i },
-    { tag: "🇪🇪 爱沙尼亚自动", regex: /🇪🇪|\bEE\b|爱沙尼亚|Estonia/i },
-    { tag: "🇦🇪 阿联酋自动", regex: /🇦🇪|\bAE\b|阿联酋|United Arab Emirates/i },
-    { tag: "🇳🇬 尼日利亚自动", regex: /🇳🇬|\bNG\b|尼日利亚|Nigeria/i },
-    { tag: "🇧🇬 保加利亚自动", regex: /🇧🇬|\bBG\b|保加利亚|Bulgaria/i },
-    { tag: "🇸🇨 塞舌尔自动", regex: /🇸🇨|\bSC\b|塞舌尔|Seychelles/i },
-    { tag: "🇬🇧 英国自动", regex: /🇬🇧|\bGB\b|英国|United Kingdom/i },
-    { tag: "🇪🇸 西班牙自动", regex: /🇪🇸|\bES\b|西班牙|Spain/i },
-    { tag: "🇻🇳 越南自动", regex: /🇻🇳|\bVN\b|越南|Vietnam/i },
-    { tag: "🇸🇽 荷属圣马丁自动", regex: /🇸🇽|\bSX\b|荷属圣马丁|Sint Maarten/i },
-    { tag: "🇲🇴 澳门自动", regex: /🇲🇴|\bMO\b|澳门|Macau|Macao/i },
-    { tag: "🇵🇭 菲律宾自动", regex: /🇵🇭|\bPH\b|菲律宾|Philippines/i },
-    { tag: "🇹🇭 泰国自动", regex: /🇹🇭|\bTH\b|泰国|Thailand/i },
-    { tag: "🇲🇳 蒙古自动", regex: /🇲🇳|\bMN\b|蒙古|Mongolia/i },
-    { tag: "🇫🇮 芬兰自动", regex: /🇫🇮|\bFI\b|芬兰|Finland/i },
-    { tag: "🇸🇪 瑞典自动", regex: /🇸🇪|\bSE\b|瑞典|Sweden/i },
-    { tag: "🇦🇹 奥地利自动", regex: /🇦🇹|\bAT\b|奥地利|Austria/i },
-    { tag: "🇧🇷 巴西自动", regex: /🇧🇷|\bBR\b|巴西|Brazil/i },
-    { tag: "🇰🇿 哈萨克斯坦自动", regex: /🇰🇿|\bKZ\b|哈萨克斯坦|Kazakhstan/i },
-    { tag: "🇮🇱 以色列自动", regex: /🇮🇱|\bIL\b|以色列|Israel/i },
-    { tag: "🇨🇭 瑞士自动", regex: /🇨🇭|\bCH\b|瑞士|Switzerland/i },
-];
 
-/**
- * 合并多个 singbox URL 数据并注入模板配置
- * @param {string|string[]} urls - 节点订阅链接，可传入一个 URL 或多个 URL 数组
- * @returns {Promise<Object|undefined>} - 合并后的 JSON 数据
- */
-// 核心函数优化版本
-async function singboxconfig(urls, templateUrl) {
-    try {
-        // 参数预处理
-        const decodedTemplateUrl = decodeURIComponent(templateUrl);
-        const [ResponseHeaders, templateJson] = await Promise.all([
-            handleRequest(urls, decodedTemplateUrl),
-            loadConfig(decodedTemplateUrl) // 确保loadConfig实现了缓存
-        ]);
-
-        const templateData = JSON.parse(templateJson);
-        validateTemplate(templateData); // 验证模板结构
-
-        // 数据初始化
-        const urlList = Array.isArray(urls) ? urls : [urls];
-        const [uniqueOutbounds, subscriberNodeTags] = await processSubscriptions(urlList);
-        const mergedOutbounds = mergeOutbounds(uniqueOutbounds, templateData);
-
-        // 处理策略组
-        processRegionGroups(templateData, subscriberNodeTags);
-        processSkipGroups(templateData, subscriberNodeTags);
-
-        // 构建最终配置
-        const finalConfig = buildFinalConfig(templateData, mergedOutbounds);
-        return {
-            ResponseHeaders,
-            data: JSON.stringify(finalConfig, null, 4)
-        };
-    } catch (error) {
-        // 统一错误返回格式
-        return {
-            error: error.message || String(error),
-            data: null
-        };
-    }
-}
-
-// 工具函数
-function validateTemplate(template) {
-    if (!template?.outbounds?.length) {
-        throw new Error('无效模板：缺少outbounds数组');
-    }
-}
-
-async function processSubscriptions(urlList) {
-    const needNumbering = urlList.length > 1;
-    const allOutbounds = [];
-    const nodeTags = [];
-
-    await Promise.all(urlList.map(async (rawUrl, index) => {
-        const apiUrl = buildApiUrl(rawUrl);
-        const response = await fetch(apiUrl);
-
-        if (!response.ok) throw new Error(`请求失败：${apiUrl} (${response.status})`);
-        const data = await response.json();
-
-        processSubscriptionData(data, index + 1, needNumbering, allOutbounds, nodeTags);
-    }));
-
-    const uniqueOutbounds = deduplicateOutbounds(allOutbounds);
-    return [uniqueOutbounds, nodeTags];
-}
-
+// 订阅链接
 function buildApiUrl(rawUrl) {
     const BASE_API = 'https://url.v1.mk/sub';
     const params = new URLSearchParams({
@@ -1215,154 +1091,101 @@ function buildApiUrl(rawUrl) {
     });
     return `${BASE_API}?${params}`;
 }
+// outbounds 组处理
+export async function loadAndMergeOutbounds(urls) {
+    const outboundsList = [];
+    let headers = {};
 
-function processSubscriptionData(data, index, needNumbering, allOutbounds, nodeTags) {
-    if (!data?.outbounds) throw new Error('订阅返回数据格式异常');
+    for (let i = 0; i < urls.length; i++) {
+        const outboundsUrl = buildApiUrl(urls[i]);
 
-    const filtered = data.outbounds
-        .filter(o => o?.type && !['selector', 'urltest'].includes(o.type))
-        .map(o => ({
-            ...o,
-            tag: needNumbering ? `${o.tag} [${String(index).padStart(2, '0')}]` : o.tag
-        }));
+        try {
+            const outboundsdata = await loadConfig(outboundsUrl);
+            const outboundsJson = outboundsdata.data
+            headers = outboundsdata.headers
 
-    allOutbounds.push(...filtered);
-    nodeTags.push(...filtered.map(o => o.tag));
-}
+            if (outboundsJson && Array.isArray(outboundsJson.outbounds)) {
+                const sequence = i + 1;
+                const modifiedOutbounds = outboundsJson.outbounds.map(outbound => ({
+                    ...outbound,
+                    tag: `${outbound.tag} [${sequence}]`
+                }));
 
-function deduplicateOutbounds(outbounds) {
-    return [...new Map(outbounds.map(o => [o.tag, o])).values()];
-}
-
-function mergeOutbounds(uniqueOutbounds, templateData) {
-    const existingTags = new Set(uniqueOutbounds.map(o => o.tag));
-    const templateNodes = templateData.outbounds
-        .filter(o => !['selector', 'urltest'].includes(o.type))
-        .filter(o => !existingTags.has(o.tag));
-
-    return [...uniqueOutbounds, ...templateNodes];
-}
-
-function processRegionGroups(templateData, nodeTags) {
-    REGION_CONFIGS.forEach(({ tag, regex }) => {
-        addNodesToGroupByTag(templateData, nodeTags, regex, tag);
-    });
-}
-
-function processSkipGroups(templateData, nodeTags) {
-    const SKIP_TAGS = ['🚀 节点选择', '🟢 手动选择', '🎈 自动选择'];
-
-    SKIP_TAGS.forEach(tag => {
-        if (tag === '🚀 节点选择') return;
-        const group = templateData.outbounds.find(o => o.tag === tag);
-        if (group) {
-            group.outbounds = [...new Set([...group.outbounds || [], ...nodeTags])];
+                outboundsList.push(...modifiedOutbounds);
+            } else {
+                console.warn(`第 ${i + 1} 个配置中 outbounds 不存在或不是数组`);
+            }
+        } catch (err) {
+            console.error(`加载 ${outboundsUrl} 失败:`, err);
         }
-    });
-}
-
-function buildFinalConfig(templateData, mergedOutbounds) {
-    const selectorGroups = templateData.outbounds.filter(o =>
-        ['selector', 'urltest'].includes(o.type)
-    );
+    }
 
     return {
-        ...templateData,
-        outbounds: [
-            ...selectorGroups,
-            ...mergedOutbounds
-        ]
+        data: outboundsList,
+        headers: headers
     };
 }
+// 缓存
+export async function loadConfig(configUrl) {
+    const cacheKey = new Request(configUrl); // 使用 Request 对象作为缓存键
+    const cache = caches.default;
 
-/**
- * 将符合匹配规则的节点 tag 添加到目标策略组的 outbounds 中
- * @param {object} templateData - 配置 JSON 对象，包含 outbounds 数组
- * @param {string[]} nodeTags - 节点 tag 数组（已经编号过）
- * @param {RegExp} matchRegex - 用于匹配节点 tag 的正则表达式
- * @param {string} targetGroupTag - 目标策略组的 tag 名称
- */
-function addNodesToGroupByTag(templateData, nodeTags, matchRegex, targetGroupTag) {
-    if (!templateData || !Array.isArray(templateData.outbounds)) {
-        throw new Error('templateData 必须有 outbounds 数组');
-    }
-    if (!Array.isArray(nodeTags)) {
-        throw new Error('nodeTags 必须是字符串数组');
+    // 尝试从缓存读取
+    let cachedResponse = await cache.match(cacheKey);
+    if (cachedResponse) {
+        return cachedResponse.text();
     }
 
-    // 过滤出匹配的节点标签
-    const matchedTags = nodeTags.filter(tag => matchRegex.test(tag));
-    if (matchedTags.length === 0) {
-        // 没匹配到节点，则不创建组，也不添加引用
-        return;
-    }
+    // 缓存未命中，发起新请求
+    const data = await fetchResponse(configUrl);
 
-    // 查找已有的目标策略组
-    let targetGroup = templateData.outbounds.find(o => o.tag === targetGroupTag);
-    if (!targetGroup) {
-        targetGroup = {
-            type: "urltest",
-            tag: targetGroupTag,
-            url: "https://www.gstatic.com/generate_204",
-            interval: "3m",
-            tolerance: 150,
-            interrupt_exist_connections: true,
-            outbounds: []
-        };
-        templateData.outbounds.push(targetGroup);
-    }
+    // 将响应存入缓存（克隆响应以复用）
+    const cacheResponse = new Response(data.data, {
+        headers: { 'Cache-Control': 'public, max-age=1800' }
+    });
+    await cache.put(cacheKey, cacheResponse.clone());
 
-    if (!Array.isArray(targetGroup.outbounds)) {
-        targetGroup.outbounds = [];
-    }
-
-    // 将匹配到的节点标签合并到该策略组的 outbounds 中
-    const outboundSet = new Set(targetGroup.outbounds);
-    matchedTags.forEach(tag => outboundSet.add(tag));
-    targetGroup.outbounds = Array.from(outboundSet);
-
-    // 找到主策略组 "🚀 节点选择"
-    const mainSelector = templateData.outbounds.find(o => o.tag === "🚀 节点选择");
-    if (mainSelector) {
-        if (!Array.isArray(mainSelector.outbounds)) {
-            mainSelector.outbounds = [];
-        }
-        // 把目标策略组的tag添加到主策略组
-        const selectorSet = new Set(mainSelector.outbounds);
-        selectorSet.add(targetGroupTag);
-        mainSelector.outbounds = Array.from(selectorSet);
-    } else {
-        console.warn('⚠️ 未找到主策略组 "🚀 节点选择"，未添加子组引用');
-    }
+    return data;
 }
 
-async function handleRequest(urls, templateUrl) {
-    let ResponseHeaders = {};
-    let headers = {};
-    if (urls.length === 1) {
-        // 处理单个 URL 的 headers
-        const ResponseHeadersRaw = await fetchResponseHeaders(urls[0]);
-        if (ResponseHeadersRaw?.headers) {
-            headers = { ...ResponseHeadersRaw.headers };
-            const hasContentDisposition = Object.keys(headers).some(
-                key => key.toLowerCase() === "content-disposition"
-            );
-            if (!hasContentDisposition) {
-                const domain = new URL(urls[0]).hostname;
-                headers["Content-Disposition"] =
-                    `attachment; filename="${domain}"; filename*=utf-8''${encodeURIComponent(domain)}`;
-            }
-            ResponseHeaders = { headers };
+// 处理请求
+export async function fetchResponse(url) {
+    const response = await fetch(url, {
+        method: 'GET',
+        headers: {
+            'User-Agent': 'v2ray',
+            'Accept': '*/*',
         }
-        return ResponseHeaders;
-    } else {
-        const fileName = getFileNameFromUrl(templateUrl).replace(/\.[^/.]+$/, '');
-        const fallbackName = fileName
-            ? `Subscribe(${fileName})`
-            : "Subscribe";
-        headers["Content-Disposition"] =
-            `attachment; filename="${fallbackName}.json"; filename*=utf-8''${encodeURIComponent(fallbackName)}`;
-        ResponseHeaders = { headers };
-        return ResponseHeaders;
+    });
+
+    const headersObj = {};
+    // 遍历响应头，将其转为普通的 JavaScript 对象格式
+    for (const [key, value] of response.headers.entries()) {
+        headersObj[key] = value;
+    }
+    // 获取响应体的文本内容
+    const textData = await response.text();
+    let jsonData;
+    try {
+        jsonData = JSON.parse(textData);
+    } catch (e) {
+        // 如果转换失败，返回原始文本
+        jsonData = textData;
+    }
+    return {
+        status: response.status,
+        headers: headersObj,
+        data: jsonData
+    };
+}
+// 获取文件名
+export function getFileNameFromUrl(url) {
+    try {
+        const pathname = new URL(url).pathname;
+        const parts = pathname.split('/').filter(Boolean);
+        const lastPart = parts.length > 0 ? parts[parts.length - 1] : '';
+        return lastPart || null;
+    } catch {
+        return null;
     }
 }
