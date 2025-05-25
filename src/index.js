@@ -3,12 +3,12 @@ export default {
     async fetch(request, env) {
         const url = new URL(request.url);
         const userAgent = request.headers.get('User-Agent');
-        const isBrowser = /meta|clash.meta|clash|singbox/i.test(userAgent);
+        const isBrowser = /meta|clash.meta|clash|clashverge|mihomo|singbox|sing-box/i.test(userAgent);
         const templateUrl = url.searchParams.get("template");
         const singbox = url.searchParams.get("singbox");
         // 处理 URL 参数
         let urls = url.searchParams.getAll("url");
-        let headers = new Headers(), data = "";
+        let headers = new Headers(), data = "", status = '200';
 
         if (urls.length === 1 && urls[0].includes(",")) {
             urls = urls[0].split(",").map(u => u.trim()); // 拆分并去除空格
@@ -47,15 +47,17 @@ export default {
             data = res.data;
             const responseHeaders = res.headers || {};
             headers = new Headers(responseHeaders);
+            status = res.status
         } else {
             const res = await mihomoconfig(urls, templateUrl);
             data = res.data;
             const responseHeaders = res.headers || {};
             headers = new Headers(responseHeaders);
+            status = res.status
         }
         headers.set("Content-Type", "application/json; charset=utf-8");
         return new Response(data, {
-            status: 200,
+            status: status,
             headers
         });
     }
@@ -983,11 +985,11 @@ async function mihomoconfig(urls, templateUrl) {
     if (!templateUrl) {
         config = 'https://raw.githubusercontent.com/Kwisma/cf-worker-mihomo/main/Config/Mihomo.yaml';
     } else {
-        const templateout = await loadConfig(templateUrl);
+        const templateout = await fetchResponse(templateUrl);
         const templateyaml = templateout.data
         templatedata = YAML.parse(templateyaml, { maxAliasCount: -1, merge: true });
     }
-    const mihomodata = await loadConfig(config);
+    const mihomodata = await fetchResponse(config);
     let data = YAML.parse(mihomodata.data, { maxAliasCount: -1, merge: true });
     const base = data.p || {};
     const override = data.override || {};
@@ -1012,6 +1014,7 @@ async function mihomoconfig(urls, templateUrl) {
         data['rule-providers'] = templatedata['rule-providers'] || {};
     }
     return {
+        status: mihomodata.status,
         data: JSON.stringify(data, null, 4),
         headers: mihomodata.headers
     }
@@ -1019,7 +1022,7 @@ async function mihomoconfig(urls, templateUrl) {
 // singbox 配置
 async function singboxconfig(urls, templateUrl) {
     // 模板
-    const templatedata = await loadConfig(templateUrl)
+    const templatedata = await fetchResponse(templateUrl)
     const templatejson = templatedata.data
     // 节点
     const outboundsdata = await loadAndMergeOutbounds(urls);
@@ -1029,51 +1032,18 @@ async function singboxconfig(urls, templateUrl) {
         ApiUrlname.push(res.tag)
     })
     // 策略组处理
-    templatejson.outbounds.forEach(res => {
-        // 从完整 outbound 名称开始匹配
-        let matchedOutbounds = [...ApiUrlname];
-        let hasValidAction = false;
-        res.filter?.forEach(ac => {
-            // 转换为 RegExp 对象
-            const keywordReg = new RegExp(ac.keywords) || '';
-
-            if (ac.action === 'include') {
-                // 只保留匹配的
-                matchedOutbounds = matchedOutbounds.filter(name => keywordReg.test(name));
-                hasValidAction = true
-            } else if (ac.action === 'exclude') {
-                // 移除匹配的
-                matchedOutbounds = matchedOutbounds.filter(name => !keywordReg.test(name));
-                hasValidAction = true
-            } else if (ac.action === 'all') {
-                // 全部保留
-                hasValidAction = true
-            }
-        });
-        if (hasValidAction) {
-            // 写入去重后的 outbounds
-            res.outbounds = [...new Set(matchedOutbounds)];
-        } else if (res.outbounds !== null) {
-            // 没有有效操作，但原始 outbounds 存在，保留原值
-            matchedOutbounds = res.outbounds;
-        } else {
-            // 无有效操作，且原始 outbounds 不存在，删除该字段（不写入）
-            delete res.outbounds;
-        }
-        // 删除 filter 字段
-        delete res.filter;
-
-    });
+    loadAndSetOutbounds(templatejson.outbounds)
     // 节点合并
     templatejson.outbounds.push(...outboundsjson)
     return {
+        status: outboundsdata.status,
         data: JSON.stringify(templatejson),
         headers: outboundsdata.headers
     };
 }
 
 // 订阅链接
-function buildApiUrl(rawUrl) {
+export function buildApiUrl(rawUrl) {
     const BASE_API = 'https://url.v1.mk/sub';
     const params = new URLSearchParams({
         target: 'singbox',
@@ -1100,7 +1070,7 @@ export async function loadAndMergeOutbounds(urls) {
         const outboundsUrl = buildApiUrl(urls[i]);
 
         try {
-            const outboundsdata = await loadConfig(outboundsUrl);
+            const outboundsdata = await fetchResponse(outboundsUrl);
             const outboundsJson = outboundsdata.data
             headers = outboundsdata.headers
 
@@ -1125,27 +1095,51 @@ export async function loadAndMergeOutbounds(urls) {
         headers: headers
     };
 }
-// 缓存
-export async function loadConfig(configUrl) {
-    const cacheKey = new Request(configUrl); // 使用 Request 对象作为缓存键
-    const cache = caches.default;
+// 策略组处理
+export function loadAndSetOutbounds(Array) {
+    Array.forEach(res => {
+        const originalOutbounds = res.outbounds ?? null;
+        // 从完整 outbound 名称开始匹配
+        let matchedOutbounds = [...ApiUrlname];
+        let hasValidAction = false;
+        let shouldRemoveRes = false;
+        res.filter?.forEach(ac => {
+            // 转换为 RegExp 对象
+            const keywordReg = new RegExp(ac.keywords) || '';
 
-    // 尝试从缓存读取
-    let cachedResponse = await cache.match(cacheKey);
-    if (cachedResponse) {
-        return cachedResponse.text();
-    }
-
-    // 缓存未命中，发起新请求
-    const data = await fetchResponse(configUrl);
-
-    // 将响应存入缓存（克隆响应以复用）
-    const cacheResponse = new Response(data.data, {
-        headers: { 'Cache-Control': 'public, max-age=1800' }
+            if (ac.action === 'include') {
+                // 只保留匹配的
+                matchedOutbounds = matchedOutbounds.filter(name => keywordReg.test(name));
+                hasValidAction = true
+                if (matchedOutbounds.length === 0) {
+                    shouldRemoveRes = true;
+                }
+            } else if (ac.action === 'exclude') {
+                // 移除匹配的
+                matchedOutbounds = matchedOutbounds.filter(name => !keywordReg.test(name));
+                hasValidAction = true
+            } else if (ac.action === 'all') {
+                // 全部保留
+                hasValidAction = true
+            }
+        });
+        if (hasValidAction) {
+            // 写入去重后的 outbounds
+            res.outbounds = [...new Set(matchedOutbounds)];
+        } else if (res.outbounds !== null) {
+            // 没有有效操作，但原始 outbounds 存在，保留原值
+            matchedOutbounds = res.outbounds;
+        } else {
+            // 无有效操作，且原始 outbounds 不存在，删除该字段（不写入）
+            delete res.outbounds;
+        }
+        // 删除 filter 字段
+        delete res.filter;
+        if (shouldRemoveRes) {
+            return false; // 从 outbounds 中剔除该项
+        }
+        return true;
     });
-    await cache.put(cacheKey, cacheResponse.clone());
-
-    return data;
 }
 
 // 处理请求
