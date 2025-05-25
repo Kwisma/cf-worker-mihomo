@@ -1095,10 +1095,7 @@ export async function loadAndMergeOutbounds(urls) {
         headers: headers
     };
 }
-// 策略组处理 为什么报错
-if (!res.outbounds || res.outbounds === '') {
-            delete res; // 从 outbounds 中剔除该项
-        }
+
 export function loadAndSetOutbounds(Array, ApiUrlname) {
     Array.forEach(res => {
         // 从完整 outbound 名称开始匹配
