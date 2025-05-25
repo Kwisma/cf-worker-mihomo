@@ -800,7 +800,7 @@ async function getFakePage(image = 'https://t.alcy.cc/ycy') {
                         label: "1.11.X",
                         options: [
                             {
-                                label: "默认（精简版）",
+                                label: "sukonzer（精简版）",
                                 value: "https://raw.githubusercontent.com/sukonzer/SIA/main/config-template/sb-1.11.x.json"
                             }
                         ]
