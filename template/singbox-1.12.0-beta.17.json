@@ -249,7 +249,7 @@
             },
             {
                 "rule_set": [
-                    "GeoSite-CN"
+                    "Geosite-CN"
                 ],
                 "server": "DIRECT-DNS"
             },
