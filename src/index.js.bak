@@ -1095,10 +1095,7 @@ export async function loadAndMergeOutbounds(urls) {
         headers: headers
     };
 }
-// 策略组处理 为什么报错
-if (!res.outbounds || res.outbounds === '') {
-            delete res; // 从 outbounds 中剔除该项
-        }
+// 策略组处理
 export function loadAndSetOutbounds(Array, ApiUrlname) {
     Array.forEach(res => {
         // 从完整 outbound 名称开始匹配
@@ -1134,11 +1131,9 @@ export function loadAndSetOutbounds(Array, ApiUrlname) {
         // 删除 filter 字段
         delete res.filter;
         if (!res.outbounds || res.outbounds === '') {
-            return null; // 标记为要剔除
+            delete res; // 从 outbounds 中剔除该项
         }
-
-        return res;
-    }).filter(Boolean); // 剔除 null
+    });
 }
 
 // 处理请求
