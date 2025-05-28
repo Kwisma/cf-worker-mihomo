@@ -4,7 +4,7 @@
  */
 {
 	"$schema": "node_modules/wrangler/config-schema.json",
-	"name": "cf-worker-mihomo",
+	"name": "cf-worker-mihomo-lite",
 	"main": "src/index.js",
 	"compatibility_date": "2025-04-16",
 	"observability": {
