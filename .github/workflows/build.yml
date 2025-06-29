@@ -29,14 +29,26 @@ jobs:
         run: |
           mkdir temp-pages
           cp _worker.js temp-pages/
-          cp worker.js temp-pages/
           cd temp-pages
           git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
           git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git checkout -b pages
-          git add worker.js _worker.js
+          git add _worker.js
           git commit -m "Automated update" || echo "No changes to commit"
           git push -f origin pages
+      - name: Push worker.js to pages branch
+        run: |
+          mkdir temp-pages
+          cp worker.js temp-pages/
+          cd temp-pages
+          git init
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
+          git checkout -b worker
+          git add worker.js
+          git commit -m "Automated update" || echo "No changes to commit"
+          git push -f origin worker
 
