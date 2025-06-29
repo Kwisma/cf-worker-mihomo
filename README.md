@@ -67,6 +67,7 @@ npm run deploy
 ### 2. Cloudflare Workers 部署
 1. 部署 CF Worker：
    - 在 CF Worker 控制台中创建一个新的 Worker。
+   - 打开项目 > 设置 > 运行时 > 兼容性标志，设置为 `nodejs_compat` 。
    - 将 [worker.js](./worker.js) 的内容粘贴到 Worker 编辑器中。
 2. 给 workers绑定 自定义域： 
    - 在 workers控制台的 `触发器`选项卡，下方点击 `添加自定义域`。
@@ -83,15 +84,18 @@ npm run deploy
 2. 点击 **创建项目** → 选择你的 Git 提供商（GitHub/GitLab）
 3. 选择仓库 → 开始设置
 4. 配置选项：
-   - **构建命令**：`npm run build:workers`
-   - **输出目录**：`dist`
+   - **生产分支**：`pages`
 5. 点击 **保存并部署**
+6. 打开项目 > 设置 > 运行时 > 兼容性标志，设置为 `nodejs_compat` 。
+7. 重试部署
 
 #### 方法二：手动上传
 
 1. 下载项目中的  [_worker.js](./_worker.js) 文件
 2. 在 Pages 控制台选择 **直接上传**
-3. 选择 `_worker.js` 文件
+3. 选择 `_worker.js` 文件部署
+4. 打开项目 > 设置 > 运行时 > 兼容性标志，设置为 `nodejs_compat` 。
+5. 再次部署
 
 #### 自定义域名
 1. 进入 Pages 项目 → **自定义域**

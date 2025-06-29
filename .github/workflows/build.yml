@@ -31,3 +31,19 @@ jobs:
           git add worker.js _worker.js
           git commit -m "Automated update" || echo "No changes to commit"
           git push
+      - name: Push _worker.js to pages branch
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          mkdir temp-pages
+          cp _worker.js temp-pages/
+
+          cd temp-pages
+          git init
+          git remote add origin https://github.com/${{ github.repository }}.git
+          git checkout -b pages
+
+          git add _worker.js
+          git commit -m "Automated update" || echo "No changes to commit"
+          git push -f origin pages
+
