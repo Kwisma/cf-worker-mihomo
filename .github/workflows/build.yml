@@ -40,7 +40,7 @@ jobs:
           git push -f origin pages
       - name: Push worker.js to pages branch
         run: |
-          mkdir temp-pages
+          mkdir temp-worker
           cp worker.js temp-worker/
           cd temp-worker
           git init
