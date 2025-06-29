@@ -41,8 +41,8 @@ jobs:
       - name: Push worker.js to pages branch
         run: |
           mkdir temp-pages
-          cp worker.js temp-pages/
-          cd temp-pages
+          cp worker.js temp-worker/
+          cd temp-worker
           git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
