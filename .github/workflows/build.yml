@@ -39,7 +39,7 @@ jobs:
           git init
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git remote add origin https://github.com/${{ github.repository }}.git
+          git remote add origin "https://${{ github.actor }}:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}"
           git checkout -b pages
           git add _worker.js
           git commit -m "Automated update" || echo "No changes to commit"
