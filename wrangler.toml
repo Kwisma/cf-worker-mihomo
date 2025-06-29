@@ -1,4 +1,4 @@
-name = "cf-worker-mihomo"
+name = "durable-chat-template"
 main = "src/index.js"
 compatibility_date = "2025-04-16"
 compatibility_flags = ["nodejs_compat"]
