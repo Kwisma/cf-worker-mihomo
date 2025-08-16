@@ -273,8 +273,6 @@ rules:
   - MATCH,🚀全球代理
 sub-rules:
   SUB-RULES:
-    - RULE-SET,private_ip,🎯全球直连,no-resolve
-    - RULE-SET,private_domain,🎯全球直连
     - RULE-SET,github_domain,Github
     - RULE-SET,twitter_domain,Twitter
     - RULE-SET,youtube_domain,YouTube
@@ -287,22 +285,30 @@ sub-rules:
     - RULE-SET,bahamut_domain,巴哈姆特
     - RULE-SET,spotify_domain,Spotify
     - RULE-SET,pixiv_domain,Pixiv
-    - RULE-SET,cn_domain,⚪绕过连接
     - RULE-SET,geolocation-!cn,🚀全球代理
     - RULE-SET,google_ip,Google,no-resolve
     - RULE-SET,netflix_ip,NETFLIX,no-resolve
     - RULE-SET,telegram_ip,Telegram,no-resolve
     - RULE-SET,twitter_ip,Twitter,no-resolve
-    - RULE-SET,cn_ip,🎯全球直连
+    - OR,((AND,((RULE-SET,cn_domain),(RULE-SET,cn_ip))),(RULE-SET,private_domain),(RULE-SET,private_ip,no-resolve)),🎯全球直连
+
 rule-providers:
+  cn_domain:
+    <<: *domain_mrs
+    url: "https://cdn.jsdmirror.com/gh/Kwisma/clash-rules@release/direct.mrs"
+    path: ./ruleset/CN_Domain.mrs
+  cn_ip:
+    <<: *ipcidr_mrs
+    url: "https://jsd.onmicrosoft.cn/gh/Kwisma/clash-rules@release/cncidr.mrs"
+    path: ./ruleset/CN_IP.mrs
   private_domain:
     <<: *domain_mrs
     url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs"
-    path: ./ruleset/private_domain.mrs
-  cn_domain:
-    <<: *domain_mrs
-    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/cn.mrs"
-    path: ./ruleset/cn_domain.mrs
+    path: ./ruleset/Private_Domain.mrs
+  private_ip:
+    <<: *ipcidr_mrs
+    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs"
+    path: ./ruleset/Private_IP.mrs
   biliintl_domain:
     <<: *domain_mrs
     url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/biliintl.mrs"
@@ -355,14 +361,6 @@ rule-providers:
     <<: *domain_mrs
     url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/geolocation-!cn.mrs"
     path: ./ruleset/geolocation-!cn.mrs
-  private_ip:
-    <<: *ipcidr_mrs
-    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs"
-    path: ./ruleset/private_ip.mrs
-  cn_ip:
-    <<: *ipcidr_mrs
-    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/cn.mrs"
-    path: ./ruleset/cn_ip.mrs
   google_ip:
     <<: *ipcidr_mrs
     url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/google.mrs"

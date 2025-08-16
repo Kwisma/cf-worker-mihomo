@@ -396,19 +396,8 @@ sub-rules:
   SUB-RULES:
     # 广告拦截
     - RULE-SET,ads_domain,🪧广告拦截
-    - RULE-SET,blockhttpdns_domain,🔎HttpDNS
-    - RULE-SET,blockhttpdns_ip,🔎HttpDNS,no-resolve #仅匹配ip，不解析域名
-    - DOMAIN-KEYWORD,httpdns,🔎HttpDNS
-    - RULE-SET,stun_domain,💧泄漏拦截
-    - DST-PORT,3478,💧泄漏拦截 # 标准 STUN/TURN 默认端口（UDP/TCP），多数服务使用
-    - AND,(NETWORK,TCP),(DST-PORT,5349),💧泄漏拦截 # TURN over TLS 的默认端口（TCP），用于加密传输
-    - AND,(NETWORK,UDP),(DST-PORT,5350),💧泄漏拦截 # NAT-PMP 通知端口（UDP），用于通知公网 IP 变化
-    - AND,(NETWORK,UDP),(DST-PORT,5351),💧泄漏拦截 # NAT-PMP 请求端口（UDP），用于发起端口映射请求
-    - AND,(NETWORK,UDP),(DST-PORT,19302),💧泄漏拦截 # Google 公共 STUN 服务端口（UDP），常用于 WebRTC 默认配置
-    - DOMAIN-KEYWORD,stun,💧泄漏拦截
-    # 本地直连
-    - RULE-SET,private_domain,🎯全球直连
-    - RULE-SET,private_ip,🎯全球直连,no-resolve
+    - OR,((RULE-SET,blockhttpdns_domain),(RULE-SET,blockhttpdns_ip,no-resolve)),🔎HttpDNS
+    - OR,((AND,((NETWORK,TCP),(DST-PORT,5349))),(AND,((NETWORK,UDP),(DST-PORT,5350))),(AND,((NETWORK,UDP),(DST-PORT,5351))),(AND,((NETWORK,UDP),(DST-PORT,19302))),(RULE-SET,stun_domain),(DST-PORT,3478)),💧泄漏拦截
     # 域名
     - RULE-SET,appstore_domain,AppStore # App Store 应用商店
     - RULE-SET,applemail_domain,Apple邮箱 # Apple Mail 邮件服务
@@ -560,7 +549,7 @@ sub-rules:
     - RULE-SET,youtube_ip,YouTube,no-resolve
     - RULE-SET,globalmedia_ip,国际媒体,no-resolve
     - RULE-SET,cloudflare_ip,Cloudflare,no-resolve
-    - RULE-SET,cn_ip,🎯全球直连
+    - OR,((AND,((RULE-SET,cn_domain),(RULE-SET,cn_ip))),(RULE-SET,private_domain),(RULE-SET,private_ip,no-resolve)),🎯全球直连
 
 rule-providers:
   # ------------------------------------------------------------
@@ -1257,16 +1246,6 @@ rule-providers:
     url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/mihoyo.mrs"
     path: ./ruleset/Mihoyo_Domain.mrs
 
-  private_domain:
-    <<: *domain_mrs
-    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs"
-    path: ./ruleset/Private_Domain.mrs
-
-  private_ip:
-    <<: *ipcidr_mrs
-    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs"
-    path: ./ruleset/Private_IP.mrs
-
   kugou_domain:
     <<: *domain_mrs
     url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/kugou.mrs"
@@ -1351,8 +1330,18 @@ rule-providers:
 
   cn_ip:
     <<: *ipcidr_mrs
-    url: "https://cdn.jsdmirror.com/gh/Kwisma/clash-rules@release/cncidr.mrs"
+    url: "https://jsd.onmicrosoft.cn/gh/Kwisma/clash-rules@release/cncidr.mrs"
     path: ./ruleset/CN_IP.mrs
+
+  private_domain:
+    <<: *domain_mrs
+    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geosite/private.mrs"
+    path: ./ruleset/Private_Domain.mrs
+
+  private_ip:
+    <<: *ipcidr_mrs
+    url: "https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@meta/geo/geoip/private.mrs"
+    path: ./ruleset/Private_IP.mrs
 
   4gtv_domain:
     <<: *domain_mrs

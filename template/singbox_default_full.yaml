@@ -20,7 +20,6 @@ route:
     - { rule_set: [ ads_domain ], outbound: 🪧 广告拦截 }
     - { type: logical, mode: or, rules: [ { port: [ 3478 ] }, { network: [ tcp ], port: [ 5349 ] }, { network: [ udp ], port: [ 5350, 5351, 19302 ] }, { rule_set: [ stun_domain ] } ], outbound: 💧 泄漏拦截 }
     - { rule_set: [ blockhttpdns_domain ], outbound: 🔎 HttpDNS }
-    - { rule_set: [ private_domain, private_ip ], outbound: 🎯 全球直连 }
     - { rule_set: [ appstore_domain ], outbound: AppStore }
     - { rule_set: [ applemail_domain ], outbound: Apple邮箱 }
     - { rule_set: [ applemusic_domain ], outbound: Apple音乐 }
@@ -107,7 +106,7 @@ route:
     - { rule_set: [ google_ip ], outbound: Google }
     - { rule_set: [ cloudflare_ip ], outbound: Cloudflare }
     - { action: resolve }
-    - { rule_set: [ cn_ip ], outbound: 🎯 全球直连 }
+    - { type: logical, mode: or, rules: [ { type: logical, mode: and, rules: [ { rule_set: [ cn_domain ] }, { rule_set: [ cn_ip ] } ] }, { rule_set: [ private_domain, private_ip ] } ], outbound: 🎯 全球直连 }
   rule_set:
     # senshinya 规则集
     - { tag: stun_domain, type: remote, url: https://cdn.jsdmirror.com/gh/senshinya/singbox_ruleset@main/rule/STUN/STUN.srs, format: binary, download_detour: 🎯 全球直连 }
@@ -201,7 +200,8 @@ route:
     - { tag: ads_domain, type: remote, url: https://cdn.jsdmirror.com/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Singbox.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: private_ip, type: remote, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/private.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: private_domain, type: remote, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/private.srs, format: binary, download_detour: 🎯 全球直连 }
-    - { tag: cn_ip, type: remote, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geoip/cn.srs, format: binary, download_detour: 🎯 全球直连 }
+    - { tag: cn_domain, type: remote, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs, format: binary, download_detour: 🎯 全球直连 }
+    - { tag: cn_ip, type: remote, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/cn.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: biliintl_domain, type: remote, format: binary, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/biliintl.srs, download_detour: 🎯 全球直连 }
     - { tag: 18comic_domain, type: remote, format: binary, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/18comic.srs, download_detour: 🎯 全球直连 }
     - { tag: tor_domain, type: remote, format: binary, url: https://cdn.jsdmirror.com/gh/MetaCubeX/meta-rules-dat@sing/geo/geosite/tor.srs, download_detour: 🎯 全球直连 }

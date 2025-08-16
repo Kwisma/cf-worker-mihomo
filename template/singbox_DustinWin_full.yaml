@@ -20,7 +20,6 @@ route:
     - { rule_set: [ ads_domain ], outbound: 🪧 广告拦截 }
     - { type: logical, mode: or, rules: [ { port: [ 3478 ] }, { network: [ tcp ], port: [ 5349 ] }, { network: [ udp ], port: [ 5350, 5351, 19302 ] }, { rule_set: [ stun_domain ] } ], outbound: 💧 泄漏拦截 }
     - { rule_set: [ blockhttpdns_domain ], outbound: 🔎 HttpDNS }
-    - { rule_set: [ private_domain, private_ip ], outbound: 🎯 全球直连 }
     - { rule_set: [ apple_cn_domain ], outbound: apple }
     - { rule_set: [ appletv_domain ], outbound: appletv }
     - { rule_set: [ bilibili_domain ], outbound: bilibili }
@@ -38,12 +37,12 @@ route:
     - { rule_set: [ youtube_domain ], outbound: youtube }
     - { rule_set: [ telegram_ip ], outbound: telegram }
     - { action: resolve }
-    - { rule_set: [ cn_ip ], outbound: 🎯 全球直连 }
+    - { type: logical, mode: or, rules: [ { type: logical, mode: and, rules: [ { rule_set: [ cn_domain ] }, { rule_set: [ cn_ip ] } ] }, { rule_set: [ private_domain, private_ip ] } ], outbound: 🎯 全球直连 }
   rule_set:
     # DustinWin 规则集
     - { tag: apple_cn_domain, type: remote, url: https://cdn.jsdmirror.com/gh/DustinWin/ruleset_geodata@sing-box-ruleset/apple-cn.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: appletv_domain, type: remote, url: https://cdn.jsdmirror.com/gh/DustinWin/ruleset_geodata@sing-box-ruleset/appletv.srs, format: binary, download_detour: 🎯 全球直连 }
-    - { tag: ads_domain, type: remote, url: https://cdn.jsdmirror.com/gh/DustinWin/ruleset_geodata@sing-box-ruleset/ads.srs, format: binary, download_detour: 🎯 全球直连 }
+    - { tag: ads_domain, type: remote, url: https://cdn.jsdmirror.com/gh/TG-Twilight/AWAvenue-Ads-Rule@main/Filters/AWAvenue-Ads-Rule-Singbox.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: bilibili_domain, type: remote, url: https://cdn.jsdmirror.com/gh/DustinWin/ruleset_geodata@sing-box-ruleset/bilibili.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: cn_domain, type: remote, url: https://cdn.jsdmirror.com/gh/DustinWin/ruleset_geodata@sing-box-ruleset/cn.srs, format: binary, download_detour: 🎯 全球直连 }
     - { tag: cn_ip, type: remote, url: https://cdn.jsdmirror.com/gh/DustinWin/ruleset_geodata@sing-box-ruleset/cnip.srs, format: binary, download_detour: 🎯 全球直连 }
