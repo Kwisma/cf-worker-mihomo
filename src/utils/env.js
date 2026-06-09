@@ -44,14 +44,20 @@ export function buildConfig(request, env, isNode = false) {
     if (getParamBool('relay')) data.relay = true;
     if (getParamBool('fallback')) data.fallback = true;
 
+    data.checkUA = getEnv('CHECK_UA', 'true') !== 'false';
     data.IMG = getEnv('IMG', backimg);
     data.sub = getEnv('SUB', subapi);
     data.beian = getEnv('BEIAN', beiantext);
     data.beianurl = getEnv('BEIANURL', beiandizi);
 
+    const templateBaseUrl = getEnv('TEMPLATE_URL', '');
     const template = getParam('template');
     if (template) {
-        data.rule = `${url.origin}${isNode ? '/template' : ''}/${data.target}${getParam('template') ? getParam('template') : ''}`;
+        if (templateBaseUrl) {
+            data.rule = `${templateBaseUrl}/${data.target}${template}`;
+        } else {
+            data.rule = `${url.origin}${isNode ? '/template' : ''}/${data.target}${template}`;
+        }
     }
 
     return data;

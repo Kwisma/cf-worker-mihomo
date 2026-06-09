@@ -175,3 +175,7 @@ dist
 
 script/*.log
 .env*.local
+
+# Claude Code
+.claude/
+pnpm-workspace.yaml

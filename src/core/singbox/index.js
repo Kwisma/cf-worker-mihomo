@@ -46,7 +46,7 @@ export async function getsingbox_config(e) {
 export function Verbose(e) {
     const ua = e.userAgent;
 
-    if (!/singbox|sing-box|sfa|sfm/i.test(ua)) {
+    if (e.checkUA && !/singbox|sing-box|sfa|sfm/i.test(ua)) {
         throw new Error('不支持的客户端');
     }
 

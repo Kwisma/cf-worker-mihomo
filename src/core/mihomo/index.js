@@ -5,7 +5,7 @@ import clashConfig from '../../config/mihomo.js';
 export async function getmihomo_config(e) {
     const config = structuredClone(clashConfig);
     // 客户端验证
-    if (!/meta|clash.meta|clash|clashverge|mihomo/i.test(e.userAgent)) {
+    if (e.checkUA && !/meta|clash.meta|clash|clashverge|mihomo/i.test(e.userAgent)) {
         throw new Error('不支持的客户端');
     }
     if (!e.rule) {
