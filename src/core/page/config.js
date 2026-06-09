@@ -26,12 +26,15 @@ export default function configs() {
 ✔ 仅代理: 关闭tun，纯http/socks代理
 
 ✔ fallback: 获取原节点格式和流量信息
+
+✔ Proxy-Provider: 不下载订阅，由客户端直接拉取订阅链接（仅 mihomo）
             `,
-            protocolList: ['udp', 'ech', 'relay', 'ep', 'ea', 'adgdns', 'tun', 'fallback', 'log'],
+            protocolList: ['udp', 'ech', 'relay', 'pp', 'ep', 'ea', 'adgdns', 'tun', 'fallback', 'log'],
             protocolLabels: {
                 udp: 'UDP',
                 ech: 'ECH',
                 relay: '链式代理',
+                pp: 'Proxy-Provider',
                 ep: '分应用代理',
                 ea: '分IPCIDR代理',
                 adgdns: '去广告DNS',

@@ -43,6 +43,7 @@ export function buildConfig(request, env, isNode = false) {
     if (getParamBool('ech')) data.ech = true;
     if (getParamBool('relay')) data.relay = true;
     if (getParamBool('fallback')) data.fallback = true;
+    if (getParamBool('pp')) data.proxyprovider = true;
 
     data.IMG = getEnv('IMG', backimg);
     data.sub = getEnv('SUB', subapi);

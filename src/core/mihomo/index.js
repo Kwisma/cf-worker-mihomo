@@ -11,6 +11,9 @@ export async function getmihomo_config(e) {
     if (!e.rule) {
         throw new Error('缺少规则模板');
     }
+    if (e.proxyprovider) {
+        return await getmihomo_config_provider(e, config);
+    }
     const alldata = await Promise.all([
         getProxies_Data(e),
         fetchResponse(e.rule),
@@ -40,6 +43,59 @@ export async function getmihomo_config(e) {
     return {
         status: Proxies_Data.status,
         headers: Proxies_Data.headers,
+        data: JSON.stringify(config, null, 4),
+    };
+}
+
+/**
+ * Proxy-Provider 模式：不下载订阅，由客户端直接拉取
+ * 订阅 URL 作为 proxy-provider 注入，模板中的 filter 由 mihomo 客户端原生过滤
+ */
+async function getmihomo_config_provider(e, config) {
+    const alldata = await Promise.all([
+        fetchResponse(e.rule),
+        e.exclude_package ? fetchpackExtract() : null,
+        e.exclude_address ? fetchipExtract() : null,
+    ]);
+    const Rule_Data = alldata[0];
+    if (!Rule_Data?.data) {
+        throw new Error('获取规则数据失败');
+    }
+    e.Package = alldata[1];
+    e.Address = alldata[2];
+
+    // 从订阅 URL 创建 proxy-providers
+    const providers = {};
+    if (e.urls?.httpUrls) {
+        e.urls.httpUrls.forEach((url, i) => {
+            providers[`sub-${i}`] = {
+                type: 'http',
+                url,
+                interval: 3600,
+                path: `./proxies/sub-${i}.yaml`,
+                'health-check': {
+                    enable: true,
+                    url: 'https://www.gstatic.com/generate_204',
+                    interval: 300,
+                },
+            };
+        });
+    }
+
+    // 为有 filter 的策略组添加 include-all，使 mihomo 客户端原生过滤
+    if (Rule_Data.data['proxy-groups']) {
+        for (const group of Rule_Data.data['proxy-groups']) {
+            if (group.filter && !group['include-all']) {
+                group['include-all'] = true;
+            }
+        }
+    }
+
+    Rule_Data.data['proxy-providers'] = providers;
+    applyTemplate(config, Rule_Data.data, e);
+    return {
+        status: 200,
+        headers: {},
         data: JSON.stringify(config, null, 4),
     };
 }
